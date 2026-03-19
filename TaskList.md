@@ -306,3 +306,71 @@
 ## 메모
 
 - 진행 중 발생하는 이슈나 아이디어를 여기에 기록하세요.
+
+---
+
+## Phase 10: Addressables & 리소스 보안 (추후 진행)
+
+### 10.1 폴더 구조 마이그레이션
+- [ ] CSV 파일 이동: `Assets/Resources/Data/` → `Assets/Editor/Data/`
+- [ ] ScriptableObject 폴더 구조 정리
+- [ ] Resources 폴더 정리 (불필요한 파일 제거)
+
+### 10.2 Addressables 설정
+- [ ] Addressables 그룹 생성
+  - [ ] `MonsterIcons` 그룹
+  - [ ] `ItemIcons` 그룹
+  - [ ] `StatusEffectIcons` 그룹
+  - [ ] `EquipmentIcons` 그룹
+- [ ] Addressables 라벨 설정 (Monster, Item, Buff, Debuff 등)
+
+### 10.3 리소스 에셋 준비
+- [ ] 몬스터 아이콘 (5종)
+  - [ ] 슬라임
+  - [ ] 골렘(불)
+  - [ ] 좀비
+  - [ ] 해골
+  - [ ] 킹슬라임 (보스)
+- [ ] 장비 아이콘 (15종)
+  - [ ] 무기 (5종): 막대기, 검, 방패, 완드, 너클
+  - [ ] 갑옷 (5종): 가죽갑옷, 사슬갑옷, 강철갑옷, 가시갑옷, 깃털갑옷
+  - [ ] 장신구 (5종): 반지, 목걸이, 망토, 귀걸이, 팔찌
+- [ ] 소모품 아이콘 (10종)
+  - [ ] 회복포션 소/중/대
+  - [ ] 해독제
+  - [ ] 힘의물약, 철의물약
+  - [ ] 저주의물약, 화염병
+  - [ ] 마법화살, 폭탄
+- [ ] 상태이상 아이콘 (3종)
+  - [ ] 화상 (Burn)
+  - [ ] 중독 (Poison)
+  - [ ] 기절 (Stun)
+
+### 10.4 데이터 로드 방식 변경
+- [ ] `Resources.Load()` → `Addressables.LoadAssetAsync()` 변경
+- [ ] `DataManager.cs` 생성 (Addressables 래퍼)
+- [ ] 비동기 로딩 처리
+
+### 10.5 빌드 테스트
+- [ ] Addressables 빌드
+- [ ] 실제 빌드에서 데이터 노출 확인
+- [ ] CSV/엑셀 파일 미포함 확인
+
+### 10.6 참고 사항
+```
+현재 구조 (보안 취약):
+Assets/Resources/Data/
+├── MonsterData.csv      ← 빌드에 포함, 사용자 노출
+├── SkillData.csv
+└── GameData.xlsx
+
+권장 구조:
+Assets/
+├── EditorData/                    ← 에디터 전용 (빌드 제외)
+│   └── GameData.xlsx              ← 원본 엑셀
+├── ScriptableObjects/Data/        ← 변환된 데이터
+│   ├── Monsters/                  ← Addressables로 관리
+│   ├── Skills/
+│   └── ...
+└── AddressableAssetsData/         ← 이미 설치됨
+```
