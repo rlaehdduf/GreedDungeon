@@ -38,23 +38,28 @@ public class CSVConverter : EditorWindow
         };
     }
 
-    private static void DeleteOldAsset<T>(int id, string folder, string newName) where T : UnityEngine.Object
+    private static string GetAssetFileName<T>(int id, string name)
     {
-        string[] guids = AssetDatabase.FindAssets($"t:{typeof(T).Name}", new[] { folder });
-        foreach (string guid in guids)
+        string prefix = typeof(T).Name.Replace("DataSO", "");
+        return $"{prefix}_{id}_{name}.asset";
+    }
+
+    private static void RenameAssetIfNeeded<T>(T asset, int id, string newName, string folder) where T : UnityEngine.Object
+    {
+        string currentPath = AssetDatabase.GetAssetPath(asset);
+        string expectedName = GetAssetFileName<T>(id, newName);
+        string expectedPath = Path.Combine(folder, expectedName);
+        
+        if (currentPath != expectedPath)
         {
-            string path = AssetDatabase.GUIDToAssetPath(guid);
-            var asset = AssetDatabase.LoadAssetAtPath<T>(path);
-            if (asset != null && GetAssetID(asset) == id)
+            string result = AssetDatabase.RenameAsset(currentPath, expectedName);
+            if (string.IsNullOrEmpty(result))
             {
-                string expectedName = $"{typeof(T).Name.Replace("DataSO", "")}_{id}_{newName}.asset";
-                string currentName = System.IO.Path.GetFileName(path);
-                if (currentName != expectedName)
-                {
-                    AssetDatabase.DeleteAsset(path);
-                    Debug.Log($"기존 에셋 삭제 (이름 변경): {currentName} → {expectedName}");
-                }
-                break;
+                Debug.Log($"에셋 이름 변경: {System.IO.Path.GetFileName(currentPath)} → {expectedName}");
+            }
+            else
+            {
+                Debug.LogWarning($"이름 변경 실패: {result}");
             }
         }
     }
@@ -97,12 +102,17 @@ public class CSVConverter : EditorWindow
             var values = lines[i];
             if (values.Count < 7 || !int.TryParse(values[0], out int id)) continue;
 
-            DeleteOldAsset<StatusEffectDataSO>(id, outputPath, values[1]);
             var data = FindExistingAsset<StatusEffectDataSO>(id, outputPath);
             bool isNew = data == null;
             
             if (isNew)
+            {
                 data = ScriptableObject.CreateInstance<StatusEffectDataSO>();
+            }
+            else
+            {
+                RenameAssetIfNeeded(data, id, values[1], outputPath);
+            }
 
             data.ID = id;
             data.Name = values[1];
@@ -114,7 +124,7 @@ public class CSVConverter : EditorWindow
 
             if (isNew)
             {
-                string assetPath = Path.Combine(outputPath, $"StatusEffect_{data.ID}_{data.Name}.asset");
+                string assetPath = Path.Combine(outputPath, GetAssetFileName<StatusEffectDataSO>(id, data.Name));
                 AssetDatabase.CreateAsset(data, assetPath);
             }
             
@@ -147,12 +157,17 @@ public class CSVConverter : EditorWindow
             var values = lines[i];
             if (values.Count < 7 || !int.TryParse(values[0], out int id)) continue;
 
-            DeleteOldAsset<RarityDataSO>(id, outputPath, values[1]);
             var data = FindExistingAsset<RarityDataSO>(id, outputPath);
             bool isNew = data == null;
             
             if (isNew)
+            {
                 data = ScriptableObject.CreateInstance<RarityDataSO>();
+            }
+            else
+            {
+                RenameAssetIfNeeded(data, id, values[1], outputPath);
+            }
 
             data.ID = id;
             data.Name = values[1];
@@ -164,7 +179,7 @@ public class CSVConverter : EditorWindow
 
             if (isNew)
             {
-                string assetPath = Path.Combine(outputPath, $"Rarity_{data.ID}_{data.Name}.asset");
+                string assetPath = Path.Combine(outputPath, GetAssetFileName<RarityDataSO>(id, data.Name));
                 AssetDatabase.CreateAsset(data, assetPath);
             }
             
@@ -201,12 +216,17 @@ public class CSVConverter : EditorWindow
                 continue;
             }
 
-            DeleteOldAsset<SkillDataSO>(id, outputPath, values[1]);
             var data = FindExistingAsset<SkillDataSO>(id, outputPath);
             bool isNew = data == null;
             
             if (isNew)
+            {
                 data = ScriptableObject.CreateInstance<SkillDataSO>();
+            }
+            else
+            {
+                RenameAssetIfNeeded(data, id, values[1], outputPath);
+            }
 
             data.ID = id;
             data.Name = values[1];
@@ -223,7 +243,7 @@ public class CSVConverter : EditorWindow
 
             if (isNew)
             {
-                string assetPath = Path.Combine(outputPath, $"Skill_{data.ID}_{data.Name}.asset");
+                string assetPath = Path.Combine(outputPath, GetAssetFileName<SkillDataSO>(id, data.Name));
                 AssetDatabase.CreateAsset(data, assetPath);
             }
             
@@ -256,12 +276,17 @@ public class CSVConverter : EditorWindow
             var values = lines[i];
             if (values.Count < 12 || !int.TryParse(values[0], out int id)) continue;
 
-            DeleteOldAsset<EquipmentDataSO>(id, outputPath, values[1]);
             var data = FindExistingAsset<EquipmentDataSO>(id, outputPath);
             bool isNew = data == null;
             
             if (isNew)
+            {
                 data = ScriptableObject.CreateInstance<EquipmentDataSO>();
+            }
+            else
+            {
+                RenameAssetIfNeeded(data, id, values[1], outputPath);
+            }
 
             data.ID = id;
             data.Name = values[1];
@@ -278,7 +303,7 @@ public class CSVConverter : EditorWindow
 
             if (isNew)
             {
-                string assetPath = Path.Combine(outputPath, $"Equipment_{data.ID}_{data.Name}.asset");
+                string assetPath = Path.Combine(outputPath, GetAssetFileName<EquipmentDataSO>(id, data.Name));
                 AssetDatabase.CreateAsset(data, assetPath);
             }
             
@@ -311,12 +336,17 @@ public class CSVConverter : EditorWindow
             var values = lines[i];
             if (values.Count < 14 || !int.TryParse(values[0], out int id)) continue;
 
-            DeleteOldAsset<MonsterDataSO>(id, outputPath, values[1]);
             var data = FindExistingAsset<MonsterDataSO>(id, outputPath);
             bool isNew = data == null;
             
             if (isNew)
+            {
                 data = ScriptableObject.CreateInstance<MonsterDataSO>();
+            }
+            else
+            {
+                RenameAssetIfNeeded(data, id, values[1], outputPath);
+            }
 
             data.ID = id;
             data.Name = values[1];
@@ -335,7 +365,7 @@ public class CSVConverter : EditorWindow
 
             if (isNew)
             {
-                string assetPath = Path.Combine(outputPath, $"Monster_{data.ID}_{data.Name}.asset");
+                string assetPath = Path.Combine(outputPath, GetAssetFileName<MonsterDataSO>(id, data.Name));
                 AssetDatabase.CreateAsset(data, assetPath);
             }
             
@@ -368,12 +398,17 @@ public class CSVConverter : EditorWindow
             var values = lines[i];
             if (values.Count < 10 || !int.TryParse(values[0], out int id)) continue;
 
-            DeleteOldAsset<ConsumableDataSO>(id, outputPath, values[1]);
             var data = FindExistingAsset<ConsumableDataSO>(id, outputPath);
             bool isNew = data == null;
             
             if (isNew)
+            {
                 data = ScriptableObject.CreateInstance<ConsumableDataSO>();
+            }
+            else
+            {
+                RenameAssetIfNeeded(data, id, values[1], outputPath);
+            }
 
             data.ID = id;
             data.Name = values[1];
@@ -389,7 +424,7 @@ public class CSVConverter : EditorWindow
 
             if (isNew)
             {
-                string assetPath = Path.Combine(outputPath, $"Consumable_{data.ID}_{data.Name}.asset");
+                string assetPath = Path.Combine(outputPath, GetAssetFileName<ConsumableDataSO>(id, data.Name));
                 AssetDatabase.CreateAsset(data, assetPath);
             }
             
