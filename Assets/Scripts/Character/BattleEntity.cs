@@ -8,9 +8,10 @@ namespace GreedDungeon.Character
     {
         private readonly List<ActiveStatusEffect> _statusEffects = new();
         private readonly List<SkillDataSO> _skills = new();
+        private Stats _baseStats;
 
         public abstract string Name { get; }
-        public abstract Stats BaseStats { get; }
+        public Stats BaseStats => _baseStats;
 
         public int CurrentHP { get; private set; }
         public int CurrentMP { get; private set; }
@@ -31,8 +32,13 @@ namespace GreedDungeon.Character
 
         protected BattleEntity()
         {
-            CurrentHP = BaseStats.MaxHP;
-            CurrentMP = BaseStats.MaxMP;
+        }
+
+        protected void InitializeStats(Stats baseStats)
+        {
+            _baseStats = baseStats;
+            CurrentHP = _baseStats.MaxHP;
+            CurrentMP = _baseStats.MaxMP;
         }
 
         protected abstract Stats GetEquipmentStats();

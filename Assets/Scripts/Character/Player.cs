@@ -9,13 +9,12 @@ namespace GreedDungeon.Character
         private int _gold;
 
         public override string Name => "Player";
-        public override Stats BaseStats { get; }
         public int Gold => _gold;
         public int DungeonLevel { get; private set; }
 
-        public Player() : base()
+        public Player()
         {
-            BaseStats = new Stats(maxHP: 100, maxMP: 50, attack: 10, defense: 5, speed: 10, criticalRate: 5f);
+            InitializeStats(new Stats(maxHP: 100, maxMP: 50, attack: 10, defense: 5, speed: 10, criticalRate: 5f));
             _gold = 0;
             DungeonLevel = 1;
         }

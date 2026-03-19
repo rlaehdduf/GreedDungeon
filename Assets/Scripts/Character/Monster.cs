@@ -9,19 +9,18 @@ namespace GreedDungeon.Character
         private readonly StatusEffectDataSO _statusEffectData;
 
         public override string Name => _data.Name;
-        public override Stats BaseStats { get; }
         public MonsterDataSO Data => _data;
         public Element Element => _data.Element;
         public bool IsBoss => _data.IsBoss;
 
         public int GoldDrop => UnityEngine.Random.Range(_data.GoldDropMin, _data.GoldDropMax + 1);
 
-        public Monster(MonsterDataSO data, StatusEffectDataSO statusEffectData = null) : base()
+        public Monster(MonsterDataSO data, StatusEffectDataSO statusEffectData = null)
         {
             _data = data ?? throw new ArgumentNullException(nameof(data));
             _statusEffectData = statusEffectData;
 
-            BaseStats = new Stats(
+            InitializeStats(new Stats(
                 maxHP: data.MaxHP,
                 maxMP: 0,
                 attack: data.Attack,
@@ -29,10 +28,7 @@ namespace GreedDungeon.Character
                 speed: data.Speed,
                 criticalRate: data.CriticalRate,
                 resistance: 0f
-            );
-
-            SetInitialHP(BaseStats.MaxHP);
-            SetInitialMP(BaseStats.MaxMP);
+            ));
         }
 
         protected override Stats GetEquipmentStats() => new Stats();
