@@ -20,6 +20,7 @@ public class CSVConverter : EditorWindow
         total += ConvertSkills();
         total += ConvertEquipments();
         total += ConvertMonsters();
+        total += ConvertConsumables();
         
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -243,6 +244,48 @@ public class CSVConverter : EditorWindow
         return count;
     }
 
+    [MenuItem("Tools/CSV/Convert Consumables")]
+    public static int ConvertConsumables()
+    {
+        string csvFile = Path.Combine(CSV_PATH, "ConsumableData.csv");
+        if (!File.Exists(csvFile))
+        {
+            Debug.LogWarning($"파일 없음: {csvFile}");
+            return 0;
+        }
+
+        string outputPath = Path.Combine(OUTPUT_PATH, "Consumables");
+        if (!Directory.Exists(outputPath))
+            Directory.CreateDirectory(outputPath);
+
+        var lines = ReadCSV(csvFile);
+        int count = 0;
+        for (int i = 1; i < lines.Count; i++)
+        {
+            var values = lines[i];
+            if (values.Count < 10 || !int.TryParse(values[0], out int id)) continue;
+
+            var data = ScriptableObject.CreateInstance<ConsumableDataSO>();
+            data.ID = id;
+            data.Name = values[1];
+            data.EffectType = ParseConsumableEffectType(values[2]);
+            data.EffectValue = float.TryParse(values[3], NumberStyles.Float, CultureInfo.InvariantCulture, out float ev) ? ev : 0;
+            data.Target = ParseConsumableTarget(values[4]);
+            data.StatusEffectID = values[5] == "None" ? "" : values[5];
+            data.Duration = int.TryParse(values[6], out int dur) ? dur : 0;
+            data.BuyPrice = int.TryParse(values[7], out int bp) ? bp : 0;
+            data.SellPrice = int.TryParse(values[8], out int sp) ? sp : 0;
+            data.Description = values[9];
+
+            string assetPath = Path.Combine(outputPath, $"Consumable_{data.ID}_{data.Name}.asset");
+            AssetDatabase.CreateAsset(data, assetPath);
+            count++;
+        }
+        
+        Debug.Log($"Consumable 변환 완료: {count}개 (파일에서 {lines.Count}줄 읽음)");
+        return count;
+    }
+
     private static List<List<string>> ReadCSV(string path)
     {
         var result = new List<List<string>>();
@@ -339,16 +382,41 @@ public class CSVConverter : EditorWindow
         };
     }
 
-    private static SkillPoolType ParseSkillPoolType(string value)
-    {
-        return value switch
+private static SkillPoolType ParseSkillPoolType(string value)
         {
-            "Common" => SkillPoolType.Common,
-            "Melee" => SkillPoolType.Melee,
-            "Magic" => SkillPoolType.Magic,
-            "Passive" => SkillPoolType.Passive,
-            "Random" => SkillPoolType.Random,
-            _ => SkillPoolType.Common
-        };
-    }
+            return value switch
+            {
+                "Common" => SkillPoolType.Common,
+                "Melee" => SkillPoolType.Melee,
+                "Magic" => SkillPoolType.Magic,
+                "Passive" => SkillPoolType.Passive,
+                "Random" => SkillPoolType.Random,
+                _ => SkillPoolType.Common
+            };
+        }
+
+        private static ConsumableEffectType ParseConsumableEffectType(string value)
+        {
+            return value switch
+            {
+                "Heal" => ConsumableEffectType.Heal,
+                "Cleanse" => ConsumableEffectType.Cleanse,
+                "Buff" => ConsumableEffectType.Buff,
+                "Poison" => ConsumableEffectType.Poison,
+                "Burn" => ConsumableEffectType.Burn,
+                "Attack" => ConsumableEffectType.Attack,
+                _ => ConsumableEffectType.Heal
+            };
+        }
+
+        private static ConsumableTarget ParseConsumableTarget(string value)
+        {
+            return value switch
+            {
+                "Player" => ConsumableTarget.Player,
+                "Single" => ConsumableTarget.Single,
+                "All" => ConsumableTarget.All,
+                _ => ConsumableTarget.Player
+            };
+        }
 }
