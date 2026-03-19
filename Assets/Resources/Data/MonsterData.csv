@@ -1,0 +1,6 @@
+﻿ID,Name,Element,MaxHP,Attack,Defense,Speed,CriticalRate,GoldDropMin,GoldDropMax,StatusEffect,StatusEffectChance,SpecialSkill,IsBoss
+1,슬라임,풀,40,5,2,10,5,10,15,None,0,X,FALSE
+2,골렘(불),불,100,12,15,3,2,30,45,Burn,20,X,FALSE
+3,좀비,무,80,8,5,5,5,20,30,Poison,30,X,FALSE
+4,해골,무,60,10,3,12,15,25,35,Stun,10,X,FALSE
+5,킹슬라임,풀,500,25,10,7,10,200,300,None,0,Damage -50%,TRUE
