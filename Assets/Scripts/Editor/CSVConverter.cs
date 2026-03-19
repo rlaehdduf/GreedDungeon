@@ -11,6 +11,54 @@ public class CSVConverter : EditorWindow
     private const string CSV_PATH = "Assets/EditorData/Data";
     private const string OUTPUT_PATH = "Assets/ScriptableObjects/Data";
 
+    private static T FindExistingAsset<T>(int id, string folder) where T : UnityEngine.Object
+    {
+        string[] guids = AssetDatabase.FindAssets($"t:{typeof(T).Name}", new[] { folder });
+        foreach (string guid in guids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            var asset = AssetDatabase.LoadAssetAtPath<T>(path);
+            if (asset != null && GetAssetID(asset) == id)
+                return asset;
+        }
+        return null;
+    }
+
+    private static int GetAssetID(UnityEngine.Object asset)
+    {
+        return asset switch
+        {
+            StatusEffectDataSO s => s.ID,
+            RarityDataSO r => r.ID,
+            SkillDataSO sk => sk.ID,
+            EquipmentDataSO e => e.ID,
+            MonsterDataSO m => m.ID,
+            ConsumableDataSO c => c.ID,
+            _ => -1
+        };
+    }
+
+    private static void DeleteOldAsset<T>(int id, string folder, string newName) where T : UnityEngine.Object
+    {
+        string[] guids = AssetDatabase.FindAssets($"t:{typeof(T).Name}", new[] { folder });
+        foreach (string guid in guids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            var asset = AssetDatabase.LoadAssetAtPath<T>(path);
+            if (asset != null && GetAssetID(asset) == id)
+            {
+                string expectedName = $"{typeof(T).Name.Replace("DataSO", "")}_{id}_{newName}.asset";
+                string currentName = System.IO.Path.GetFileName(path);
+                if (currentName != expectedName)
+                {
+                    AssetDatabase.DeleteAsset(path);
+                    Debug.Log($"기존 에셋 삭제 (이름 변경): {currentName} → {expectedName}");
+                }
+                break;
+            }
+        }
+    }
+
     [MenuItem("Tools/CSV/Convert All")]
     public static void ConvertAll()
     {
@@ -25,7 +73,7 @@ public class CSVConverter : EditorWindow
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         
-        Debug.Log($"CSV 변환 완료! 총 {total}개");
+        Debug.Log($"═══ CSV 변환 완료! 총 {total}개 ═══");
     }
 
     [MenuItem("Tools/CSV/Convert StatusEffects")]
@@ -49,7 +97,13 @@ public class CSVConverter : EditorWindow
             var values = lines[i];
             if (values.Count < 7 || !int.TryParse(values[0], out int id)) continue;
 
-            var data = ScriptableObject.CreateInstance<StatusEffectDataSO>();
+            DeleteOldAsset<StatusEffectDataSO>(id, outputPath, values[1]);
+            var data = FindExistingAsset<StatusEffectDataSO>(id, outputPath);
+            bool isNew = data == null;
+            
+            if (isNew)
+                data = ScriptableObject.CreateInstance<StatusEffectDataSO>();
+
             data.ID = id;
             data.Name = values[1];
             data.DamagePerTurn = int.TryParse(values[2], out int dpt) ? dpt : 0;
@@ -58,12 +112,17 @@ public class CSVConverter : EditorWindow
             data.Duration = int.TryParse(values[5], out int dur) ? dur : 0;
             data.SkipTurn = values[6].ToLower() == "true";
 
-            string assetPath = Path.Combine(outputPath, $"StatusEffect_{data.ID}_{data.Name}.asset");
-            AssetDatabase.CreateAsset(data, assetPath);
+            if (isNew)
+            {
+                string assetPath = Path.Combine(outputPath, $"StatusEffect_{data.ID}_{data.Name}.asset");
+                AssetDatabase.CreateAsset(data, assetPath);
+            }
+            
+            EditorUtility.SetDirty(data);
             count++;
         }
         
-        Debug.Log($"StatusEffect 변환 완료: {count}개 (파일에서 {lines.Count}줄 읽음)");
+        Debug.Log($"StatusEffect 변환 완료: {count}개");
         return count;
     }
 
@@ -88,7 +147,13 @@ public class CSVConverter : EditorWindow
             var values = lines[i];
             if (values.Count < 7 || !int.TryParse(values[0], out int id)) continue;
 
-            var data = ScriptableObject.CreateInstance<RarityDataSO>();
+            DeleteOldAsset<RarityDataSO>(id, outputPath, values[1]);
+            var data = FindExistingAsset<RarityDataSO>(id, outputPath);
+            bool isNew = data == null;
+            
+            if (isNew)
+                data = ScriptableObject.CreateInstance<RarityDataSO>();
+
             data.ID = id;
             data.Name = values[1];
             data.StatMultiplier = float.TryParse(values[2], NumberStyles.Float, CultureInfo.InvariantCulture, out float sm) ? sm : 1;
@@ -97,12 +162,17 @@ public class CSVConverter : EditorWindow
             data.SkillTierMax = int.TryParse(values[5], out int stmax) ? stmax : 0;
             data.DropWeight = int.TryParse(values[6], out int dw) ? dw : 0;
 
-            string assetPath = Path.Combine(outputPath, $"Rarity_{data.ID}_{data.Name}.asset");
-            AssetDatabase.CreateAsset(data, assetPath);
+            if (isNew)
+            {
+                string assetPath = Path.Combine(outputPath, $"Rarity_{data.ID}_{data.Name}.asset");
+                AssetDatabase.CreateAsset(data, assetPath);
+            }
+            
+            EditorUtility.SetDirty(data);
             count++;
         }
         
-        Debug.Log($"Rarity 변환 완료: {count}개 (파일에서 {lines.Count}줄 읽음)");
+        Debug.Log($"Rarity 변환 완료: {count}개");
         return count;
     }
 
@@ -131,7 +201,13 @@ public class CSVConverter : EditorWindow
                 continue;
             }
 
-            var data = ScriptableObject.CreateInstance<SkillDataSO>();
+            DeleteOldAsset<SkillDataSO>(id, outputPath, values[1]);
+            var data = FindExistingAsset<SkillDataSO>(id, outputPath);
+            bool isNew = data == null;
+            
+            if (isNew)
+                data = ScriptableObject.CreateInstance<SkillDataSO>();
+
             data.ID = id;
             data.Name = values[1];
             data.Type = ParseSkillType(values[2]);
@@ -145,12 +221,17 @@ public class CSVConverter : EditorWindow
             data.StatusEffectChance = float.TryParse(values[10], NumberStyles.Float, CultureInfo.InvariantCulture, out float sec) ? sec : 0;
             data.Tier = int.TryParse(values[11], out int tier) ? tier : 1;
 
-            string assetPath = Path.Combine(outputPath, $"Skill_{data.ID}_{data.Name}.asset");
-            AssetDatabase.CreateAsset(data, assetPath);
+            if (isNew)
+            {
+                string assetPath = Path.Combine(outputPath, $"Skill_{data.ID}_{data.Name}.asset");
+                AssetDatabase.CreateAsset(data, assetPath);
+            }
+            
+            EditorUtility.SetDirty(data);
             count++;
         }
         
-        Debug.Log($"Skill 변환 완료: {count}개 (파일에서 {lines.Count}줄 읽음)");
+        Debug.Log($"Skill 변환 완료: {count}개");
         return count;
     }
 
@@ -175,7 +256,13 @@ public class CSVConverter : EditorWindow
             var values = lines[i];
             if (values.Count < 12 || !int.TryParse(values[0], out int id)) continue;
 
-            var data = ScriptableObject.CreateInstance<EquipmentDataSO>();
+            DeleteOldAsset<EquipmentDataSO>(id, outputPath, values[1]);
+            var data = FindExistingAsset<EquipmentDataSO>(id, outputPath);
+            bool isNew = data == null;
+            
+            if (isNew)
+                data = ScriptableObject.CreateInstance<EquipmentDataSO>();
+
             data.ID = id;
             data.Name = values[1];
             data.Type = ParseEquipmentType(values[2]);
@@ -189,12 +276,17 @@ public class CSVConverter : EditorWindow
             data.BuyPrice = int.TryParse(values[10], out int bp) ? bp : 0;
             data.SellPrice = int.TryParse(values[11], out int sp) ? sp : 0;
 
-            string assetPath = Path.Combine(outputPath, $"Equipment_{data.ID}_{data.Name}.asset");
-            AssetDatabase.CreateAsset(data, assetPath);
+            if (isNew)
+            {
+                string assetPath = Path.Combine(outputPath, $"Equipment_{data.ID}_{data.Name}.asset");
+                AssetDatabase.CreateAsset(data, assetPath);
+            }
+            
+            EditorUtility.SetDirty(data);
             count++;
         }
         
-        Debug.Log($"Equipment 변환 완료: {count}개 (파일에서 {lines.Count}줄 읽음)");
+        Debug.Log($"Equipment 변환 완료: {count}개");
         return count;
     }
 
@@ -219,7 +311,13 @@ public class CSVConverter : EditorWindow
             var values = lines[i];
             if (values.Count < 14 || !int.TryParse(values[0], out int id)) continue;
 
-            var data = ScriptableObject.CreateInstance<MonsterDataSO>();
+            DeleteOldAsset<MonsterDataSO>(id, outputPath, values[1]);
+            var data = FindExistingAsset<MonsterDataSO>(id, outputPath);
+            bool isNew = data == null;
+            
+            if (isNew)
+                data = ScriptableObject.CreateInstance<MonsterDataSO>();
+
             data.ID = id;
             data.Name = values[1];
             data.Element = ParseElement(values[2]);
@@ -235,12 +333,17 @@ public class CSVConverter : EditorWindow
             data.SpecialSkill = values[12];
             data.IsBoss = values[13].ToLower().Replace("fasle", "false") == "true";
 
-            string assetPath = Path.Combine(outputPath, $"Monster_{data.ID}_{data.Name}.asset");
-            AssetDatabase.CreateAsset(data, assetPath);
+            if (isNew)
+            {
+                string assetPath = Path.Combine(outputPath, $"Monster_{data.ID}_{data.Name}.asset");
+                AssetDatabase.CreateAsset(data, assetPath);
+            }
+            
+            EditorUtility.SetDirty(data);
             count++;
         }
         
-        Debug.Log($"Monster 변환 완료: {count}개 (파일에서 {lines.Count}줄 읽음)");
+        Debug.Log($"Monster 변환 완료: {count}개");
         return count;
     }
 
@@ -265,7 +368,13 @@ public class CSVConverter : EditorWindow
             var values = lines[i];
             if (values.Count < 10 || !int.TryParse(values[0], out int id)) continue;
 
-            var data = ScriptableObject.CreateInstance<ConsumableDataSO>();
+            DeleteOldAsset<ConsumableDataSO>(id, outputPath, values[1]);
+            var data = FindExistingAsset<ConsumableDataSO>(id, outputPath);
+            bool isNew = data == null;
+            
+            if (isNew)
+                data = ScriptableObject.CreateInstance<ConsumableDataSO>();
+
             data.ID = id;
             data.Name = values[1];
             data.EffectType = ParseConsumableEffectType(values[2]);
@@ -276,13 +385,19 @@ public class CSVConverter : EditorWindow
             data.BuyPrice = int.TryParse(values[7], out int bp) ? bp : 0;
             data.SellPrice = int.TryParse(values[8], out int sp) ? sp : 0;
             data.Description = values[9];
+            data.BuffType = ParseBuffType(values[5], values[1]);
 
-            string assetPath = Path.Combine(outputPath, $"Consumable_{data.ID}_{data.Name}.asset");
-            AssetDatabase.CreateAsset(data, assetPath);
+            if (isNew)
+            {
+                string assetPath = Path.Combine(outputPath, $"Consumable_{data.ID}_{data.Name}.asset");
+                AssetDatabase.CreateAsset(data, assetPath);
+            }
+            
+            EditorUtility.SetDirty(data);
             count++;
         }
         
-        Debug.Log($"Consumable 변환 완료: {count}개 (파일에서 {lines.Count}줄 읽음)");
+        Debug.Log($"Consumable 변환 완료: {count}개");
         return count;
     }
 
@@ -418,5 +533,12 @@ private static SkillPoolType ParseSkillPoolType(string value)
                 "All" => ConsumableTarget.All,
                 _ => ConsumableTarget.Player
             };
+        }
+
+        private static BuffType ParseBuffType(string statusEffectId, string name)
+        {
+            if (name.Contains("힘의")) return BuffType.Attack;
+            if (name.Contains("철의")) return BuffType.Defense;
+            return BuffType.None;
         }
 }
