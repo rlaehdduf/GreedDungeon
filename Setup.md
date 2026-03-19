@@ -94,3 +94,12 @@ CSVConverter에서 자동 수정:
 - `Fasle` → `FALSE`
 - `Brun` → `Burn`
 - `Dagame` → `Damage`
+
+---
+
+## 수정 내역
+
+### 2026-03-19: CSVConverter 빈 데이터 처리
+- `ReadCSV()` 메서드에 빈 줄 체크 추가 (`string.IsNullOrWhiteSpace`)
+- 빈 필드 체크 추가 (ID가 비어있으면 스킵)
+- CSV 끝에 빈 줄이 있어도 에러 발생하지 않음

@@ -231,6 +231,8 @@ public class CSVConverter : EditorWindow
             string line;
             while ((line = reader.ReadLine()) != null)
             {
+                if (string.IsNullOrWhiteSpace(line)) continue;
+                
                 var values = new List<string>();
                 var fields = line.Split(',');
                 
@@ -242,7 +244,8 @@ public class CSVConverter : EditorWindow
                     values.Add(value);
                 }
                 
-                result.Add(values);
+                if (values.Count > 0 && !string.IsNullOrEmpty(values[0]))
+                    result.Add(values);
             }
         }
         
