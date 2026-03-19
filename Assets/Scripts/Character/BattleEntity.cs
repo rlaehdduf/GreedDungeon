@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GreedDungeon.ScriptableObjects;
+using UnityEngine;
 
 namespace GreedDungeon.Character
 {
@@ -78,22 +79,51 @@ namespace GreedDungeon.Character
 
         public void ProcessTurnStart()
         {
+            if (_statusEffects.Count > 0)
+            {
+                Debug.Log($"  [{Name}] 상태이상 처리 시작");
+            }
+
             for (int i = _statusEffects.Count - 1; i >= 0; i--)
             {
                 var effect = _statusEffects[i];
                 ProcessStatusEffectDamage(effect);
                 effect.RemainingDuration--;
+                
                 if (effect.RemainingDuration <= 0)
+                {
+                    Debug.Log($"    [{effect.Data.Name}] 효과 종료");
                     _statusEffects.RemoveAt(i);
+                }
+                else
+                {
+                    Debug.Log($"    [{effect.Data.Name}] 남은 지속: {effect.RemainingDuration}턴");
+                }
             }
         }
 
         private void ProcessStatusEffectDamage(ActiveStatusEffect effect)
         {
-            int damage = effect.Data.DamagePerTurn;
-            damage += (int)(CurrentHP * effect.Data.DamageCurrentPercent);
-            damage += (int)(TotalStats.MaxHP * effect.Data.DamageMaxPercent);
-            if (damage > 0) TakeDamage(damage);
+            if (effect.Data.SkipTurn)
+            {
+                Debug.Log($"    [{effect.Data.Name}] 턴 스킵!");
+            }
+
+            int baseDamage = effect.Data.DamagePerTurn;
+            int currentHpDamage = (int)(CurrentHP * effect.Data.DamageCurrentPercent);
+            int maxHpDamage = (int)(TotalStats.MaxHP * effect.Data.DamageMaxPercent);
+            int totalDamage = baseDamage + currentHpDamage + maxHpDamage;
+
+            if (totalDamage > 0)
+            {
+                string damageBreakdown = "";
+                if (baseDamage > 0) damageBreakdown += $"고정:{baseDamage}";
+                if (currentHpDamage > 0) damageBreakdown += $" 현재HP%:{currentHpDamage}";
+                if (maxHpDamage > 0) damageBreakdown += $" 최대HP%:{maxHpDamage}";
+
+                TakeDamage(totalDamage);
+                Debug.Log($"    [{effect.Data.Name}] 데미지: {totalDamage} ({damageBreakdown.Trim()}) → HP: {CurrentHP}/{TotalStats.MaxHP}");
+            }
         }
 
         public void ProcessTurnEnd() { }

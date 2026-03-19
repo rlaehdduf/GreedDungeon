@@ -18,28 +18,23 @@ namespace GreedDungeon.Combat
         {
             var result = new DamageResult();
 
-            int baseDamage = CalculateBaseDamage(attacker, skill);
-            int defense = defender.TotalStats.Defense;
-            int finalDamage = Math.Max(1, baseDamage - defense / 2);
+            result.BaseAttack = attacker.TotalStats.Attack;
+            result.SkillMultiplier = skill?.EffectValue ?? 1f;
+            result.BaseDamage = (int)(result.BaseAttack * result.SkillMultiplier);
+
+            result.Defense = defender.TotalStats.Defense;
+            result.DamageAfterDefense = Math.Max(1, result.BaseDamage - result.Defense / 2);
 
             result.IsCritical = RollCritical(attacker.TotalStats.CriticalRate);
-            if (result.IsCritical)
-                finalDamage = (int)(finalDamage * BASE_CRITICAL_MULTIPLIER);
+            result.CriticalMultiplier = result.IsCritical ? BASE_CRITICAL_MULTIPLIER : 1f;
+            int damageAfterCrit = (int)(result.DamageAfterDefense * result.CriticalMultiplier);
 
-            float elementMultiplier = GetElementMultiplierForSkill(skill, defender);
-            finalDamage = (int)(finalDamage * elementMultiplier);
-
-            result.Damage = finalDamage;
-            result.ElementMultiplier = elementMultiplier;
+            result.ElementMultiplier = GetElementMultiplierForSkill(skill, defender, out Element attackElement, out Element defenderElement);
+            result.AttackElement = attackElement;
+            result.DefenderElement = defenderElement;
+            result.Damage = (int)(damageAfterCrit * result.ElementMultiplier);
 
             return result;
-        }
-
-        private int CalculateBaseDamage(IBattleEntity attacker, SkillDataSO skill)
-        {
-            int baseAttack = attacker.TotalStats.Attack;
-            float skillMultiplier = skill?.EffectValue ?? 1f;
-            return (int)(baseAttack * skillMultiplier);
         }
 
         private bool RollCritical(float criticalRate)
@@ -47,13 +42,16 @@ namespace GreedDungeon.Combat
             return UnityEngine.Random.Range(0f, 100f) < criticalRate;
         }
 
-        private float GetElementMultiplierForSkill(SkillDataSO skill, IBattleEntity defender)
+        private float GetElementMultiplierForSkill(SkillDataSO skill, IBattleEntity defender, out Element attackElement, out Element defenderElement)
         {
-            if (skill == null) return 1f;
-            if (defender is Monster monster)
+            attackElement = Element.None;
+            defenderElement = Element.None;
+
+            if (skill != null && defender is Monster monster)
             {
-                Element skillElement = GetSkillElement(skill);
-                return GetElementMultiplier(skillElement, monster.Element);
+                attackElement = GetSkillElement(skill);
+                defenderElement = monster.Element;
+                return GetElementMultiplier(attackElement, defenderElement);
             }
             return 1f;
         }
@@ -92,5 +90,13 @@ namespace GreedDungeon.Combat
         public int Damage { get; set; }
         public bool IsCritical { get; set; }
         public float ElementMultiplier { get; set; }
+        public int BaseAttack { get; set; }
+        public float SkillMultiplier { get; set; }
+        public int BaseDamage { get; set; }
+        public int Defense { get; set; }
+        public int DamageAfterDefense { get; set; }
+        public float CriticalMultiplier { get; set; }
+        public Element AttackElement { get; set; }
+        public Element DefenderElement { get; set; }
     }
 }
