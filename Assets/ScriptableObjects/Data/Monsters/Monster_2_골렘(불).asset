@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca3c52bff6c20144ea7b942cdc714313, type: 3}
+  m_Name: "Monster_2_\uACE8\uB818(\uBD88)"
+  m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.MonsterDataSO
+  ID: 2
+  Name: "\uACE8\uB818(\uBD88)"
+  Element: 1
+  MaxHP: 100
+  Attack: 12
+  Defense: 15
+  Speed: 3
+  CriticalRate: 2
+  GoldDropMin: 30
+  GoldDropMax: 45
+  StatusEffectID: Burn
+  StatusEffectChance: 20
+  SpecialSkill: X
+  IsBoss: 0

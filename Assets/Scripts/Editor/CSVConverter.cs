@@ -3,6 +3,7 @@ using UnityEditor;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
+using System.Globalization;
 using GreedDungeon.ScriptableObjects;
 
 public class CSVConverter : EditorWindow
@@ -13,26 +14,27 @@ public class CSVConverter : EditorWindow
     [MenuItem("Tools/CSV/Convert All")]
     public static void ConvertAll()
     {
-        ConvertStatusEffects();
-        ConvertRarities();
-        ConvertSkills();
-        ConvertEquipments();
-        ConvertMonsters();
+        int total = 0;
+        total += ConvertStatusEffects();
+        total += ConvertRarities();
+        total += ConvertSkills();
+        total += ConvertEquipments();
+        total += ConvertMonsters();
         
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         
-        Debug.Log("CSV 변환 완료!");
+        Debug.Log($"CSV 변환 완료! 총 {total}개");
     }
 
     [MenuItem("Tools/CSV/Convert StatusEffects")]
-    public static void ConvertStatusEffects()
+    public static int ConvertStatusEffects()
     {
         string csvFile = Path.Combine(CSV_PATH, "StatusEffect.csv");
         if (!File.Exists(csvFile))
         {
             Debug.LogWarning($"파일 없음: {csvFile}");
-            return;
+            return 0;
         }
 
         string outputPath = Path.Combine(OUTPUT_PATH, "StatusEffects");
@@ -40,35 +42,38 @@ public class CSVConverter : EditorWindow
             Directory.CreateDirectory(outputPath);
 
         var lines = ReadCSV(csvFile);
+        int count = 0;
         for (int i = 1; i < lines.Count; i++)
         {
             var values = lines[i];
-            if (values.Count < 7) continue;
+            if (values.Count < 7 || !int.TryParse(values[0], out int id)) continue;
 
             var data = ScriptableObject.CreateInstance<StatusEffectDataSO>();
-            data.ID = int.Parse(values[0]);
+            data.ID = id;
             data.Name = values[1];
-            data.DamagePerTurn = int.Parse(values[2]);
-            data.DamageCurrentPercent = float.Parse(values[3]);
-            data.DamageMaxPercent = float.Parse(values[4]);
-            data.Duration = int.Parse(values[5]);
+            data.DamagePerTurn = int.TryParse(values[2], out int dpt) ? dpt : 0;
+            data.DamageCurrentPercent = float.TryParse(values[3], NumberStyles.Float, CultureInfo.InvariantCulture, out float dcp) ? dcp : 0;
+            data.DamageMaxPercent = float.TryParse(values[4], NumberStyles.Float, CultureInfo.InvariantCulture, out float dmp) ? dmp : 0;
+            data.Duration = int.TryParse(values[5], out int dur) ? dur : 0;
             data.SkipTurn = values[6].ToLower() == "true";
 
             string assetPath = Path.Combine(outputPath, $"StatusEffect_{data.ID}_{data.Name}.asset");
             AssetDatabase.CreateAsset(data, assetPath);
+            count++;
         }
         
-        Debug.Log($"StatusEffect 변환 완료: {lines.Count - 1}개");
+        Debug.Log($"StatusEffect 변환 완료: {count}개 (파일에서 {lines.Count}줄 읽음)");
+        return count;
     }
 
     [MenuItem("Tools/CSV/Convert Rarities")]
-    public static void ConvertRarities()
+    public static int ConvertRarities()
     {
         string csvFile = Path.Combine(CSV_PATH, "RarityData.csv");
         if (!File.Exists(csvFile))
         {
             Debug.LogWarning($"파일 없음: {csvFile}");
-            return;
+            return 0;
         }
 
         string outputPath = Path.Combine(OUTPUT_PATH, "Rarities");
@@ -76,35 +81,38 @@ public class CSVConverter : EditorWindow
             Directory.CreateDirectory(outputPath);
 
         var lines = ReadCSV(csvFile);
+        int count = 0;
         for (int i = 1; i < lines.Count; i++)
         {
             var values = lines[i];
-            if (values.Count < 7) continue;
+            if (values.Count < 7 || !int.TryParse(values[0], out int id)) continue;
 
             var data = ScriptableObject.CreateInstance<RarityDataSO>();
-            data.ID = int.Parse(values[0]);
+            data.ID = id;
             data.Name = values[1];
-            data.StatMultiplier = float.Parse(values[2]);
+            data.StatMultiplier = float.TryParse(values[2], NumberStyles.Float, CultureInfo.InvariantCulture, out float sm) ? sm : 1;
             data.HasSkill = values[3].ToLower() == "true";
-            data.SkillTierMin = int.Parse(values[4]);
-            data.SkillTierMax = int.Parse(values[5]);
-            data.DropWeight = int.Parse(values[6]);
+            data.SkillTierMin = int.TryParse(values[4], out int stmin) ? stmin : 0;
+            data.SkillTierMax = int.TryParse(values[5], out int stmax) ? stmax : 0;
+            data.DropWeight = int.TryParse(values[6], out int dw) ? dw : 0;
 
             string assetPath = Path.Combine(outputPath, $"Rarity_{data.ID}_{data.Name}.asset");
             AssetDatabase.CreateAsset(data, assetPath);
+            count++;
         }
         
-        Debug.Log($"Rarity 변환 완료: {lines.Count - 1}개");
+        Debug.Log($"Rarity 변환 완료: {count}개 (파일에서 {lines.Count}줄 읽음)");
+        return count;
     }
 
     [MenuItem("Tools/CSV/Convert Skills")]
-    public static void ConvertSkills()
+    public static int ConvertSkills()
     {
         string csvFile = Path.Combine(CSV_PATH, "SkillData.csv");
         if (!File.Exists(csvFile))
         {
             Debug.LogWarning($"파일 없음: {csvFile}");
-            return;
+            return 0;
         }
 
         string outputPath = Path.Combine(OUTPUT_PATH, "Skills");
@@ -112,40 +120,47 @@ public class CSVConverter : EditorWindow
             Directory.CreateDirectory(outputPath);
 
         var lines = ReadCSV(csvFile);
+        int count = 0;
         for (int i = 1; i < lines.Count; i++)
         {
             var values = lines[i];
-            if (values.Count < 12) continue;
+            if (values.Count < 12 || !int.TryParse(values[0], out int id))
+            {
+                Debug.LogWarning($"Skill 라인 {i} 건너뜀: 필드 수={values.Count}");
+                continue;
+            }
 
             var data = ScriptableObject.CreateInstance<SkillDataSO>();
-            data.ID = int.Parse(values[0]);
+            data.ID = id;
             data.Name = values[1];
             data.Type = ParseSkillType(values[2]);
-            data.MPCost = int.Parse(values[3]);
+            data.MPCost = int.TryParse(values[3], out int mp) ? mp : 0;
             data.Description = values[4];
             data.EffectType = ParseEffectType(values[5].Replace("Dagame", "Damage"));
-            data.EffectValue = float.Parse(values[6]);
-            data.Duration = int.Parse(values[7]);
+            data.EffectValue = float.TryParse(values[6], NumberStyles.Float, CultureInfo.InvariantCulture, out float ev) ? ev : 0;
+            data.Duration = int.TryParse(values[7], out int dur) ? dur : 0;
             data.Target = ParseTargetType(values[8]);
             data.StatusEffectID = values[9] == "None" ? "" : values[9];
-            data.StatusEffectChance = float.Parse(values[10]);
-            data.Tier = int.Parse(values[11]);
+            data.StatusEffectChance = float.TryParse(values[10], NumberStyles.Float, CultureInfo.InvariantCulture, out float sec) ? sec : 0;
+            data.Tier = int.TryParse(values[11], out int tier) ? tier : 1;
 
             string assetPath = Path.Combine(outputPath, $"Skill_{data.ID}_{data.Name}.asset");
             AssetDatabase.CreateAsset(data, assetPath);
+            count++;
         }
         
-        Debug.Log($"Skill 변환 완료: {lines.Count - 1}개");
+        Debug.Log($"Skill 변환 완료: {count}개 (파일에서 {lines.Count}줄 읽음)");
+        return count;
     }
 
     [MenuItem("Tools/CSV/Convert Equipments")]
-    public static void ConvertEquipments()
+    public static int ConvertEquipments()
     {
         string csvFile = Path.Combine(CSV_PATH, "EquipmentData.csv");
         if (!File.Exists(csvFile))
         {
             Debug.LogWarning($"파일 없음: {csvFile}");
-            return;
+            return 0;
         }
 
         string outputPath = Path.Combine(OUTPUT_PATH, "Equipments");
@@ -153,40 +168,43 @@ public class CSVConverter : EditorWindow
             Directory.CreateDirectory(outputPath);
 
         var lines = ReadCSV(csvFile);
+        int count = 0;
         for (int i = 1; i < lines.Count; i++)
         {
             var values = lines[i];
-            if (values.Count < 12) continue;
+            if (values.Count < 12 || !int.TryParse(values[0], out int id)) continue;
 
             var data = ScriptableObject.CreateInstance<EquipmentDataSO>();
-            data.ID = int.Parse(values[0]);
+            data.ID = id;
             data.Name = values[1];
             data.Type = ParseEquipmentType(values[2]);
-            data.HP = int.Parse(values[3]);
-            data.MP = int.Parse(values[4]);
-            data.Attack = int.Parse(values[5]);
-            data.Defense = int.Parse(values[6]);
-            data.Speed = int.Parse(values[7]);
-            data.CriticalRate = float.Parse(values[8]);
+            data.HP = int.TryParse(values[3], out int hp) ? hp : 0;
+            data.MP = int.TryParse(values[4], out int mp) ? mp : 0;
+            data.Attack = int.TryParse(values[5], out int atk) ? atk : 0;
+            data.Defense = int.TryParse(values[6], out int def) ? def : 0;
+            data.Speed = int.TryParse(values[7], out int spd) ? spd : 0;
+            data.CriticalRate = float.TryParse(values[8], NumberStyles.Float, CultureInfo.InvariantCulture, out float cr) ? cr : 0;
             data.SkillPoolType = ParseSkillPoolType(values[9]);
-            data.BuyPrice = int.Parse(values[10]);
-            data.SellPrice = int.Parse(values[11]);
+            data.BuyPrice = int.TryParse(values[10], out int bp) ? bp : 0;
+            data.SellPrice = int.TryParse(values[11], out int sp) ? sp : 0;
 
             string assetPath = Path.Combine(outputPath, $"Equipment_{data.ID}_{data.Name}.asset");
             AssetDatabase.CreateAsset(data, assetPath);
+            count++;
         }
         
-        Debug.Log($"Equipment 변환 완료: {lines.Count - 1}개");
+        Debug.Log($"Equipment 변환 완료: {count}개 (파일에서 {lines.Count}줄 읽음)");
+        return count;
     }
 
     [MenuItem("Tools/CSV/Convert Monsters")]
-    public static void ConvertMonsters()
+    public static int ConvertMonsters()
     {
         string csvFile = Path.Combine(CSV_PATH, "MonsterData.csv");
         if (!File.Exists(csvFile))
         {
             Debug.LogWarning($"파일 없음: {csvFile}");
-            return;
+            return 0;
         }
 
         string outputPath = Path.Combine(OUTPUT_PATH, "Monsters");
@@ -194,59 +212,70 @@ public class CSVConverter : EditorWindow
             Directory.CreateDirectory(outputPath);
 
         var lines = ReadCSV(csvFile);
+        int count = 0;
         for (int i = 1; i < lines.Count; i++)
         {
             var values = lines[i];
-            if (values.Count < 14) continue;
+            if (values.Count < 14 || !int.TryParse(values[0], out int id)) continue;
 
             var data = ScriptableObject.CreateInstance<MonsterDataSO>();
-            data.ID = int.Parse(values[0]);
+            data.ID = id;
             data.Name = values[1];
             data.Element = ParseElement(values[2]);
-            data.MaxHP = int.Parse(values[3]);
-            data.Attack = int.Parse(values[4]);
-            data.Defense = int.Parse(values[5]);
-            data.Speed = int.Parse(values[6]);
-            data.CriticalRate = float.Parse(values[7]);
-            data.GoldDropMin = int.Parse(values[8]);
-            data.GoldDropMax = int.Parse(values[9]);
+            data.MaxHP = int.TryParse(values[3], out int mhp) ? mhp : 0;
+            data.Attack = int.TryParse(values[4], out int atk) ? atk : 0;
+            data.Defense = int.TryParse(values[5], out int def) ? def : 0;
+            data.Speed = int.TryParse(values[6], out int spd) ? spd : 0;
+            data.CriticalRate = float.TryParse(values[7], NumberStyles.Float, CultureInfo.InvariantCulture, out float cr) ? cr : 0;
+            data.GoldDropMin = int.TryParse(values[8], out int gmin) ? gmin : 0;
+            data.GoldDropMax = int.TryParse(values[9], out int gmax) ? gmax : 0;
             data.StatusEffectID = values[10] == "None" ? "" : values[10].Replace("Brun", "Burn");
-            data.StatusEffectChance = float.Parse(values[11]);
+            data.StatusEffectChance = float.TryParse(values[11], NumberStyles.Float, CultureInfo.InvariantCulture, out float sec) ? sec : 0;
             data.SpecialSkill = values[12];
             data.IsBoss = values[13].ToLower().Replace("fasle", "false") == "true";
 
             string assetPath = Path.Combine(outputPath, $"Monster_{data.ID}_{data.Name}.asset");
             AssetDatabase.CreateAsset(data, assetPath);
+            count++;
         }
         
-        Debug.Log($"Monster 변환 완료: {lines.Count - 1}개");
+        Debug.Log($"Monster 변환 완료: {count}개 (파일에서 {lines.Count}줄 읽음)");
+        return count;
     }
 
     private static List<List<string>> ReadCSV(string path)
     {
         var result = new List<List<string>>();
         
-        using (var reader = new StreamReader(path, Encoding.UTF8))
+        byte[] bytes = File.ReadAllBytes(path);
+        string text;
+        
+        if (bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
         {
-            string line;
-            while ((line = reader.ReadLine()) != null)
+            text = Encoding.UTF8.GetString(bytes, 3, bytes.Length - 3);
+        }
+        else
+        {
+            text = Encoding.UTF8.GetString(bytes);
+        }
+        
+        string[] lines = text.Split(new[] { "\r\n", "\r", "\n" }, System.StringSplitOptions.None);
+        
+        for (int lineNum = 0; lineNum < lines.Length; lineNum++)
+        {
+            string line = lines[lineNum];
+            if (string.IsNullOrWhiteSpace(line)) continue;
+            
+            var values = new List<string>();
+            var fields = line.Split(',');
+            
+            foreach (var field in fields)
             {
-                if (string.IsNullOrWhiteSpace(line)) continue;
-                
-                var values = new List<string>();
-                var fields = line.Split(',');
-                
-                foreach (var field in fields)
-                {
-                    string value = field.Trim();
-                    if (value.StartsWith("﻿"))
-                        value = value.Substring(1);
-                    values.Add(value);
-                }
-                
-                if (values.Count > 0 && !string.IsNullOrEmpty(values[0]))
-                    result.Add(values);
+                values.Add(field.Trim());
             }
+            
+            if (values.Count > 0 && !string.IsNullOrEmpty(values[0]))
+                result.Add(values);
         }
         
         return result;
