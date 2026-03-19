@@ -8,7 +8,7 @@ using GreedDungeon.ScriptableObjects;
 
 public class CSVConverter : EditorWindow
 {
-    private const string CSV_PATH = "Assets/Resources/Data";
+    private const string CSV_PATH = "Assets/EditorData/Data";
     private const string OUTPUT_PATH = "Assets/ScriptableObjects/Data";
 
     [MenuItem("Tools/CSV/Convert All")]
