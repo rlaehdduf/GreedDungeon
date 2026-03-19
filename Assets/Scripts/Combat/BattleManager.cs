@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GreedDungeon.Character;
+using GreedDungeon.Items;
 using GreedDungeon.ScriptableObjects;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ namespace GreedDungeon.Combat
     {
         void StartBattle(Player player, Monster monster);
         void ExecuteAttack(IBattleEntity attacker, IBattleEntity defender, SkillDataSO skill);
+        void ExecuteDefend(IBattleEntity defender);
+        bool ExecuteItem(ConsumableItem item, IBattleEntity target);
         void EndTurn();
         bool IsBattleOver { get; }
         bool PlayerWon { get; }
@@ -84,11 +87,78 @@ namespace GreedDungeon.Combat
                 Debug.Log($"    속성 [{result.AttackElement} → {result.DefenderElement}]: x{result.ElementMultiplier} ({elementText})");
             }
 
+            if (result.IsDefending)
+            {
+                Debug.Log($"    ■ 방어 태세! 데미지 {result.DefenseMultiplier * 100}%로 감소");
+            }
+
             Debug.Log($"    ▶ 최종 데미지: {result.Damage}");
 
             defender.TakeDamage(result.Damage);
 
             ApplyStatusEffectFromSkill(skill, defender);
+        }
+
+        public void ExecuteDefend(IBattleEntity defender)
+        {
+            if (defender.IsDead) return;
+
+            string defenderName = defender == _player ? "플레이어" : defender.Name;
+            defender.StartDefend();
+            Debug.Log($"[방어] {defenderName}이(가) 방어 태세를 취함");
+        }
+
+        public bool ExecuteItem(ConsumableItem item, IBattleEntity target)
+        {
+            if (item == null || item.Quantity <= 0) return false;
+            if (target == null || target.IsDead) return false;
+
+            var data = item.Data;
+            Debug.Log($"[아이템] {data.Name} 사용 → {target.Name}");
+
+            switch (data.EffectType)
+            {
+                case ConsumableEffectType.Heal:
+                    int healAmount = (int)data.EffectValue;
+                    target.Heal(healAmount);
+                    Debug.Log($"  HP 회복: +{healAmount} → {target.CurrentHP}/{target.TotalStats.MaxHP}");
+                    break;
+
+                case ConsumableEffectType.Cleanse:
+                    target.ClearDebuffs();
+                    break;
+
+                case ConsumableEffectType.Buff:
+                    if (data.BuffType != BuffType.None)
+                    {
+                        target.ApplyBuff(data.BuffType, data.EffectValue, data.Duration);
+                    }
+                    break;
+
+                case ConsumableEffectType.Poison:
+                case ConsumableEffectType.Burn:
+                    var effect = FindStatusEffect(data.EffectType == ConsumableEffectType.Poison ? "Poison" : "Burn");
+                    if (effect != null)
+                    {
+                        target.ApplyStatusEffect(effect, data.Duration);
+                        Debug.Log($"  ★ {target.Name}이(가) [{effect.Name}] 상태이상에 걸림!");
+                    }
+                    break;
+
+                case ConsumableEffectType.Attack:
+                    int damage = (int)data.EffectValue;
+                    target.TakeDamage(damage);
+                    Debug.Log($"  데미지: {damage} → HP: {target.CurrentHP}/{target.TotalStats.MaxHP}");
+                    break;
+            }
+
+            item.Use();
+            if (item.Quantity <= 0 && target == _player)
+            {
+                _player.RemoveItem(data.ID);
+            }
+            
+            return true;
         }
 
         private void ApplyStatusEffectFromSkill(SkillDataSO skill, IBattleEntity target)

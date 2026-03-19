@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GreedDungeon.Items;
 using GreedDungeon.ScriptableObjects;
 
 namespace GreedDungeon.Character
@@ -6,11 +7,58 @@ namespace GreedDungeon.Character
     public class Player : BattleEntity
     {
         private readonly Dictionary<EquipmentType, EquipmentDataSO> _equippedItems = new();
+        private readonly Dictionary<int, ConsumableItem> _inventory = new();
         private int _gold;
 
         public override string Name => "Player";
         public int Gold => _gold;
         public int DungeonLevel { get; private set; }
+        public IReadOnlyDictionary<int, ConsumableItem> Inventory => _inventory;
+
+        public void AddItem(ConsumableDataSO data, int count = 1)
+        {
+            if (data == null || count <= 0) return;
+            
+            if (_inventory.TryGetValue(data.ID, out var existing))
+            {
+                existing.Add(count);
+            }
+            else
+            {
+                _inventory[data.ID] = new ConsumableItem(data, count);
+            }
+        }
+
+        public bool HasItem(int itemId)
+        {
+            return _inventory.TryGetValue(itemId, out var item) && item.Quantity > 0;
+        }
+
+        public int GetItemCount(int itemId)
+        {
+            return _inventory.TryGetValue(itemId, out var item) ? item.Quantity : 0;
+        }
+
+        public ConsumableItem GetItem(int itemId)
+        {
+            return _inventory.TryGetValue(itemId, out var item) ? item : null;
+        }
+
+        public bool RemoveItem(int itemId, int count = 1)
+        {
+            if (!_inventory.TryGetValue(itemId, out var item)) return false;
+            
+            for (int i = 0; i < count; i++)
+            {
+                if (!item.Use()) return false;
+            }
+            
+            if (item.Quantity <= 0)
+            {
+                _inventory.Remove(itemId);
+            }
+            return true;
+        }
 
         public Player()
         {

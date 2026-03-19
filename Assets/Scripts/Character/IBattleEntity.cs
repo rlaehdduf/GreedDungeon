@@ -13,6 +13,7 @@ namespace GreedDungeon.Character
         bool IsDead { get; }
         IReadOnlyList<ActiveStatusEffect> StatusEffects { get; }
         IReadOnlyList<SkillDataSO> Skills { get; }
+        IReadOnlyList<ActiveBuff> Buffs { get; }
 
         void TakeDamage(int damage);
         void Heal(int amount);
@@ -20,6 +21,11 @@ namespace GreedDungeon.Character
         void RestoreMP(int amount);
         void ApplyStatusEffect(StatusEffectDataSO effect, int remainingDuration);
         void RemoveStatusEffect(ActiveStatusEffect effect);
+        bool IsDefending { get; }
+        void StartDefend();
+        void ApplyBuff(BuffType type, float value, int duration);
+        void RemoveBuff(ActiveBuff buff);
+        void ClearDebuffs();
         void ProcessTurnStart();
         void ProcessTurnEnd();
         void ClearAllStatusEffects();

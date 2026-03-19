@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GreedDungeon.Character;
 using GreedDungeon.Combat;
+using GreedDungeon.Items;
 using GreedDungeon.ScriptableObjects;
 
 public class BattleSceneTester : MonoBehaviour
@@ -11,6 +12,9 @@ public class BattleSceneTester : MonoBehaviour
     [SerializeField] private StatusEffectDataSO _burnEffect;
     [SerializeField] private StatusEffectDataSO _poisonEffect;
     [SerializeField] private StatusEffectDataSO _stunEffect;
+    [SerializeField] private ConsumableDataSO _healPotionSmall;
+    [SerializeField] private ConsumableDataSO _healPotionLarge;
+    [SerializeField] private ConsumableDataSO _attackBuffPotion;
     [SerializeField] private bool _autoPlay = true;
     [SerializeField] private float _turnDelay = 1f;
 
@@ -38,6 +42,11 @@ public class BattleSceneTester : MonoBehaviour
         _battleManager = new BattleManager(_damageCalculator, _turnManager);
 
         _player = new Player();
+        
+        if (_healPotionSmall != null) _player.AddItem(_healPotionSmall, 3);
+        if (_healPotionLarge != null) _player.AddItem(_healPotionLarge, 1);
+        if (_attackBuffPotion != null) _player.AddItem(_attackBuffPotion, 2);
+        
         LogPlayerStats();
 
         if (_testMonster == null)
@@ -105,6 +114,35 @@ public class BattleSceneTester : MonoBehaviour
 
     private void ExecutePlayerTurn()
     {
+        bool lowHp = _player.CurrentHP < _player.TotalStats.MaxHP * 0.4f;
+        bool hasHealPotion = _player.GetItemCount(1) > 0 || _player.GetItemCount(3) > 0;
+
+        if (lowHp && hasHealPotion && Random.value < 0.6f)
+        {
+            var item = _player.GetItem(1) ?? _player.GetItem(3);
+            if (item != null)
+            {
+                _battleManager.ExecuteItem(item, _player);
+                return;
+            }
+        }
+
+        if (Random.value < 0.15f && _player.Buffs.Count == 0 && _attackBuffPotion != null)
+        {
+            var item = _player.GetItem(_attackBuffPotion.ID);
+            if (item != null)
+            {
+                _battleManager.ExecuteItem(item, _player);
+                return;
+            }
+        }
+
+        if (Random.value < 0.2f && _player.CurrentHP < _player.TotalStats.MaxHP * 0.5f)
+        {
+            _battleManager.ExecuteDefend(_player);
+            return;
+        }
+
         var skills = _player.Skills;
         SkillDataSO selectedSkill = null;
 
@@ -173,7 +211,18 @@ public class BattleSceneTester : MonoBehaviour
 
     private void LogEntityStatus(IBattleEntity entity, string name)
     {
-        Debug.Log($"[{name}] HP: {entity.CurrentHP}/{entity.TotalStats.MaxHP} | MP: {entity.CurrentMP}/{entity.TotalStats.MaxMP}");
+        string defenseStatus = entity.IsDefending ? " [방어중]" : "";
+        Debug.Log($"[{name}] HP: {entity.CurrentHP}/{entity.TotalStats.MaxHP} | MP: {entity.CurrentMP}/{entity.TotalStats.MaxMP}{defenseStatus}");
+        
+        if (entity.Buffs.Count > 0)
+        {
+            var buffs = new List<string>();
+            foreach (var buff in entity.Buffs)
+            {
+                buffs.Add($"{buff.Type}(+{buff.Value}%, {buff.RemainingDuration}턴)");
+            }
+            Debug.Log($"  버프: {string.Join(", ", buffs)}");
+        }
         
         if (entity.StatusEffects.Count > 0)
         {

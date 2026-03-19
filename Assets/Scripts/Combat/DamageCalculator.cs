@@ -32,7 +32,11 @@ namespace GreedDungeon.Combat
             result.ElementMultiplier = GetElementMultiplierForSkill(skill, defender, out Element attackElement, out Element defenderElement);
             result.AttackElement = attackElement;
             result.DefenderElement = defenderElement;
-            result.Damage = (int)(damageAfterCrit * result.ElementMultiplier);
+            int damageAfterElement = (int)(damageAfterCrit * result.ElementMultiplier);
+
+            result.IsDefending = defender.IsDefending;
+            result.DefenseMultiplier = result.IsDefending ? 0.5f : 1f;
+            result.Damage = (int)(damageAfterElement * result.DefenseMultiplier);
 
             return result;
         }
@@ -98,5 +102,7 @@ namespace GreedDungeon.Combat
         public float CriticalMultiplier { get; set; }
         public Element AttackElement { get; set; }
         public Element DefenderElement { get; set; }
+        public bool IsDefending { get; set; }
+        public float DefenseMultiplier { get; set; }
     }
 }

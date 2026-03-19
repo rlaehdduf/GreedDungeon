@@ -8,6 +8,7 @@ namespace GreedDungeon.Character
     {
         private readonly List<ActiveStatusEffect> _statusEffects = new();
         private readonly List<SkillDataSO> _skills = new();
+        private readonly List<ActiveBuff> _buffs = new();
         private Stats _baseStats;
 
         public abstract string Name { get; }
@@ -16,9 +17,11 @@ namespace GreedDungeon.Character
         public int CurrentHP { get; private set; }
         public int CurrentMP { get; private set; }
         public bool IsDead => CurrentHP <= 0;
+        public bool IsDefending { get; private set; }
 
         public IReadOnlyList<ActiveStatusEffect> StatusEffects => _statusEffects;
         public IReadOnlyList<SkillDataSO> Skills => _skills;
+        public IReadOnlyList<ActiveBuff> Buffs => _buffs;
 
         public Stats TotalStats
         {
@@ -26,7 +29,27 @@ namespace GreedDungeon.Character
             {
                 var total = BaseStats.Clone();
                 total += GetEquipmentStats();
+                ApplyBuffModifiers(total);
                 return total;
+            }
+        }
+
+        private void ApplyBuffModifiers(Stats stats)
+        {
+            foreach (var buff in _buffs)
+            {
+                switch (buff.Type)
+                {
+                    case BuffType.Attack:
+                        stats.Attack = (int)(stats.Attack * (1 + buff.Value / 100f));
+                        break;
+                    case BuffType.Defense:
+                        stats.Defense = (int)(stats.Defense * (1 + buff.Value / 100f));
+                        break;
+                    case BuffType.Speed:
+                        stats.Speed = (int)(stats.Speed * (1 + buff.Value / 100f));
+                        break;
+                }
             }
         }
 
@@ -132,7 +155,66 @@ namespace GreedDungeon.Character
             }
         }
 
-        public void ProcessTurnEnd() { }
+        public void ProcessTurnEnd() 
+        { 
+            IsDefending = false;
+            ProcessBuffDurations();
+        }
+
+        private void ProcessBuffDurations()
+        {
+            if (_buffs.Count > 0)
+            {
+                Debug.Log($"  [{Name}] 버프 지속시간 처리");
+            }
+
+            for (int i = _buffs.Count - 1; i >= 0; i--)
+            {
+                var buff = _buffs[i];
+                buff.RemainingDuration--;
+                
+                if (buff.RemainingDuration <= 0)
+                {
+                    Debug.Log($"    [{buff.Type}] 버프 종료");
+                    _buffs.RemoveAt(i);
+                }
+                else
+                {
+                    Debug.Log($"    [{buff.Type}] 남은 지속: {buff.RemainingDuration}턴");
+                }
+            }
+        }
+
+        public void StartDefend()
+        {
+            IsDefending = true;
+            Debug.Log($"  [{Name}] 방어 태세! 받는 데미지 50% 감소");
+        }
+
+        public void ApplyBuff(BuffType type, float value, int duration)
+        {
+            var existing = _buffs.Find(b => b.Type == type);
+            if (existing != null)
+            {
+                existing.RemainingDuration = duration;
+                Debug.Log($"  [{Name}] {type} 버프 갱신: {value}% (지속: {duration}턴)");
+                return;
+            }
+            _buffs.Add(new ActiveBuff(type, value, duration));
+            Debug.Log($"  [{Name}] {type} 버프 적용: +{value}% (지속: {duration}턴)");
+        }
+
+        public void RemoveBuff(ActiveBuff buff)
+        {
+            _buffs.Remove(buff);
+        }
+
+        public void ClearDebuffs()
+        {
+            int count = _statusEffects.Count;
+            _statusEffects.Clear();
+            Debug.Log($"  [{Name}] 디버프 {count}개 해제");
+        }
 
         public void ClearAllStatusEffects()
         {
