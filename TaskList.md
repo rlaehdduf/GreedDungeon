@@ -206,15 +206,26 @@
 - [x] **해골** - 불속성, 빠름
 - [x] **킹슬라임** (보스) - 물속성, 강력
 
-### 6.3 몬스터 AI
+### 6.3 몬스터 스프라이트 애니메이션 ✅
+- [x] `MonsterSpriteView.cs` - 몬스터 스프라이트 뷰
+  - [x] 숨쉬기 애니메이션 (Scale Y축 변화)
+  - [x] 데미지 애니메이션 (Scale 작아짐 + 빨간색)
+- [x] `MonsterDataSO.cs` - ScaleX, ScaleY 필드 추가
+- [x] `BattleEntity.cs` - OnDamaged 이벤트 추가
+- [x] `CSVConverter.cs` - Scale 필드 파싱 추가
+- [x] `SpriteAddressablesSetter.cs` - 스프라이트 Addressables 설정
+- [ ] MonsterData.csv에 ScaleX, ScaleY 데이터 입력 필요
+
+### 6.4 몬스터 AI
 - [ ] `MonsterAI.cs` - 몬스터 행동 AI
   - [ ] HP > 50%: 공격 우선
   - [ ] HP 30-50%: 스킬 사용 확률 증가
   - [ ] HP < 30%: 방어 확률 증가
 
-### 6.4 테스트
+### 6.5 테스트
 - [x] 각 몬스터 전투 테스트
 - [ ] 보스 전투 테스트
+- [x] 스페이스바 데미지 애니메이션 테스트 (AddressablesTest 씬)
 
 ---
 

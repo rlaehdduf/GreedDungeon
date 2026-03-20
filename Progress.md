@@ -62,8 +62,17 @@
 - 타이틀 UI (TitleUI)
 - 팝업 시스템 (ConfirmPopup)
 
+### Monster Sprite Animation System ✅
+- MonsterDataSO: ScaleX, ScaleY 필드 추가
+- MonsterSpriteView: 숨쉬기/데미지 애니메이션 구현
+- BattleEntity: OnDamaged 이벤트 추가
+- CSVConverter: Scale 필드 파싱 추가
+- SpriteAddressablesSetter: 몬스터 스프라이트 Addressables 설정
+- AddressablesTest: 스페이스바 데미지 테스트 기능
+
 ## 진행 중인 작업 (In Progress)
 - Unity에서 UI 씬 구성 및 연결
+- MonsterData.csv에 ScaleX, ScaleY 컬럼 추가 필요
 
 ## 대기 중인 작업 (Pending)
 - Phase 5: 스킬 시스템 구현
@@ -180,3 +189,9 @@ End Sub
 
 ---
 최종 업데이트: 2026-03-20
+
+## 커밋 기록
+
+| 날짜 | 커밋 | 내용 |
+|------|------|------|
+| 2026-03-20 | ad63a6d | MonsterSpriteView 애니메이션 시스템 구현 |
