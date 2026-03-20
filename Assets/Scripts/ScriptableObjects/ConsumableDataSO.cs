@@ -41,5 +41,6 @@ namespace GreedDungeon.ScriptableObjects
         public int BuyPrice;
         public int SellPrice;
         [TextArea] public string Description;
+        public string IconAddress;
     }
 }

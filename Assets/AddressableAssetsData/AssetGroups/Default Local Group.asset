@@ -15,8 +15,98 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: f5b207d8f4b0e89419ce3c98850537d6
   m_SerializeEntries:
-  - m_GUID: 1646bf0b3cc4d184b848bd8660e62964
-    m_Address: Assets/Prefabs/Cube.prefab
+  - m_GUID: 2a3b818a8ce38b3498a7dfbff1711c65
+    m_Address: Assets/Prefabs/SkillIcon/PowerBuff.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 42bd1f493fd8e5e41b8d2f625e3f51b6
+    m_Address: Assets/Prefabs/SkillIcon/HealthBuff.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4cb61b3fb6648b3408b507dee36ca6a3
+    m_Address: Assets/Prefabs/SkillIcon/DoubleSmash.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f5e5f280d6d3b14ebbb713015915146
+    m_Address: Assets/Prefabs/SkillIcon/CrossSlash.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 748caa16df9a23445953be71724dbb15
+    m_Address: Assets/Prefabs/SkillIcon/Slash.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 803501895a9e49143b67152ed83f7eba
+    m_Address: Assets/Prefabs/Spider(Leaf).prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b06babb5b029004ab0cf5970b925a00
+    m_Address: Assets/Prefabs/Rat(None).prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d3d83f0cd0448e44884b19486fe3e77
+    m_Address: Assets/Prefabs/SkillIcon/FireBall.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9084dbf51854d634b99749dbfb3cede6
+    m_Address: Assets/Prefabs/Slime(Leaf).prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 964a60391b3c6834595a6e487690c344
+    m_Address: Assets/Prefabs/SkillIcon/BurnDeBuff.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9725049e328476f449f7c1ce22fad806
+    m_Address: Assets/Prefabs/SkillIcon/IceRain.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b7ce622b088e9e44abf2aeb02e01e86f
+    m_Address: Assets/Prefabs/Skull(Fire).prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba6cc05706718a74daf15d06a0e12144
+    m_Address: Assets/Prefabs/SkillIcon/SpeedBuff.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0400677242aa0e4f998f178fa71ecb6
+    m_Address: Assets/Prefabs/SkillIcon/Heal.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c2fc6157ee90dbf4f9728d6c3b3d14bd
+    m_Address: Assets/Prefabs/SkillIcon/DefenseBuff.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0d404439c7cb7f46b3b6ffe86a1cb55
+    m_Address: Assets/Prefabs/SkillIcon/Smash.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef902a8130d8df849b1d42894441a254
+    m_Address: Assets/Prefabs/SkillIcon/DoubleSlash.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f0791483fcaee554595ffb24588c3f04
+    m_Address: Assets/Prefabs/Cerberus(Fire).prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff6ce3f093e03514196131fdbdbced90
+    m_Address: Assets/Prefabs/SkillIcon/PoisonDeBuff.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

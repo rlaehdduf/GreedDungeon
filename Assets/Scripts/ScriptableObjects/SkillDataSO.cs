@@ -35,10 +35,14 @@ namespace GreedDungeon.ScriptableObjects
         [TextArea] public string Description;
         public EffectType EffectType;
         public float EffectValue;
+        public string ValueFloat;
+        public int HitCount;
         public int Duration;
         public TargetType Target;
         public string StatusEffectID;
         [Range(0f, 100f)] public float StatusEffectChance;
+        public int Cooldown;
         public int Tier;
+        public string IconAddress;
     }
 }

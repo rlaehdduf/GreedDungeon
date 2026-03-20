@@ -8,7 +8,7 @@ using GreedDungeon.ScriptableObjects;
 
 public class CSVConverter : EditorWindow
 {
-    private const string CSV_PATH = "Assets/EditorData/Data";
+    private const string CSV_PATH = "Assets/EditorData/Data/csv";
     private const string OUTPUT_PATH = "Assets/ScriptableObjects/Data";
 
     private static T FindExistingAsset<T>(int id, string folder) where T : UnityEngine.Object
@@ -210,7 +210,7 @@ public class CSVConverter : EditorWindow
         for (int i = 1; i < lines.Count; i++)
         {
             var values = lines[i];
-            if (values.Count < 12 || !int.TryParse(values[0], out int id))
+            if (values.Count < 16 || !int.TryParse(values[0], out int id))
             {
                 Debug.LogWarning($"Skill 라인 {i} 건너뜀: 필드 수={values.Count}");
                 continue;
@@ -235,11 +235,15 @@ public class CSVConverter : EditorWindow
             data.Description = values[4];
             data.EffectType = ParseEffectType(values[5].Replace("Dagame", "Damage"));
             data.EffectValue = float.TryParse(values[6], NumberStyles.Float, CultureInfo.InvariantCulture, out float ev) ? ev : 0;
-            data.Duration = int.TryParse(values[7], out int dur) ? dur : 0;
-            data.Target = ParseTargetType(values[8]);
-            data.StatusEffectID = values[9] == "None" ? "" : values[9];
-            data.StatusEffectChance = float.TryParse(values[10], NumberStyles.Float, CultureInfo.InvariantCulture, out float sec) ? sec : 0;
-            data.Tier = int.TryParse(values[11], out int tier) ? tier : 1;
+            data.ValueFloat = values[7];
+            data.HitCount = int.TryParse(values[8], out int hc) ? hc : 1;
+            data.Duration = int.TryParse(values[9], out int dur) ? dur : 0;
+            data.Target = ParseTargetType(values[10]);
+            data.StatusEffectID = values[11] == "None" ? "" : values[11];
+            data.StatusEffectChance = float.TryParse(values[12], NumberStyles.Float, CultureInfo.InvariantCulture, out float sec) ? sec : 0;
+            data.Cooldown = int.TryParse(values[13], out int cd) ? cd : 0;
+            data.Tier = int.TryParse(values[14], out int tier) ? tier : 1;
+            data.IconAddress = values[15];
 
             if (isNew)
             {
@@ -274,7 +278,7 @@ public class CSVConverter : EditorWindow
         for (int i = 1; i < lines.Count; i++)
         {
             var values = lines[i];
-            if (values.Count < 12 || !int.TryParse(values[0], out int id)) continue;
+            if (values.Count < 13 || !int.TryParse(values[0], out int id)) continue;
 
             var data = FindExistingAsset<EquipmentDataSO>(id, outputPath);
             bool isNew = data == null;
@@ -300,6 +304,7 @@ public class CSVConverter : EditorWindow
             data.SkillPoolType = ParseSkillPoolType(values[9]);
             data.BuyPrice = int.TryParse(values[10], out int bp) ? bp : 0;
             data.SellPrice = int.TryParse(values[11], out int sp) ? sp : 0;
+            data.IconAddress = values[12];
 
             if (isNew)
             {
@@ -334,7 +339,7 @@ public class CSVConverter : EditorWindow
         for (int i = 1; i < lines.Count; i++)
         {
             var values = lines[i];
-            if (values.Count < 14 || !int.TryParse(values[0], out int id)) continue;
+            if (values.Count < 15 || !int.TryParse(values[0], out int id)) continue;
 
             var data = FindExistingAsset<MonsterDataSO>(id, outputPath);
             bool isNew = data == null;
@@ -362,6 +367,7 @@ public class CSVConverter : EditorWindow
             data.StatusEffectChance = float.TryParse(values[11], NumberStyles.Float, CultureInfo.InvariantCulture, out float sec) ? sec : 0;
             data.SpecialSkill = values[12];
             data.IsBoss = values[13].ToLower().Replace("fasle", "false") == "true";
+            data.PrefabAddress = values[14];
 
             if (isNew)
             {
@@ -396,7 +402,7 @@ public class CSVConverter : EditorWindow
         for (int i = 1; i < lines.Count; i++)
         {
             var values = lines[i];
-            if (values.Count < 10 || !int.TryParse(values[0], out int id)) continue;
+            if (values.Count < 11 || !int.TryParse(values[0], out int id)) continue;
 
             var data = FindExistingAsset<ConsumableDataSO>(id, outputPath);
             bool isNew = data == null;
@@ -421,6 +427,7 @@ public class CSVConverter : EditorWindow
             data.SellPrice = int.TryParse(values[8], out int sp) ? sp : 0;
             data.Description = values[9];
             data.BuffType = ParseBuffType(values[5], values[1]);
+            data.IconAddress = values[10];
 
             if (isNew)
             {

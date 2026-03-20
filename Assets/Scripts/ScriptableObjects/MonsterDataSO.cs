@@ -27,5 +27,6 @@ namespace GreedDungeon.ScriptableObjects
         [Range(0f, 100f)] public float StatusEffectChance;
         public string SpecialSkill;
         public bool IsBoss;
+        public string PrefabAddress;
     }
 }

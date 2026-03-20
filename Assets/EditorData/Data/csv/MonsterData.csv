@@ -1,0 +1,6 @@
+﻿ID,ID,Name,Element,MaxHP,Attack,Defense,Speed,CriticalRate,GoldDropMin,GoldDropMax,StatusEffect,StatusEffectChance,SpecialSkill,IsBoss,PrefabAddress
+1,1,슬라임,풀,60,6,2,5,5,10,15,None,0,X,FALSE,Monsters/Slime
+2,2,역병쥐,무,45,8,4,8,2,30,45,Poison,20,X,FALSE,Monsters/Rat
+3,3,거미,풀,50,7,3,6,5,20,30,Poison,30,X,FALSE,Monsters/Spider
+4,4,해골,불,40,10,2,10,15,25,35,Burn,10,X,FALSE,Monsters/Skull
+5,5,켈베로스,불,500,25,10,7,10,200,500,Stun,0,TakeDamage -2,TRUE,Monsters/Cerberus
