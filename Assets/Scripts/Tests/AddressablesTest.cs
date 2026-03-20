@@ -5,6 +5,9 @@ using GreedDungeon.ScriptableObjects;
 using GreedDungeon.UI.Battle;
 using UnityEngine;
 using UnityEngine.UI;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace GreedDungeon.Tests
 {
@@ -29,11 +32,19 @@ namespace GreedDungeon.Tests
 
         private void Update()
         {
+#if ENABLE_INPUT_SYSTEM
+            if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame && _spawnedMonsterView != null)
+            {
+                _spawnedMonsterView.PlayDamageAnimation();
+                UpdateStatus($"데미지 애니메이션 실행!\n{_currentMonsterData?.Name ?? "Monster"}");
+            }
+#else
             if (Input.GetKeyDown(KeyCode.Space) && _spawnedMonsterView != null)
             {
                 _spawnedMonsterView.PlayDamageAnimation();
                 UpdateStatus($"데미지 애니메이션 실행!\n{_currentMonsterData?.Name ?? "Monster"}");
             }
+#endif
         }
 
         private void Start()
