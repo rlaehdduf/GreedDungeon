@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Threading.Tasks;
 using GreedDungeon.Core;
 using GreedDungeon.ScriptableObjects;
@@ -20,20 +21,24 @@ namespace GreedDungeon.Tests
 
         private GameObject _spawnedPrefab;
 
-        private void Awake()
+        private void Start()
         {
-            _assetLoader = Services.Get<IAssetLoader>();
-            _gameDataManager = Services.Get<IGameDataManager>();
+            UpdateStatus("DI 초기화 대기 중...");
+            StartCoroutine(WaitForDI());
         }
 
-        private async void Start()
+        private IEnumerator WaitForDI()
         {
-            if (_gameDataManager == null)
+            // Services 컨테이너가 초기화될 때까지 대기
+            while (!Services.IsInitialized)
             {
-                UpdateStatus("에러: DI 초기화 실패\nGameInstaller가 실행되었는지 확인하세요");
-                return;
+                yield return null;
             }
-            await InitializeAsync();
+
+            _assetLoader = Services.Get<IAssetLoader>();
+            _gameDataManager = Services.Get<IGameDataManager>();
+            
+            _ = InitializeAsync();
             SetupButtons();
         }
 

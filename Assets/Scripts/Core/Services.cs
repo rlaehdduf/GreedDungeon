@@ -5,6 +5,8 @@ namespace GreedDungeon.Core
     public static class Services
     {
         private static DIContainer _container;
+        
+        public static bool IsInitialized => _container != null;
 
         public static void Initialize(DIContainer container)
         {
@@ -15,7 +17,6 @@ namespace GreedDungeon.Core
         {
             if (_container == null)
             {
-                UnityEngine.Debug.LogError("[Services] 컨테이너가 초기화되지 않았습니다!");
                 return null;
             }
             return _container.Resolve<T>();
