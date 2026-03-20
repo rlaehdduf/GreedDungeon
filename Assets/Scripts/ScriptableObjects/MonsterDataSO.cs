@@ -28,5 +28,7 @@ namespace GreedDungeon.ScriptableObjects
         public string SpecialSkill;
         public bool IsBoss;
         public string PrefabAddress;
+        public float ScaleX = 1f;
+        public float ScaleY = 1f;
     }
 }

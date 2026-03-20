@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GreedDungeon.ScriptableObjects;
 using UnityEngine;
@@ -22,6 +23,8 @@ namespace GreedDungeon.Character
         public IReadOnlyList<ActiveStatusEffect> StatusEffects => _statusEffects;
         public IReadOnlyList<SkillDataSO> Skills => _skills;
         public IReadOnlyList<ActiveBuff> Buffs => _buffs;
+
+        public event Action<int> OnDamaged;
 
         public Stats TotalStats
         {
@@ -70,6 +73,7 @@ namespace GreedDungeon.Character
         {
             CurrentHP -= damage;
             if (CurrentHP < 0) CurrentHP = 0;
+            OnDamaged?.Invoke(damage);
         }
 
         public void Heal(int amount)

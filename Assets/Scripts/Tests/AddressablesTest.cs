@@ -2,6 +2,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using GreedDungeon.Core;
 using GreedDungeon.ScriptableObjects;
+using GreedDungeon.UI.Battle;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,11 +16,25 @@ namespace GreedDungeon.Tests
         [SerializeField] private Button _loadAllDataButton;
         [SerializeField] private Transform _spawnPoint;
         [SerializeField] private Text _statusText;
+        
+        [Header("Damage Test")]
+        [SerializeField] private MonsterSpriteView _monsterSpriteView;
 
         private IAssetLoader _assetLoader;
         private IGameDataManager _gameDataManager;
 
         private GameObject _spawnedPrefab;
+        private MonsterSpriteView _spawnedMonsterView;
+        private MonsterDataSO _currentMonsterData;
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space) && _spawnedMonsterView != null)
+            {
+                _spawnedMonsterView.PlayDamageAnimation();
+                UpdateStatus($"데미지 애니메이션 실행!\n{_currentMonsterData?.Name ?? "Monster"}");
+            }
+        }
 
         private void Start()
         {
@@ -63,7 +78,7 @@ namespace GreedDungeon.Tests
 
         private async void OnLoadMonsterClicked()
         {
-            UpdateStatus("몬스터 프리팹 로딩 중...");
+            UpdateStatus("몬스터 스프라이트 로딩 중...");
             
             var monsterData = _gameDataManager.GetMonsterData(1);
             if (monsterData == null)
@@ -71,19 +86,29 @@ namespace GreedDungeon.Tests
                 UpdateStatus("에러: 몬스터 데이터 ID 1을 찾을 수 없음");
                 return;
             }
+            
+            _currentMonsterData = monsterData;
 
-            var prefab = await _assetLoader.LoadAssetAsync<GameObject>(monsterData.PrefabAddress);
-            if (prefab == null)
+            var sprite = await _assetLoader.LoadAssetAsync<Sprite>(monsterData.PrefabAddress);
+            if (sprite == null)
             {
-                UpdateStatus($"에러: 프리팹 로드 실패\n주소: {monsterData.PrefabAddress}");
+                UpdateStatus($"에러: 스프라이트 로드 실패\n주소: {monsterData.PrefabAddress}");
                 return;
             }
 
             if (_spawnedPrefab != null)
                 Destroy(_spawnedPrefab);
 
-            _spawnedPrefab = Instantiate(prefab, _spawnPoint.position, Quaternion.identity);
-            UpdateStatus($"성공!\n{monsterData.Name} 스폰됨\n주소: {monsterData.PrefabAddress}");
+            _spawnedPrefab = new GameObject(monsterData.Name);
+            _spawnedPrefab.transform.position = _spawnPoint.position;
+            var sr = _spawnedPrefab.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.sortingOrder = 1;
+            
+            _spawnedMonsterView = _spawnedPrefab.AddComponent<MonsterSpriteView>();
+            _spawnedMonsterView.Setup(sprite, monsterData.ScaleX, monsterData.ScaleY);
+            
+            UpdateStatus($"성공!\n{monsterData.Name} 스폰됨\n주소: {monsterData.PrefabAddress}\nScale: {monsterData.ScaleX}x{monsterData.ScaleY}\n[Space] 데미지 테스트");
         }
 
         private async void OnLoadSkillClicked()
