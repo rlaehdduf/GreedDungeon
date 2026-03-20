@@ -56,12 +56,9 @@
 - DI 트러블슈팅 스킬 추가 (`.opencode/skills/di-troubleshooting.md`)
 
 ## 진행 중인 작업 (In Progress)
-- Unity에서 Addressables 테스트 씬 실행
-- ScriptableObject 라벨 설정 (MonsterData, SkillData 등)
+- Phase 3: UI 시스템 구현
 
 ## 대기 중인 작업 (Pending)
-- Unity CSVConverter 실행 테스트
-- Phase 3: UI 시스템
 - Phase 5: 스킬 시스템 구현
 
 ## 폴더 구조
@@ -151,8 +148,8 @@ End Sub
 
 ## 다음 단계
 
-1. Unity에서 테스트 씬 실행하여 Addressables 로드 확인
-2. Phase 3 UI 시스템 구현
+1. ✅ Addressables 런타임 로드 테스트 완료
+2. Phase 3 UI 시스템 구현 (현재 진행)
 3. Phase 5 스킬 시스템 구현
 
 ---
