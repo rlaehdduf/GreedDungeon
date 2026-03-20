@@ -19,6 +19,7 @@
 5. **Excel MCP Server 설치 완료**: `uv` 패키지 매니저 설치 후 opencode.json에 MCP 설정 추가
 6. **VBA 매크로로 자동 CSV 저장 구현**: 엑셀 저장 시 자동으로 csv 폴더에 CSV 파일 생성
 7. **Windows `nul` 파일 문제**: Windows 예약어라 git에서 오류 발생. 제거 필요.
+8. **Pathfinder DI [Inject] 제한**: `[Inject]` 속성은 DI 컨테이너가 생성한 객체에서만 작동. MonoBehaviour는 `Services.Get<T>()` 사용해야 함.
 
 ## 완료된 작업 (Accomplished)
 
@@ -46,8 +47,17 @@
 - VBA 매크로 코드 적용 완료 (GameData.xlsm)
 - GameData.xlsx 삭제, GameData.xlsm 유지
 
+### Addressables 런타임 로드 시스템 ✅
+- IAssetLoader 인터페이스 및 AddressablesLoader 구현
+- IGameDataManager 인터페이스 및 GameDataManager 구현
+- Services 정적 클래스 (서비스 로케이터 패턴)
+- GameInstaller에 서비스 등록
+- AddressablesTest 스크립트 작성
+- DI 트러블슈팅 스킬 추가 (`.opencode/skills/di-troubleshooting.md`)
+
 ## 진행 중인 작업 (In Progress)
-- Unity에서 Addressables 주소 설정 (프리팹 43개)
+- Unity에서 Addressables 테스트 씬 실행
+- ScriptableObject 라벨 설정 (MonsterData, SkillData 등)
 
 ## 대기 중인 작업 (Pending)
 - Unity CSVConverter 실행 테스트
@@ -61,7 +71,7 @@ Assets/
 ├── EditorData/Data/
 │   ├── GameData.xlsm          ← 엑셀 원본 (VBA 매크로 포함)
 │   └── csv/                    ← CSV 파일들 (VBA로 자동 생성)
-│       ├── MonsterData.csv     (15개 컬럼: ID ~ PrefabAddress)
+│       ├── MonsterData.csv     (16개 컬럼: ID ~ PrefabAddress)
 │       ├── SkillData.csv       (16개 컬럼: ID ~ IconAddress)
 │       ├── EquipmentData.csv   (13개 컬럼: ID ~ IconAddress)
 │       ├── ConsumableData.csv  (11개 컬럼: ID ~ IconAddress)
@@ -82,13 +92,29 @@ Assets/
 │   └── ItemIcon/               ← 아이템 아이콘 (8개)
 │
 ├── Scripts/
+│   ├── Core/
+│   │   ├── GameInstaller.cs     ← DI 서비스 등록
+│   │   ├── Services.cs          ← 서비스 로케이터
+│   │   ├── IAssetLoader.cs      ← Addressables 로더 인터페이스
+│   │   ├── AddressablesLoader.cs
+│   │   ├── IGameDataManager.cs  ← 데이터 매니저 인터페이스
+│   │   └── GameDataManager.cs
 │   ├── ScriptableObjects/
-│   │   ├── MonsterDataSO.cs      ← PrefabAddress 필드 추가됨
-│   │   ├── SkillDataSO.cs        ← IconAddress, ValueFloat, HitCount, Cooldown 필드 추가됨
-│   │   ├── EquipmentDataSO.cs    ← IconAddress 필드 추가됨
-│   │   └── ConsumableDataSO.cs   ← IconAddress 필드 추가됨
-│   └── Editor/
-│       └── CSVConverter.cs       ← 경로 수정, 새 컬럼 처리 추가됨
+│   │   ├── MonsterDataSO.cs      ← PrefabAddress 필드
+│   │   ├── SkillDataSO.cs        ← IconAddress, ValueFloat, HitCount, Cooldown
+│   │   ├── EquipmentDataSO.cs    ← IconAddress 필드
+│   │   └── ConsumableDataSO.cs   ← IconAddress 필드
+│   ├── Editor/
+│   │   ├── CSVConverter.cs       ← CSV → ScriptableObject 변환
+│   │   └── AddressablesSetter.cs ← 프리팹 주소 설정
+│   └── Tests/
+│       └── AddressablesTest.cs   ← 런타임 테스트
+│
+├── Scenes/
+│   ├── AddressablesTest.unity    ← 테스트 씬
+│   ├── Title.unity
+│   ├── Dungeon.unity
+│   └── Battle.unity
 │
 └── ScriptableObjects/Data/       ← 변환된 데이터
     ├── Monsters/ (5개)
@@ -97,6 +123,9 @@ Assets/
     ├── Consumables/ (10개)
     ├── Rarities/ (5개)
     └── StatusEffects/ (3개)
+
+.opencode/skills/
+└── di-troubleshooting.md         ← DI 트러블슈팅 스킬
 ```
 
 ## VBA 매크로 코드 (GameData.xlsm에 적용됨)
@@ -122,10 +151,9 @@ End Sub
 
 ## 다음 단계
 
-1. Unity에서 CSVConverter 실행하여 ScriptableObject 업데이트
-2. Unity CLI로 Addressables 주소 일괄 설정
-3. 런타임에 Addressables로 프리팹 로드 테스트
-4. Phase 3 UI 시스템 구현
+1. Unity에서 테스트 씬 실행하여 Addressables 로드 확인
+2. Phase 3 UI 시스템 구현
+3. Phase 5 스킬 시스템 구현
 
 ---
 최종 업데이트: 2026-03-20
