@@ -55,8 +55,15 @@
 - AddressablesTest 스크립트 작성
 - DI 트러블슈팅 스킬 추가 (`.opencode/skills/di-troubleshooting.md`)
 
+### Phase 3: UI 시스템 ✅
+- UI Core 시스템 (UIManager, UIView)
+- 전투 UI (BattleUI, PlayerStatusUI, MonsterStatusUI, ActionMenuUI, BattleLogUI)
+- 인벤토리 UI (InventoryUI, ItemSlotUI, EquipmentSlotUI)
+- 타이틀 UI (TitleUI)
+- 팝업 시스템 (ConfirmPopup)
+
 ## 진행 중인 작업 (In Progress)
-- Phase 3: UI 시스템 구현
+- Unity에서 UI 씬 구성 및 연결
 
 ## 대기 중인 작업 (Pending)
 - Phase 5: 스킬 시스템 구현
@@ -99,11 +106,30 @@ Assets/
 │   ├── ScriptableObjects/
 │   │   ├── MonsterDataSO.cs      ← PrefabAddress 필드
 │   │   ├── SkillDataSO.cs        ← IconAddress, ValueFloat, HitCount, Cooldown
-│   │   ├── EquipmentDataSO.cs    ← IconAddress 필드
+│   │   ├── EquipmentDataSO.cs    ← IconAddress, Description 필드
 │   │   └── ConsumableDataSO.cs   ← IconAddress 필드
+│   ├── UI/
+│   │   ├── Core/
+│   │   │   ├── UIManager.cs      ← UI 관리자
+│   │   │   └── UIView.cs         ← UI 뷰 기본 클래스
+│   │   ├── Battle/
+│   │   │   ├── BattleUI.cs       ← 전투 UI 메인
+│   │   │   ├── PlayerStatusUI.cs
+│   │   │   ├── MonsterStatusUI.cs
+│   │   │   ├── ActionMenuUI.cs
+│   │   │   └── BattleLogUI.cs
+│   │   ├── Inventory/
+│   │   │   ├── InventoryUI.cs    ← 인벤토리 메인
+│   │   │   ├── ItemSlotUI.cs
+│   │   │   └── EquipmentSlotUI.cs
+│   │   ├── Title/
+│   │   │   └── TitleUI.cs        ← 타이틀 UI
+│   │   └── Popup/
+│   │       └── ConfirmPopup.cs   ← 확인 팝업
 │   ├── Editor/
 │   │   ├── CSVConverter.cs       ← CSV → ScriptableObject 변환
-│   │   └── AddressablesSetter.cs ← 프리팹 주소 설정
+│   │   ├── AddressablesSetter.cs ← 프리팹 주소 설정
+│   │   └── ScriptableObjectAddressablesSetter.cs ← SO 주소/라벨 설정
 │   └── Tests/
 │       └── AddressablesTest.cs   ← 런타임 테스트
 │

@@ -33,6 +33,7 @@ namespace GreedDungeon.ScriptableObjects
         public SkillPoolType SkillPoolType;
         public int BuyPrice;
         public int SellPrice;
+        [TextArea] public string Description;
         public string IconAddress;
     }
 }
