@@ -16,11 +16,12 @@ MonoBehaviour:
   Name: "\uBAA9\uAC78\uC774"
   Type: 2
   HP: 10
-  MP: 10
+  MP: 5
   Attack: 0
-  Defense: 0
+  Defense: 3
   Speed: 0
   CriticalRate: 0
   SkillPoolType: 4
   BuyPrice: 200
   SellPrice: 100
+  IconAddress: Accessories/NeckGlass

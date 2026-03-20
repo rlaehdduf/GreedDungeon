@@ -19,8 +19,12 @@ MonoBehaviour:
   Description: "\uC801\uC5D0\uAC8C \uB450\uBC88 \uACF5\uACA9"
   EffectType: 0
   EffectValue: 0.8
+  ValueFloat: m
+  HitCount: 2
   Duration: 0
   Target: 0
   StatusEffectID: 
   StatusEffectChance: 0
+  Cooldown: 1
   Tier: 2
+  IconAddress: Skills/DoubleSlash

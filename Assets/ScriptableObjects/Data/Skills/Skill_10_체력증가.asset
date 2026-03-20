@@ -19,8 +19,12 @@ MonoBehaviour:
   Description: "\uCCB4\uB825\uC774 20 \uC99D\uAC00\uD569\uB2C8\uB2E4"
   EffectType: 1
   EffectValue: 20
+  ValueFloat: i
+  HitCount: 0
   Duration: 0
   Target: 2
   StatusEffectID: 
   StatusEffectChance: 0
+  Cooldown: 0
   Tier: 1
+  IconAddress: Skills/HealthBuff

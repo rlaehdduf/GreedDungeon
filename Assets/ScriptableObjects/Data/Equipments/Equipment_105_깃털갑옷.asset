@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: 105
   Name: "\uAE43\uD138\uAC11\uC637"
   Type: 1
-  HP: 10
+  HP: 25
   MP: 0
   Attack: 0
   Defense: 2
@@ -24,3 +24,4 @@ MonoBehaviour:
   SkillPoolType: 3
   BuyPrice: 350
   SellPrice: 175
+  IconAddress: Armors/FeatherArmor

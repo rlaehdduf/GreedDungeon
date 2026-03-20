@@ -19,8 +19,12 @@ MonoBehaviour:
   Description: "\uACF5\uACA9\uB825\uC774 5 \uC99D\uAC00\uD569\uB2C8\uB2E4"
   EffectType: 1
   EffectValue: 5
+  ValueFloat: i
+  HitCount: 0
   Duration: 0
   Target: 2
   StatusEffectID: 
   StatusEffectChance: 0
+  Cooldown: 0
   Tier: 2
+  IconAddress: Skills/PowerBuff

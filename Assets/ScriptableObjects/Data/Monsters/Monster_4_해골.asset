@@ -14,15 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.MonsterDataSO
   ID: 4
   Name: "\uD574\uACE8"
-  Element: 0
-  MaxHP: 60
+  Element: 1
+  MaxHP: 40
   Attack: 10
-  Defense: 3
-  Speed: 12
+  Defense: 2
+  Speed: 10
   CriticalRate: 15
   GoldDropMin: 25
   GoldDropMax: 35
-  StatusEffectID: Stun
+  StatusEffectID: Burn
   StatusEffectChance: 10
   SpecialSkill: X
   IsBoss: 0
+  PrefabAddress: Monsters/Skull

@@ -24,3 +24,4 @@ MonoBehaviour:
   SkillPoolType: 0
   BuyPrice: 180
   SellPrice: 90
+  IconAddress: Weapons/Shield

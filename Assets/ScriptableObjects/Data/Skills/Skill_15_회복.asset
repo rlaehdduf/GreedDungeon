@@ -19,8 +19,12 @@ MonoBehaviour:
   Description: "\uCD5C\uB300\uCCB4\uB825 25%\uB9CC\uD07C \uD68C\uBCF5\uD569\uB2C8\uB2E4"
   EffectType: 2
   EffectValue: 1.25
+  ValueFloat: m
+  HitCount: 0
   Duration: 0
   Target: 2
   StatusEffectID: 
   StatusEffectChance: 0
+  Cooldown: 3
   Tier: 2
+  IconAddress: Skills/Heal

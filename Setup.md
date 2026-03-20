@@ -103,3 +103,76 @@ CSVConverter에서 자동 수정:
 - `ReadCSV()` 메서드에 빈 줄 체크 추가 (`string.IsNullOrWhiteSpace`)
 - 빈 필드 체크 추가 (ID가 비어있으면 스킵)
 - CSV 끝에 빈 줄이 있어도 에러 발생하지 않음
+
+### 2026-03-20: Addressables 런타임 로드 시스템
+- `IAssetLoader.cs`, `AddressablesLoader.cs` 추가
+- `IGameDataManager.cs`, `GameDataManager.cs` 추가
+- `GameInstaller.cs`에 새 서비스 등록
+
+---
+
+## 5. Addressables 설정 (필수)
+
+### 5.1 프리팹 주소 설정
+
+1. Unity 메뉴: **Tools → Addressables → Set All Prefab Addresses**
+2. 콘솔에서 "Addressables 주소 설정 완료! 총 XX개" 확인
+3. 확인: **Window → Asset Management → Addressables → Groups**
+   - 각 프리팹에 커스텀 주소가 설정되어 있어야 함
+   - 예: `Monsters/Slime`, `Skills/Smash`, `Weapons/Sword`
+
+### 5.2 ScriptableObject 데이터 라벨 설정
+
+GameDataManager가 데이터를 로드하려면 라벨이 필요합니다:
+
+1. **Window → Asset Management → Addressables → Groups** 열기
+2. 각 ScriptableObject 그룹 선택 후 Labels 추가:
+   - `Assets/ScriptableObjects/Data/Monsters/` → Label: `MonsterData`
+   - `Assets/ScriptableObjects/Data/Skills/` → Label: `SkillData`
+   - `Assets/ScriptableObjects/Data/Equipments/` → Label: `EquipmentData`
+   - `Assets/ScriptableObjects/Data/Consumables/` → Label: `ConsumableData`
+   - `Assets/ScriptableObjects/Data/Rarities/` → Label: `RarityData`
+   - `Assets/ScriptableObjects/Data/StatusEffects/` → Label: `StatusEffectData`
+
+### 5.3 Addressables 빌드
+
+1. **Window → Asset Management → Addressables → Groups**
+2. **Build → New Build → Default Build Script** 실행
+3. 빌드 완료 대기
+
+---
+
+## 6. 테스트 씬 설정
+
+### 6.1 테스트 씬 생성
+
+1. `Assets/Scenes/AddressablesTest.unity` 생성
+2. Build Settings에 추가
+3. 씬에 설정:
+   - 빈 GameObject (이름: `GameRoot`)
+   - `RootContext` 컴포넌트 추가
+   - `GameInstaller` 컴포넌트 추가
+   - `RootContext`의 Installers 리스트에 `GameInstaller` 할당
+   - `AddressablesTest` 컴포넌트 추가
+
+### 6.2 테스트 UI 구성
+
+AddressablesTest 컴포넌트에 할당:
+- `LoadMonsterButton` - 몬스터 프리팹 로드 테스트
+- `LoadSkillButton` - 스킬 아이콘 로드 테스트
+- `LoadAllDataButton` - 모든 데이터 목록 출력
+- `SpawnPoint` - 프리팹 생성 위치 (Transform)
+- `StatusText` - 상태 메시지 표시 (Text)
+
+---
+
+## 확인 사항 (업데이트)
+
+- [ ] Build Settings에 3개 씬 추가됨
+- [ ] Title 씬에 RootContext + GameInstaller 설정됨
+- [ ] CSV 변환 완료
+- [ ] ScriptableObject 생성됨
+- [ ] Addressables 프리팹 주소 설정됨
+- [ ] ScriptableObject 라벨 설정됨
+- [ ] Addressables 빌드 완료
+- [ ] 테스트 씬에서 로드 테스트 성공

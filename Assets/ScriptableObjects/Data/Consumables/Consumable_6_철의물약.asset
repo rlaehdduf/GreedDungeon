@@ -19,7 +19,8 @@ MonoBehaviour:
   Target: 0
   StatusEffectID: 
   Duration: 2
-  BuffType: 0
+  BuffType: 2
   BuyPrice: 120
   SellPrice: 60
   Description: "\uBC29\uC5B4\uB825\uC774 \uC77C\uC815\uBE44\uC728 \uC99D\uAC00\uD55C\uB2E4"
+  IconAddress: Items/BuffPotion

@@ -23,3 +23,4 @@ MonoBehaviour:
   BuyPrice: 150
   SellPrice: 75
   Description: "\uC801\uC5D0\uAC8C \uD654\uC0C1 \uB514\uBC84\uD504\uB97C \uBD80\uC5EC\uD55C\uB2E4"
+  IconAddress: Items/DeBuffPotion

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b4d370f9ffb5884590a6f4eb5f7f19d, type: 3}
-  m_Name: "Consumable_10_\uD3ED\uD0C4"
+  m_Name: "Consumable_10_\uD3ED\uBC1C\uC758\uC11C"
   m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.ConsumableDataSO
   ID: 10
-  Name: "\uD3ED\uD0C4"
+  Name: "\uD3ED\uBC1C\uC758\uC11C"
   EffectType: 5
   EffectValue: 50
   Target: 2
@@ -23,3 +23,4 @@ MonoBehaviour:
   BuyPrice: 250
   SellPrice: 125
   Description: "\uC801\uB4E4\uC5D0\uAC8C \uAC15\uB825\uD55C \uD3ED\uBC1C\uC744 \uC77C\uC73C\uD0A8\uB2E4"
+  IconAddress: Items/Explosion

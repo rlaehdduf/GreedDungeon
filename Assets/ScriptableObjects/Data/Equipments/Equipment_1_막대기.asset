@@ -24,3 +24,4 @@ MonoBehaviour:
   SkillPoolType: 0
   BuyPrice: 50
   SellPrice: 25
+  IconAddress: Weapons/Stick

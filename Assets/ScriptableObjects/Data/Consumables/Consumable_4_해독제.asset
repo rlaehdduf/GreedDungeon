@@ -23,3 +23,4 @@ MonoBehaviour:
   BuyPrice: 80
   SellPrice: 40
   Description: "\uBAA8\uB4E0 \uB514\uBC84\uD504\uB97C \uD574\uC81C\uD55C\uB2E4"
+  IconAddress: Items/Antidote

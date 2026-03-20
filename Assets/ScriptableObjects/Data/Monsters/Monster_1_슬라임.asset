@@ -15,10 +15,10 @@ MonoBehaviour:
   ID: 1
   Name: "\uC2AC\uB77C\uC784"
   Element: 3
-  MaxHP: 40
-  Attack: 5
+  MaxHP: 60
+  Attack: 6
   Defense: 2
-  Speed: 10
+  Speed: 5
   CriticalRate: 5
   GoldDropMin: 10
   GoldDropMax: 15
@@ -26,3 +26,4 @@ MonoBehaviour:
   StatusEffectChance: 0
   SpecialSkill: X
   IsBoss: 0
+  PrefabAddress: Monsters/Slime

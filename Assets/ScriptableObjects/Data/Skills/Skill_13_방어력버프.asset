@@ -19,8 +19,12 @@ MonoBehaviour:
   Description: "\uBC29\uC5B4\uB825\uC774 40% \uC99D\uAC00\uD569\uB2C8\uB2E4"
   EffectType: 2
   EffectValue: 1.4
+  ValueFloat: m
+  HitCount: 0
   Duration: 3
   Target: 2
   StatusEffectID: 
   StatusEffectChance: 0
+  Cooldown: 5
   Tier: 1
+  IconAddress: Skills/DefenseBuff

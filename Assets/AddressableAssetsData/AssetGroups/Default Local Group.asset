@@ -15,100 +15,257 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: f5b207d8f4b0e89419ce3c98850537d6
   m_SerializeEntries:
-  - m_GUID: 2a3b818a8ce38b3498a7dfbff1711c65
-    m_Address: Assets/Prefabs/SkillIcon/PowerBuff.prefab
+  - m_GUID: 08a93400ccae9034180f0a96abc9e261
+    m_Address: Armors/ChainArmor
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1900e72a9aa6d64419f675337bd75b46
+    m_Address: Weapons/Axe
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1aeaaed992d7dfd49847bf909a61a700
+    m_Address: Weapons/Sword
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 261b23393f864154986e73d2a48db358
+    m_Address: Armors/SpikeArmor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2654f89d5095a3145957d20007ae01b4
+    m_Address: Items/MagicArrow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ConsumableData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a3b818a8ce38b3498a7dfbff1711c65
+    m_Address: Skills/PowerBuff
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 30ede6ac6f447fb4bb648c462c08edf8
+    m_Address: Items/Antidote
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ConsumableData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ae513f9670df224f8b0e3fe56ba268c
+    m_Address: Accessories/Cloak
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 40bc4ebb34b287c40848fa44d0632a72
+    m_Address: Armors/LeatherArmor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 42bd1f493fd8e5e41b8d2f625e3f51b6
-    m_Address: Assets/Prefabs/SkillIcon/HealthBuff.prefab
+    m_Address: Skills/HealthBuff
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43584142b6b3d3644bc43f957e0bdc73
+    m_Address: Accessories/NeckGlass
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a13696839600404099897cc09373110
+    m_Address: Items/Explosion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ConsumableData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4cb61b3fb6648b3408b507dee36ca6a3
-    m_Address: Assets/Prefabs/SkillIcon/DoubleSmash.prefab
+    m_Address: Skills/DoubleSmash
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4fa89cc5f28c8db43b8a07afba610954
+    m_Address: Accessories/Crown
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c0bc344e25cd3741a88086afdf4806e
+    m_Address: Accessories/Ring
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5f5e5f280d6d3b14ebbb713015915146
-    m_Address: Assets/Prefabs/SkillIcon/CrossSlash.prefab
+    m_Address: Skills/CrossSlash
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 748caa16df9a23445953be71724dbb15
-    m_Address: Assets/Prefabs/SkillIcon/Slash.prefab
+    m_Address: Skills/Slash
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 766c00f57fa800e4ea64698aff1647a7
+    m_Address: Skills/ManaBall
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 803501895a9e49143b67152ed83f7eba
-    m_Address: Assets/Prefabs/Spider(Leaf).prefab
+    m_Address: Monsters/Spider
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - MonsterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 877641a06af9dc544a804911e293d06b
+    m_Address: Weapons/Shield
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8b06babb5b029004ab0cf5970b925a00
-    m_Address: Assets/Prefabs/Rat(None).prefab
+    m_Address: Monsters/Rat
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - MonsterData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8d3d83f0cd0448e44884b19486fe3e77
-    m_Address: Assets/Prefabs/SkillIcon/FireBall.prefab
+    m_Address: Skills/FireBall
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9084dbf51854d634b99749dbfb3cede6
-    m_Address: Assets/Prefabs/Slime(Leaf).prefab
+    m_Address: Monsters/Slime
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - MonsterData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 964a60391b3c6834595a6e487690c344
-    m_Address: Assets/Prefabs/SkillIcon/BurnDeBuff.prefab
+    m_Address: Skills/BurnDeBuff
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9725049e328476f449f7c1ce22fad806
-    m_Address: Assets/Prefabs/SkillIcon/IceRain.prefab
+    m_Address: Skills/IceRain
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aa33403550ce921449698206e4094f64
+    m_Address: Weapons/Stick
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b78cb2016acc9484393143a60142e162
+    m_Address: Items/BuffPotion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ConsumableData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b7ce622b088e9e44abf2aeb02e01e86f
-    m_Address: Assets/Prefabs/Skull(Fire).prefab
+    m_Address: Monsters/Skull
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - MonsterData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ba6cc05706718a74daf15d06a0e12144
-    m_Address: Assets/Prefabs/SkillIcon/SpeedBuff.prefab
+    m_Address: Skills/SpeedBuff
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c0400677242aa0e4f998f178fa71ecb6
-    m_Address: Assets/Prefabs/SkillIcon/Heal.prefab
+    m_Address: Skills/Heal
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c2fc6157ee90dbf4f9728d6c3b3d14bd
-    m_Address: Assets/Prefabs/SkillIcon/DefenseBuff.prefab
+    m_Address: Skills/DefenseBuff
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c94760d49f7279c4988fe564077bb895
+    m_Address: Weapons/Wand
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9727940029f2fd4c9891cb040bbad26
+    m_Address: Items/Potion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ConsumableData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce82f3b978276084398fd4e99668031b
+    m_Address: Armors/PlateArmor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d0d404439c7cb7f46b3b6ffe86a1cb55
-    m_Address: Assets/Prefabs/SkillIcon/Smash.prefab
+    m_Address: Skills/Smash
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d764a5592262bf047ad27cc3d3367636
+    m_Address: Items/Coins
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ConsumableData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df817168436653446b70cbc8c63442a1
+    m_Address: Accessories/Jewel
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ef902a8130d8df849b1d42894441a254
-    m_Address: Assets/Prefabs/SkillIcon/DoubleSlash.prefab
+    m_Address: Skills/DoubleSlash
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f0791483fcaee554595ffb24588c3f04
-    m_Address: Assets/Prefabs/Cerberus(Fire).prefab
+    m_Address: Monsters/Cerberus
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - MonsterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f26a2355239c83947902d8ba8549cd63
+    m_Address: Items/DeBuffPotion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ConsumableData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f90647962ff07f54a8664f2665704966
+    m_Address: Armors/FeatherArmor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ff6ce3f093e03514196131fdbdbced90
-    m_Address: Assets/Prefabs/SkillIcon/PoisonDeBuff.prefab
+    m_Address: Skills/PoisonDeBuff
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 55a1fafe6e6735e4a8adcf098947ed7a, type: 2}

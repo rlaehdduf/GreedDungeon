@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: f5b207d8f4b0e89419ce3c98850537d6
   m_currentHash:
     serializedVersion: 2
-    Hash: 47e89784023b0483ed804d6ad64168dc
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -100,6 +100,10 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
+    - SkillData
+    - MonsterData
+    - EquipmentData
+    - ConsumableData
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: f51e8900585755f4d895135470bdb862, type: 2}

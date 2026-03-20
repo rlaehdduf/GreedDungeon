@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fb5eec95be251ac4898f4ee17be12d18, type: 3}
-  m_Name: "Equipment_5_\uB108\uD074"
+  m_Name: "Equipment_205_\uC655\uAD00"
   m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.EquipmentDataSO
-  ID: 5
-  Name: "\uB108\uD074"
-  Type: 0
+  ID: 205
+  Name: "\uC655\uAD00"
+  Type: 2
   HP: 0
-  MP: 0
-  Attack: 8
+  MP: 15
+  Attack: 5
   Defense: 0
-  Speed: 5
-  CriticalRate: 15
-  SkillPoolType: 0
+  Speed: 0
+  CriticalRate: 0
+  SkillPoolType: 4
   BuyPrice: 220
   SellPrice: 110
+  IconAddress: Accessories/Crown

@@ -23,3 +23,4 @@ MonoBehaviour:
   BuyPrice: 80
   SellPrice: 40
   Description: "\uC801\uC5D0\uAC8C \uAC15\uD55C \uD654\uC0B4\uC744 \uBC1C\uC0AC\uD55C\uB2E4"
+  IconAddress: Items/MagicArrow

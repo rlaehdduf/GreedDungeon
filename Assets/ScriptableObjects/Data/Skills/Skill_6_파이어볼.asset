@@ -18,9 +18,13 @@ MonoBehaviour:
   MPCost: 18
   Description: "\uC801\uC5D0\uAC8C \uD654\uC0C1 \uACF5\uACA9"
   EffectType: 0
-  EffectValue: 1.8
+  EffectValue: 2
+  ValueFloat: m
+  HitCount: 1
   Duration: 2
   Target: 0
   StatusEffectID: Burn
   StatusEffectChance: 50
+  Cooldown: 2
   Tier: 2
+  IconAddress: Skills/FireBall

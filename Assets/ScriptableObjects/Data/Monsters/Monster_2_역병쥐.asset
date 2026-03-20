@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca3c52bff6c20144ea7b942cdc714313, type: 3}
-  m_Name: "Monster_3_\uC880\uBE44"
+  m_Name: "Monster_2_\uC5ED\uBCD1\uC950"
   m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.MonsterDataSO
-  ID: 3
-  Name: "\uC880\uBE44"
+  ID: 2
+  Name: "\uC5ED\uBCD1\uC950"
   Element: 0
-  MaxHP: 80
+  MaxHP: 45
   Attack: 8
-  Defense: 5
-  Speed: 5
-  CriticalRate: 5
-  GoldDropMin: 20
-  GoldDropMax: 30
+  Defense: 4
+  Speed: 8
+  CriticalRate: 2
+  GoldDropMin: 30
+  GoldDropMax: 45
   StatusEffectID: Poison
-  StatusEffectChance: 30
+  StatusEffectChance: 20
   SpecialSkill: X
   IsBoss: 0
+  PrefabAddress: Monsters/Rat

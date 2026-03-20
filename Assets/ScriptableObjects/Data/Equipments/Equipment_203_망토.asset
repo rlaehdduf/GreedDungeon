@@ -18,9 +18,10 @@ MonoBehaviour:
   HP: 0
   MP: 0
   Attack: 0
-  Defense: 0
-  Speed: 5
+  Defense: 2
+  Speed: 8
   CriticalRate: 2
   SkillPoolType: 4
   BuyPrice: 180
   SellPrice: 90
+  IconAddress: Accessories/Cloak

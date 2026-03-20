@@ -15,12 +15,13 @@ MonoBehaviour:
   ID: 103
   Name: "\uAC15\uCCA0\uAC11\uC637"
   Type: 1
-  HP: 60
+  HP: 50
   MP: 0
   Attack: 0
-  Defense: 15
+  Defense: 12
   Speed: -8
   CriticalRate: 0
   SkillPoolType: 3
   BuyPrice: 550
   SellPrice: 275
+  IconAddress: Armors/PlateArmor

@@ -24,3 +24,4 @@ MonoBehaviour:
   SkillPoolType: 2
   BuyPrice: 250
   SellPrice: 125
+  IconAddress: Weapons/Wand

@@ -19,8 +19,12 @@ MonoBehaviour:
   Description: "\uC18D\uB3C4\uAC00 5 \uC99D\uAC00\uD569\uB2C8\uB2E4"
   EffectType: 2
   EffectValue: 5
+  ValueFloat: i
+  HitCount: 0
   Duration: 5
   Target: 2
   StatusEffectID: 
   StatusEffectChance: 0
+  Cooldown: 8
   Tier: 3
+  IconAddress: Skills/SpeedBuff

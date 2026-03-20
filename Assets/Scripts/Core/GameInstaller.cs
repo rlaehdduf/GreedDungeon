@@ -7,8 +7,12 @@ namespace GreedDungeon.Core
     {
         public override void Install(DIContainer container)
         {
+            Services.Initialize(container);
+            
             container.Register<IGameManager, GameManager>(lifetime: ServiceLifetime.Singleton);
             container.Register<ISceneLoader, SceneLoader>(lifetime: ServiceLifetime.Singleton);
+            container.Register<IAssetLoader, AddressablesLoader>(lifetime: ServiceLifetime.Singleton);
+            container.Register<IGameDataManager, GameDataManager>(lifetime: ServiceLifetime.Singleton);
         }
     }
 }
