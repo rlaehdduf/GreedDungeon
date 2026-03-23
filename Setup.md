@@ -58,6 +58,7 @@ Battle.unity
 | 필드 | 연결 대상 |
 |------|-----------|
 | `_monsterDisplay` | MonsterDisplay GameObject |
+| `_battleUI` | Canvas (BattleUI 컴포넌트) |
 
 ### MonsterDisplay
 | 필드 | 연결 대상 |

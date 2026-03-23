@@ -11,6 +11,7 @@ namespace GreedDungeon.Combat
     {
         [Header("UI References")]
         [SerializeField] private UI.Battle.MonsterDisplay _monsterDisplay;
+        [SerializeField] private UI.Battle.BattleUI _battleUI;
 
         private IBattleManager _battleManager;
         private IGameDataManager _gameDataManager;
@@ -40,6 +41,60 @@ namespace GreedDungeon.Combat
             
             _battleManager.OnBattleStarted += HandleBattleStarted;
             _battleManager.OnMonsterDamaged += HandleMonsterDamaged;
+
+            SetupUIEvents();
+        }
+
+        private void SetupUIEvents()
+        {
+            if (_battleUI != null)
+            {
+                _battleUI.OnSkillSelected += HandleSkillSelected;
+                _battleUI.OnAttackClicked += HandleAttackClicked;
+                _battleUI.OnDefendClicked += HandleDefendClicked;
+            }
+        }
+
+        private void HandleSkillSelected(int skillId)
+        {
+            Debug.Log($"[BattleController] 스킬 선택: {skillId}");
+            if (UseSkill(skillId))
+            {
+                Debug.Log($"[BattleController] 스킬 사용 성공!");
+                _battleUI?.UpdatePlayerStatus(_testPlayer);
+                _battleUI?.UpdateMonsterStatus(_currentMonster);
+                _skillSlotUI?.UpdateCooldownDisplay();
+            }
+        }
+
+        private void HandleAttackClicked()
+        {
+            Debug.Log("[BattleController] 공격 버튼 클릭");
+            _battleManager.ExecuteAttack(_testPlayer, _currentMonster, null);
+            _battleUI?.UpdatePlayerStatus(_testPlayer);
+            _battleUI?.UpdateMonsterStatus(_currentMonster);
+        }
+
+        private void HandleDefendClicked()
+        {
+            Debug.Log("[BattleController] 방어 버튼 클릭");
+            _battleManager.ExecuteDefend(_testPlayer);
+            _battleUI?.UpdatePlayerStatus(_testPlayer);
+        }
+
+        private UI.Battle.SkillSlotUI _skillSlotUI;
+        private UI.Battle.SkillSlotUI SkillSlotUI
+        {
+            get
+            {
+                if (_skillSlotUI == null && _battleUI != null)
+                {
+                    var field = typeof(UI.Battle.BattleUI).GetField("_skillSlotUI", 
+                        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    _skillSlotUI = field?.GetValue(_battleUI) as UI.Battle.SkillSlotUI;
+                }
+                return _skillSlotUI;
+            }
         }
 
         public void StartTestBattle()
@@ -134,6 +189,13 @@ namespace GreedDungeon.Combat
             {
                 _battleManager.OnBattleStarted -= HandleBattleStarted;
                 _battleManager.OnMonsterDamaged -= HandleMonsterDamaged;
+            }
+
+            if (_battleUI != null)
+            {
+                _battleUI.OnSkillSelected -= HandleSkillSelected;
+                _battleUI.OnAttackClicked -= HandleAttackClicked;
+                _battleUI.OnDefendClicked -= HandleDefendClicked;
             }
         }
     }
