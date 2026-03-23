@@ -24,6 +24,10 @@
 
 ```
 Battle.unity
+├── GameRoot (필수 - DI)
+│   ├── RootContext (컴포넌트)
+│   └── GameInstaller (컴포넌트)
+│
 ├── Canvas
 │   ├── EnemyInfomation
 │   ├── PlayerInfomation
