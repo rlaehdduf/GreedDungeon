@@ -12,7 +12,7 @@ namespace GreedDungeon.UI
             {
                 if (_instance == null)
                 {
-                    _instance = FindObjectOfType<UIManager>();
+                    _instance = FindFirstObjectByType<UIManager>();
                     if (_instance == null)
                     {
                         var go = new GameObject("[UIManager]");

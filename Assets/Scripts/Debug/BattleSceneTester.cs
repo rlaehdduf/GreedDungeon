@@ -39,7 +39,7 @@ private void InitializeBattle()
 
             _damageCalculator = new DamageCalculator();
             _turnManager = new TurnManager();
-            _battleManager = new BattleManager(_damageCalculator, _turnManager, null);
+            _battleManager = new BattleManager(_damageCalculator, _turnManager, null, null);
 
         _player = new Player();
         
