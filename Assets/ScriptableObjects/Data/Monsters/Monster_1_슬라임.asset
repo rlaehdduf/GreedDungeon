@@ -27,3 +27,5 @@ MonoBehaviour:
   SpecialSkill: X
   IsBoss: 0
   PrefabAddress: Monsters/Slime
+  ScaleX: 0.3
+  ScaleY: 0.3

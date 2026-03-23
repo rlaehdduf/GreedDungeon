@@ -27,3 +27,5 @@ MonoBehaviour:
   SpecialSkill: X
   IsBoss: 0
   PrefabAddress: Monsters/Skull
+  ScaleX: 0.45
+  ScaleY: 0.45

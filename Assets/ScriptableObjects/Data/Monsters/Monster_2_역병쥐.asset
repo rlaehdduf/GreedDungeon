@@ -27,3 +27,5 @@ MonoBehaviour:
   SpecialSkill: X
   IsBoss: 0
   PrefabAddress: Monsters/Rat
+  ScaleX: 0.35
+  ScaleY: 0.35

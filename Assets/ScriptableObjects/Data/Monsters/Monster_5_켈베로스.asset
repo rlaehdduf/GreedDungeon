@@ -27,3 +27,5 @@ MonoBehaviour:
   SpecialSkill: TakeDamage -2
   IsBoss: 1
   PrefabAddress: Monsters/Cerberus
+  ScaleX: 0.6
+  ScaleY: 0.6
