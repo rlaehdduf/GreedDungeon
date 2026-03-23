@@ -114,8 +114,8 @@ public interface ISkillManager
 ### 쿨다운 관리
 
 - 전역 쿨다운: 전투 간 유지
-- 턴 종료 시: ReduceAllCooldowns() 호출
-- 던전 진입 시: ResetCooldowns() 호출 (선택)
+- 턴 종료 시: `BattleManager.EndTurn()` → `ProcessTurnEnd()` 이후 `ReduceAllCooldowns()` 호출
+- 던전 진입 시: `ResetCooldowns()` 호출 (Dungeon 씬 진입 시점)
 
 ## 파일 구조
 
