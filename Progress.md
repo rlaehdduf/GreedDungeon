@@ -6,20 +6,18 @@
 ## 개발 규칙
 - **항상 물어보고 진행하기** - 작업 전 사용자 승인 필수
 - **Unity 수동 설정 사항은 Setup.md에 기록하고 Git 커밋**
-- **Pathfinder Core DI 시스템 사용** - `[Inject]` 속성으로 의존성 주입
+- **Pathfinder Core DI 시스템 사용** - MonoBehaviour는 `Services.Get<T>()` 사용
 - **SOLID 준수** - 클래스 300행/메서드 10개 제한
+- **순환 의존성 주의** - DI 생성자 주입 대신 `Services.Get<T>()` 런타임 호출로 해결
 - **CSV 데이터 워크플로우**: GameData.xlsm → 자동 CSV 저장 → CSVConverter → ScriptableObject
-- **Addressables 방식 B 사용**: 커스텀 주소 (예: Monsters/Slime)
 
 ## 발견 사항 (Discoveries)
-1. **Unity CLI 연결 문제** - HTTP server는 실행되지만 명령이 타임아웃됨. 파일 조작으로 우회.
-2. **CSV 파싱 UTF-8 BOM 문제 해결**: `File.ReadAllBytes()`로 직접 읽고 UTF-8 BOM 감지 후 수동 디코딩
-3. **생성자 순서 버그**: 추상 클래스에서 `abstract property`는 자식 생성자보다 늦게 초기화됨 → `InitializeStats()` 패턴으로 해결
-4. **Resources 폴더 보안 이슈**: Resources 폴더의 모든 파일은 빌드에 무조건 포함 → EditorData 폴더로 이동하여 해결
-5. **Excel MCP Server 설치 완료**: `uv` 패키지 매니저 설치 후 opencode.json에 MCP 설정 추가
-6. **VBA 매크로로 자동 CSV 저장 구현**: 엑셀 저장 시 자동으로 csv 폴더에 CSV 파일 생성
-7. **Windows `nul` 파일 문제**: Windows 예약어라 git에서 오류 발생. 제거 필요.
-8. **Pathfinder DI [Inject] 제한**: `[Inject]` 속성은 DI 컨테이너가 생성한 객체에서만 작동. MonoBehaviour는 `Services.Get<T>()` 사용해야 함.
+1. **순환 의존성 문제** - BattleManager와 SkillManager가 서로 필요. 해결: `Services.Get<T>()` 런타임 호출
+2. **비동기 초기화 순서** - SkillManager가 GameDataManager보다 먼저 생성되어 스킬 풀이 비어있었음. 해결: `EnsureInitialized()` 지연 초기화 패턴
+3. **Unity 코루틴과 Task** - `yield return Task`는 실제로 대기하지 않음. `IsInitialized` 폴링으로 해결
+4. **툴팁 Raycast 차단** - CanvasGroup `blocksRaycasts = false`로 설정하여 마우스 이벤트 통과
+5. **Addressables 타입 문제** - 스킬 아이콘이 Sprite 타입으로 등록되지 않아 로드 실패. 해결: 별도 Sprite 폴더에 아이콘 배치
+6. **Pathfinder DI [Inject] 제한** - `[Inject]` 속성은 DI 컨테이너가 생성한 객체에서만 작동. MonoBehaviour는 `Services.Get<T>()` 사용
 
 ## 완료된 작업 (Accomplished)
 
@@ -33,61 +31,51 @@
 - 상태이상 시스템 (화상, 독, 스턴)
 - 속성 상성 보너스
 
+### Phase 3: UI 시스템 ✅
+- UI Core 시스템 (UIManager, UIView)
+- 전투 UI (BattleUI, PlayerStatusUI, MonsterStatusUI, ActionMenuUI, BattleLogUI)
+- 스킬 슬롯 UI + 툴팁
+- 인벤토리 UI (InventoryUI, InventorySlotUI, EquipSlotUI, ItemTooltipUI, ConfirmDropPopup)
+- 타이틀 UI (TitleUI)
+- 팝업 시스템 (ConfirmPopup)
+
 ### Phase 4: 인벤토리/버프/아이템 사용 ✅
-- 인벤토리 시스템
+- 인벤토리 시스템 (InventoryItem 20칸)
 - 버프/디버프 시스템
 - 소모품 아이템 사용
 
+### Phase 5: 스킬 시스템 ✅
+- 스킬 데이터 구조 (SkillDataSO)
+- 스킬 풀 시스템 (SkillManager)
+- 스킬 아이콘 Addressables 등록 자동화
+
+### 버프/디버프 아이콘 시스템 ✅
+- StatusEffectSlotUI: 아이콘 + Count 텍스트 컴포넌트
+- PlayerStatusUI: _debuffSlots, _buffSlots 리스트 (풀 방식)
+- MonsterStatusUI: _debuffSlots 리스트 (풀 방식)
+- StatusEffectDataSO: IconAddress 필드 추가
+- ActiveBuff: GetIconAddress() 메서드 추가
+
 ### 데이터 워크플로우 구축 ✅
-- CSV 파일 구조 정리: `Assets/EditorData/Data/csv/` 폴더로 이동
-- CSVConverter 경로 수정 완료
-- ScriptableObject에 PrefabAddress/IconAddress 필드 추가 완료
-- CSVConverter 새 컬럼 처리 추가 완료
-- Excel MCP Server 설치 및 연결 완료
-- VBA 매크로 코드 적용 완료 (GameData.xlsm)
-- GameData.xlsx 삭제, GameData.xlsm 유지
+- CSV 파일 구조 정리: `Assets/EditorData/Data/csv/`
+- CSVConverter: Rarity ColorHex, StatusEffect IconAddress 파싱
+- VBA 매크로: 엑셀 저장 시 자동 CSV 생성
 
 ### Addressables 런타임 로드 시스템 ✅
 - IAssetLoader 인터페이스 및 AddressablesLoader 구현
 - IGameDataManager 인터페이스 및 GameDataManager 구현
 - Services 정적 클래스 (서비스 로케이터 패턴)
-- GameInstaller에 서비스 등록
-- AddressablesTest 스크립트 작성
-- DI 트러블슈팅 스킬 추가 (`.opencode/skills/di-troubleshooting.md`)
-
-### Phase 3: UI 시스템 ✅
-- UI Core 시스템 (UIManager, UIView)
-- 전투 UI (BattleUI, PlayerStatusUI, MonsterStatusUI, ActionMenuUI, BattleLogUI)
-- 인벤토리 UI (InventoryUI, ItemSlotUI, EquipmentSlotUI)
-- 타이틀 UI (TitleUI)
-- 팝업 시스템 (ConfirmPopup)
+- 속성 아이콘 Addressables 등록 (Elements/Fire, Elements/Water, Elements/Leaf, Elements/Neutral)
 
 ### Monster Sprite Animation System ✅
 - MonsterDataSO: ScaleX, ScaleY 필드 추가
 - MonsterSpriteView: 숨쉬기/데미지 애니메이션 구현
 - BattleEntity: OnDamaged 이벤트 추가
-- CSVConverter: Scale 필드 파싱 추가
-- SpriteAddressablesSetter: 몬스터 스프라이트 Addressables 설정
-- AddressablesTest: 스페이스바 데미지 테스트 기능
-
-### 스킬 시스템 ✅
-- 스킬 데이터 구조 (SkillDataSO)
-- 스킬 풀 시스템 (SkillManager)
-- 스킬 슬롯 UI + 툴팁
-- 스킬 아이콘 Addressables 등록 자동화
-- 속성 아이콘 Addressables 등록 + MonsterStatusUI 연동
-
-### 버프/디버프 아이콘 시스템 ✅
-- StatusEffectDataSO: IconAddress 필드 추가
-- ActiveBuff: GetIconAddress() 메서드 추가
-- StatusEffect.csv: IconAddress 컬럼 추가
-- CSVConverter: StatusEffect IconAddress 파싱 추가
-- PlayerStatusUI: 버프/디버프 아이콘 Addressables 로드
-- MonsterStatusUI: 디버프 아이콘 Addressables 로드
 
 ## 진행 중인 작업 (In Progress)
-- Unity에서 UI 프리팹 구성 (버프/디버프 아이콘 프리팹에 Count 텍스트 추가)
-- StatusEffect.csv에 IconAddress 값 입력
+- Unity에서 UI 프리팹 구성
+  - StatusEffectSlotUI 프리팹 생성 (Image + Text "Count")
+  - PlayerInfomation, EnemyInfomation에 슬롯 할당
 
 ## 대기 중인 작업 (Pending)
 - 던전 시스템 구현
@@ -95,112 +83,103 @@
 ## 폴더 구조
 
 ```
-Assets/
-├── EditorData/Data/
-│   ├── GameData.xlsm          ← 엑셀 원본 (VBA 매크로 포함)
-│   └── csv/                    ← CSV 파일들 (VBA로 자동 생성)
-│       ├── MonsterData.csv     (16개 컬럼: ID ~ PrefabAddress)
-│       ├── SkillData.csv       (16개 컬럼: ID ~ IconAddress)
-│       ├── EquipmentData.csv   (13개 컬럼: ID ~ IconAddress)
-│       ├── ConsumableData.csv  (11개 컬럼: ID ~ IconAddress)
-│       ├── RarityData.csv
-│       └── StatusEffect.csv
+Assets/Scripts/
+├── Core/
+│   ├── GameInstaller.cs        ← DI 서비스 등록
+│   ├── Services.cs             ← 서비스 로케이터
+│   ├── IAssetLoader.cs         ← Addressables 로더 인터페이스
+│   ├── AddressablesLoader.cs
+│   ├── IGameDataManager.cs     ← 데이터 매니저 인터페이스
+│   └── GameDataManager.cs
 │
-├── Prefabs/
-│   ├── Monster/                ← 몬스터 프리팹 (5개)
-│   │   ├── Slime(Leaf).prefab
-│   │   ├── Rat(None).prefab
-│   │   ├── Spider(Leaf).prefab
-│   │   ├── Skull(Fire).prefab
-│   │   └── Cerberus(Fire).prefab
-│   ├── SkillIcon/              ← 스킬 아이콘 (15개)
-│   ├── WeaponIcon/             ← 무기 아이콘 (5개)
-│   ├── ArmorIcon/              ← 갑옷 아이콘 (5개)
-│   ├── Accessory/              ← 악세서리 아이콘 (5개)
-│   └── ItemIcon/               ← 아이템 아이콘 (8개)
+├── Character/
+│   ├── Player.cs               ← List<InventoryItem> 20칸
+│   ├── Monster.cs
+│   ├── BattleEntity.cs         ← 버프/상태이상 관리
+│   ├── ActiveBuff.cs           ← GetIconAddress() 추가
+│   └── IBattleEntity.cs        ← ActiveStatusEffect 정의
 │
-├── Scripts/
-│   ├── Core/
-│   │   ├── GameInstaller.cs     ← DI 서비스 등록
-│   │   ├── Services.cs          ← 서비스 로케이터
-│   │   ├── IAssetLoader.cs      ← Addressables 로더 인터페이스
-│   │   ├── AddressablesLoader.cs
-│   │   ├── IGameDataManager.cs  ← 데이터 매니저 인터페이스
-│   │   └── GameDataManager.cs
-│   ├── ScriptableObjects/
-│   │   ├── MonsterDataSO.cs      ← PrefabAddress 필드
-│   │   ├── SkillDataSO.cs        ← IconAddress, ValueFloat, HitCount, Cooldown
-│   │   ├── EquipmentDataSO.cs    ← IconAddress, Description 필드
-│   │   └── ConsumableDataSO.cs   ← IconAddress 필드
-│   ├── UI/
-│   │   ├── Core/
-│   │   │   ├── UIManager.cs      ← UI 관리자
-│   │   │   └── UIView.cs         ← UI 뷰 기본 클래스
-│   │   ├── Battle/
-│   │   │   ├── BattleUI.cs       ← 전투 UI 메인
-│   │   │   ├── PlayerStatusUI.cs
-│   │   │   ├── MonsterStatusUI.cs
-│   │   │   ├── ActionMenuUI.cs
-│   │   │   └── BattleLogUI.cs
-│   │   ├── Inventory/
-│   │   │   ├── InventoryUI.cs    ← 인벤토리 메인
-│   │   │   ├── ItemSlotUI.cs
-│   │   │   └── EquipmentSlotUI.cs
-│   │   ├── Title/
-│   │   │   └── TitleUI.cs        ← 타이틀 UI
-│   │   └── Popup/
-│   │       └── ConfirmPopup.cs   ← 확인 팝업
-│   ├── Editor/
-│   │   ├── CSVConverter.cs       ← CSV → ScriptableObject 변환
-│   │   ├── AddressablesSetter.cs ← 프리팹 주소 설정
-│   │   └── ScriptableObjectAddressablesSetter.cs ← SO 주소/라벨 설정
-│   └── Tests/
-│       └── AddressablesTest.cs   ← 런타임 테스트
+├── Items/
+│   └── InventoryItem.cs        ← Equipment/Consumable 래퍼, Rarity
 │
-├── Scenes/
-│   ├── AddressablesTest.unity    ← 테스트 씬
-│   ├── Title.unity
-│   ├── Dungeon.unity
-│   └── Battle.unity
+├── ScriptableObjects/
+│   ├── MonsterDataSO.cs        ← PrefabAddress
+│   ├── SkillDataSO.cs          ← IconAddress, Cooldown
+│   ├── EquipmentDataSO.cs      ← IconAddress
+│   ├── ConsumableDataSO.cs     ← IconAddress
+│   ├── RarityDataSO.cs         ← Color 필드
+│   └── StatusEffectDataSO.cs   ← IconAddress 필드
 │
-└── ScriptableObjects/Data/       ← 변환된 데이터
-    ├── Monsters/ (5개)
-    ├── Skills/ (15개)
-    ├── Equipments/ (15개)
-    ├── Consumables/ (10개)
-    ├── Rarities/ (5개)
-    └── StatusEffects/ (3개)
+├── Skill/
+│   ├── ISkillManager.cs
+│   └── SkillManager.cs         ← 스킬 풀, 쿨다운, 실행
+│
+├── Combat/
+│   ├── BattleManager.cs
+│   ├── BattleController.cs
+│   ├── DamageCalculator.cs
+│   └── TurnManager.cs
+│
+├── UI/Battle/
+│   ├── BattleUI.cs
+│   ├── PlayerStatusUI.cs       ← _debuffSlots, _buffSlots
+│   ├── MonsterStatusUI.cs      ← _debuffSlots
+│   ├── StatusEffectSlotUI.cs   ← 아이콘 + Count 텍스트
+│   ├── SkillSlotUI.cs          ← 쿨다운 표시
+│   ├── ActionMenuUI.cs
+│   └── BattleLogUI.cs
+│
+├── UI/Inventory/
+│   ├── InventoryUI.cs
+│   ├── InventorySlotUI.cs
+│   ├── EquipSlotUI.cs
+│   ├── ItemTooltipUI.cs
+│   └── ConfirmDropPopup.cs
+│
+├── Editor/
+│   ├── CSVConverter.cs         ← CSV → ScriptableObject
+│   └── ScriptableObjectAddressablesSetter.cs ← 아이콘 Addressables 등록
+│
+└── Tests/
+    └── AddressablesTest.cs
 
-.opencode/skills/
-└── di-troubleshooting.md         ← DI 트러블슈팅 스킬
+Assets/Prefabs/
+├── Monster/                    ← 몬스터 프리팹 (5개)
+├── SkillIcon/                  ← 스킬 아이콘 Sprite (15개)
+├── Elementer/                  ← 속성 아이콘 (Fire, Water, Leaf, Neutral)
+└── UI/                         ← UI 프리팹
+
+Assets/ScriptableObjects/Data/
+├── Monsters/ (5개)
+├── Skills/ (15개)
+├── Equipments/ (15개)
+├── Consumables/ (10개)
+├── Rarities/ (5개)
+└── StatusEffects/ (3개)
+
+Assets/EditorData/Data/csv/
+├── MonsterData.csv
+├── SkillData.csv
+├── EquipmentData.csv
+├── ConsumableData.csv
+├── RarityData.csv
+└── StatusEffect.csv           ← IconAddress 컬럼 포함
 ```
 
-## VBA 매크로 코드 (GameData.xlsm에 적용됨)
+## 아이콘 주소 매핑
 
-```vba
-Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
-    Dim ws As Worksheet
-    Dim csvPath As String
-    Dim csvFile As String
-    
-    csvPath = ThisWorkbook.Path & "\csv\"
-    
-    For Each ws In ThisWorkbook.Worksheets
-        csvFile = csvPath & ws.Name & ".csv"
-        ws.Copy
-        ActiveWorkbook.SaveAs Filename:=csvFile, FileFormat:=xlCSVUTF8, CreateBackup:=False
-        ActiveWorkbook.Close SaveChanges:=False
-    Next ws
-    
-    MsgBox "CSV 파일 저장 완료!", vbInformation
-End Sub
-```
-
-## 다음 단계
-
-1. ✅ Addressables 런타임 로드 테스트 완료
-2. Phase 3 UI 시스템 구현 (현재 진행)
-3. Phase 5 스킬 시스템 구현
+| 타입 | 주소 |
+|-----|------|
+| 버프 - 공격력 | Skills/PowerBuff |
+| 버프 - 방어력 | Skills/DefenseBuff |
+| 버프 - 속도 | Skills/SpeedBuff |
+| 디버프 - 화상 | Skills/BurnDeBuff |
+| 디버프 - 독 | Skills/PoisonDeBuff |
+| 디버프 - 스턴 | Skills/Stun |
+| 속성 - 불 | Elements/Fire |
+| 속성 - 물 | Elements/Water |
+| 속성 - 풀 | Elements/Leaf |
+| 속성 - 없음 | Elements/Neutral |
 
 ---
 최종 업데이트: 2026-03-23
@@ -209,5 +188,6 @@ End Sub
 
 | 날짜 | 커밋 | 내용 |
 |------|------|------|
-| 2026-03-23 | - | StatusEffectSlotUI 추가, 버프/디버프 슬롯 풀 시스템 구현 |
+| 2026-03-23 | 21630bb | StatusEffectSlotUI 추가, 버프/디버프 슬롯 풀 시스템 구현 |
+| 2026-03-23 | - | 스킬 시스템, 속성 아이콘, StatusEffect IconAddress 추가 |
 | 2026-03-20 | ad63a6d | MonsterSpriteView 애니메이션 시스템 구현 |
