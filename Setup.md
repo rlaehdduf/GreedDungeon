@@ -137,6 +137,31 @@ Battle.unity
 
 ---
 
+## 스킬 시스템
+
+### 스킬 획득
+- 장비 장착 시 `SkillPoolType`별 랜덤 스킬 획득
+- 슬롯 최대 3개 (무기/갑옷/악세서리)
+
+### 스킬 타입별 동작
+| 타입 | 동작 |
+|------|------|
+| Common/Melee/Magic | 적에게 데미지 |
+| Buff | 공격력/방어력/속도 증가 또는 HP 회복 |
+| Passive | 슬롯 장착 중 스탯 영구 증가 |
+
+### 쿨다운
+- 전역 쿨다운 (전투 간 유지)
+- 턴 종료 시 1 감소
+- UI에 남은 턴 수 표시
+
+### DI 등록
+```
+ISkillManager → SkillManager (Singleton)
+```
+
+---
+
 ## 확인 체크리스트
 
 - [ ] Build Settings에 3개 씬 추가
@@ -146,3 +171,38 @@ Battle.unity
 - [ ] Battle 씬: GameRoot - RootContext, GameInstaller
 - [ ] Battle 씬: Managers - BattleController, MonsterDisplay
 - [ ] Battle 씬: Canvas - BattleUI, SkillSlotUI, PlayerStatusUI, MonsterStatusUI, BattleLogUI, ActionMenuUI
+
+---
+
+## 파일 구조
+
+```
+Assets/Scripts/
+├── Core/
+│   ├── GameInstaller.cs      ← DI 등록
+│   ├── Services.cs
+│   └── IGameDataManager.cs
+│
+├── Skill/
+│   ├── ISkillManager.cs      ← 스킬 관리 인터페이스
+│   └── SkillManager.cs       ← 풀, 쿨다운, 실행
+│
+├── Combat/
+│   ├── BattleManager.cs      ← 전투 관리
+│   ├── BattleController.cs   ← 스킬 사용
+│   ├── DamageCalculator.cs
+│   └── TurnManager.cs
+│
+├── Character/
+│   ├── Player.cs             ← 패시브 적용, 스킬 획득
+│   ├── Monster.cs
+│   └── BattleEntity.cs
+│
+└── UI/Battle/
+    ├── BattleUI.cs
+    ├── SkillSlotUI.cs        ← 쿨다운 표시
+    ├── PlayerStatusUI.cs
+    ├── MonsterStatusUI.cs
+    ├── BattleLogUI.cs
+    └── ActionMenuUI.cs
+```
