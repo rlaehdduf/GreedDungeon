@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using GreedDungeon.Character;
 using GreedDungeon.Core;
 using GreedDungeon.ScriptableObjects;
+using GreedDungeon.Skill;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,13 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private Button _slot2;
         [SerializeField] private Button _slot3;
 
+        [Header("Cooldown Texts")]
+        [SerializeField] private Text _cooldownText1;
+        [SerializeField] private Text _cooldownText2;
+        [SerializeField] private Text _cooldownText3;
+
         private IAssetLoader _assetLoader;
+        private ISkillManager _skillManager;
         private Player _player;
         private SkillDataSO[] _slotSkills = new SkillDataSO[3];
 
@@ -31,6 +38,7 @@ namespace GreedDungeon.UI.Battle
             if (Services.IsInitialized)
             {
                 _assetLoader = Services.Get<IAssetLoader>();
+                _skillManager = Services.Get<ISkillManager>();
             }
         }
 
@@ -75,6 +83,7 @@ namespace GreedDungeon.UI.Battle
                 image.sprite = null;
                 image.color = new Color(0.2f, 0.2f, 0.2f, 0.5f);
                 slot.interactable = false;
+                UpdateCooldownText(index, 0);
                 return;
             }
 
@@ -109,6 +118,58 @@ namespace GreedDungeon.UI.Battle
             if (_slot1 != null && _slotSkills[0] != null) _slot1.interactable = interactable;
             if (_slot2 != null && _slotSkills[1] != null) _slot2.interactable = interactable;
             if (_slot3 != null && _slotSkills[2] != null) _slot3.interactable = interactable;
+        }
+
+        public void UpdateCooldownDisplay()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (_slotSkills[i] != null && _skillManager != null)
+                {
+                    int remaining = _skillManager.GetRemainingCooldown(_slotSkills[i].ID);
+                    UpdateCooldownText(i, remaining);
+                    
+                    if (_skillManager.IsOnCooldown(_slotSkills[i].ID))
+                    {
+                        SetSlotInteractable(i, false);
+                    }
+                }
+                else
+                {
+                    UpdateCooldownText(i, 0);
+                }
+            }
+        }
+
+        private void UpdateCooldownText(int index, int remaining)
+        {
+            Text text = index switch
+            {
+                0 => _cooldownText1,
+                1 => _cooldownText2,
+                2 => _cooldownText3,
+                _ => null
+            };
+
+            if (text != null)
+            {
+                text.text = remaining > 0 ? remaining.ToString() : "";
+                text.gameObject.SetActive(remaining > 0);
+            }
+        }
+
+        private void SetSlotInteractable(int index, bool interactable)
+        {
+            Button slot = index switch
+            {
+                0 => _slot1,
+                1 => _slot2,
+                2 => _slot3,
+                _ => null
+            };
+
+            if (slot != null)
+                slot.interactable = interactable;
         }
     }
 }

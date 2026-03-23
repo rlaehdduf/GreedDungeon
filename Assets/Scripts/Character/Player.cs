@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
+using GreedDungeon.Core;
 using GreedDungeon.Items;
 using GreedDungeon.ScriptableObjects;
+using GreedDungeon.Skill;
 
 namespace GreedDungeon.Character
 {
@@ -82,6 +85,17 @@ namespace GreedDungeon.Character
                     equipmentStats.CriticalRate += equipment.CriticalRate;
                 }
             }
+
+            if (Services.IsInitialized)
+            {
+                var skillManager = Services.Get<ISkillManager>();
+                foreach (var skill in Skills)
+                {
+                    if (skill.Type == SkillType.Passive)
+                        skillManager.ApplyPassiveStats(skill, equipmentStats);
+                }
+            }
+
             return equipmentStats;
         }
 
@@ -101,6 +115,11 @@ namespace GreedDungeon.Character
         public EquipmentDataSO GetEquipped(EquipmentType type)
         {
             return _equippedItems.TryGetValue(type, out var equipment) ? equipment : null;
+        }
+
+        public SkillDataSO GetSkill(int skillId)
+        {
+            return Skills.FirstOrDefault(s => s.ID == skillId);
         }
 
         public void AddGold(int amount)
@@ -136,7 +155,9 @@ namespace GreedDungeon.Character
 
         private SkillDataSO GetRandomSkillFromPool(SkillPoolType poolType)
         {
-            return null;
+            if (!Services.IsInitialized) return null;
+            var skillManager = Services.Get<ISkillManager>();
+            return skillManager?.GetRandomSkill(poolType);
         }
     }
 }

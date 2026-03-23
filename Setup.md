@@ -86,6 +86,12 @@ Battle.unity
 | `_slot1` | SkillSlot_1 Button |
 | `_slot2` | SkillSlot_2 Button |
 | `_slot3` | SkillSlot_3 Button |
+| `_cooldownText1` | SkillSlot_1 쿨다운 Text (선택) |
+| `_cooldownText2` | SkillSlot_2 쿨다운 Text (선택) |
+| `_cooldownText3` | SkillSlot_3 쿨다운 Text (선택) |
+
+> 스킬은 장비 장착 시 SkillPoolType별 랜덤 획득
+> 쿨다운은 전역 (전투 간 유지)
 
 ### PlayerStatusUI (PlayerInfomation에 추가)
 | 필드 | 연결 대상 |
