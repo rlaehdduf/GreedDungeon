@@ -17,12 +17,12 @@ MonoBehaviour:
   Type: 2
   HP: 0
   MP: 0
-  Attack: 2
-  Defense: 0
-  Speed: 2
-  CriticalRate: 3
-  SkillPoolType: 4
-  BuyPrice: 150
-  SellPrice: 75
+  Attack: 0
+  Defense: 2
+  Speed: 0
+  CriticalRate: 2
+  SkillPoolType: 0
+  BuyPrice: 0
+  SellPrice: 150
   Description: 
-  IconAddress: Accessories/Ring
+  IconAddress: 75

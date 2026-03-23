@@ -27,6 +27,7 @@ namespace GreedDungeon.UI.Battle
 
         private void SetupButtons()
         {
+            Debug.Log($"[BattleUI] SetupButtons - _actionMenu: {_actionMenu != null}, _skillSlotUI: {_skillSlotUI != null}");
             if (_actionMenu != null)
             {
                 _actionMenu.OnAttackClicked += () => OnAttackClicked?.Invoke();
@@ -36,7 +37,17 @@ namespace GreedDungeon.UI.Battle
 
             if (_skillSlotUI != null)
             {
-                _skillSlotUI.OnSkillSlotClicked += (id) => OnSkillSelected?.Invoke(id);
+                _skillSlotUI.OnSkillSlotClicked += (id) => 
+                {
+                    Debug.Log($"[BattleUI] OnSkillSlotClicked 이벤트 수신 - ID: {id}");
+                    OnSkillSelected?.Invoke(id);
+                    Debug.Log($"[BattleUI] OnSkillSelected 이벤트 발생 완료");
+                };
+                Debug.Log("[BattleUI] _skillSlotUI 이벤트 구독 완료");
+            }
+            else
+            {
+                Debug.LogWarning("[BattleUI] _skillSlotUI가 null입니다! Inspector에서 연결하세요.");
             }
         }
 
@@ -58,13 +69,20 @@ namespace GreedDungeon.UI.Battle
         public void UpdatePlayerStatus(Player player)
         {
             if (_playerStatus != null)
+            {
                 _playerStatus.UpdateStatus(player);
+                _playerStatus.UpdateDebuffs(player);
+                _playerStatus.UpdateBuffs(player);
+            }
         }
 
         public void UpdateMonsterStatus(Monster monster)
         {
             if (_monsterStatus != null)
+            {
                 _monsterStatus.UpdateStatus(monster);
+                _monsterStatus.UpdateDebuffs(monster);
+            }
         }
 
         public void AddBattleLog(string message)

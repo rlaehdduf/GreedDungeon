@@ -17,7 +17,7 @@ namespace GreedDungeon.Combat
         void StartBattle(Player player, Monster monster);
         void ExecuteAttack(IBattleEntity attacker, IBattleEntity defender, SkillDataSO skill);
         void ExecuteDefend(IBattleEntity defender);
-        bool ExecuteItem(ConsumableItem item, IBattleEntity target);
+        bool ExecuteItem(InventoryItem item, IBattleEntity target);
         void EndTurn();
         bool IsBattleOver { get; }
         bool PlayerWon { get; }
@@ -138,12 +138,13 @@ namespace GreedDungeon.Combat
             Debug.Log($"[방어] {defenderName}이(가) 방어 태세를 취함");
         }
 
-        public bool ExecuteItem(ConsumableItem item, IBattleEntity target)
+        public bool ExecuteItem(InventoryItem item, IBattleEntity target)
         {
-            if (item == null || item.Quantity <= 0) return false;
+            if (item == null || item.Type != ItemType.Consumable) return false;
+            if (item.Quantity <= 0) return false;
             if (target == null || target.IsDead) return false;
 
-            var data = item.Data;
+            var data = item.Consumable;
             Debug.Log($"[아이템] {data.Name} 사용 → {target.Name}");
 
             switch (data.EffectType)
@@ -182,10 +183,10 @@ namespace GreedDungeon.Combat
                     break;
             }
 
-            item.Use();
+            item.RemoveQuantity(1);
             if (item.Quantity <= 0 && target == _player)
             {
-                _player.RemoveItem(data.ID);
+                _player.UseItemById(data.ID);
             }
             
             return true;

@@ -28,3 +28,4 @@ MonoBehaviour:
   Cooldown: 2
   Tier: 2
   IconAddress: Skills/FireBall
+  Element: 0

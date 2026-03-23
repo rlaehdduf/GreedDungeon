@@ -70,12 +70,27 @@
 - SpriteAddressablesSetter: 몬스터 스프라이트 Addressables 설정
 - AddressablesTest: 스페이스바 데미지 테스트 기능
 
+### 스킬 시스템 ✅
+- 스킬 데이터 구조 (SkillDataSO)
+- 스킬 풀 시스템 (SkillManager)
+- 스킬 슬롯 UI + 툴팁
+- 스킬 아이콘 Addressables 등록 자동화
+- 속성 아이콘 Addressables 등록 + MonsterStatusUI 연동
+
+### 버프/디버프 아이콘 시스템 ✅
+- StatusEffectDataSO: IconAddress 필드 추가
+- ActiveBuff: GetIconAddress() 메서드 추가
+- StatusEffect.csv: IconAddress 컬럼 추가
+- CSVConverter: StatusEffect IconAddress 파싱 추가
+- PlayerStatusUI: 버프/디버프 아이콘 Addressables 로드
+- MonsterStatusUI: 디버프 아이콘 Addressables 로드
+
 ## 진행 중인 작업 (In Progress)
-- Unity에서 UI 씬 구성 및 연결
-- MonsterData.csv에 ScaleX, ScaleY 컬럼 추가 필요
+- Unity에서 UI 프리팹 구성 (버프/디버프 아이콘 프리팹에 Count 텍스트 추가)
+- StatusEffect.csv에 IconAddress 값 입력
 
 ## 대기 중인 작업 (Pending)
-- Phase 5: 스킬 시스템 구현
+- 던전 시스템 구현
 
 ## 폴더 구조
 
@@ -188,10 +203,11 @@ End Sub
 3. Phase 5 스킬 시스템 구현
 
 ---
-최종 업데이트: 2026-03-20
+최종 업데이트: 2026-03-23
 
 ## 커밋 기록
 
 | 날짜 | 커밋 | 내용 |
 |------|------|------|
+| 2026-03-23 | - | StatusEffectSlotUI 추가, 버프/디버프 슬롯 풀 시스템 구현 |
 | 2026-03-20 | ad63a6d | MonsterSpriteView 애니메이션 시스템 구현 |

@@ -39,6 +39,18 @@ namespace GreedDungeon.Combat
             _gameDataManager = Services.Get<IGameDataManager>();
             _skillManager = Services.Get<ISkillManager>();
             
+            if (!_gameDataManager.IsInitialized)
+            {
+                Debug.Log("[BattleController] GameDataManager 초기화 대기 중...");
+                _gameDataManager.InitializeAsync();
+                
+                while (!_gameDataManager.IsInitialized)
+                {
+                    yield return null;
+                }
+                Debug.Log("[BattleController] GameDataManager 초기화 완료");
+            }
+            
             _battleManager.OnBattleStarted += HandleBattleStarted;
             _battleManager.OnMonsterDamaged += HandleMonsterDamaged;
 
@@ -47,12 +59,20 @@ namespace GreedDungeon.Combat
 
         private void SetupUIEvents()
         {
+            Debug.Log($"[BattleController] SetupUIEvents - _battleUI: {_battleUI != null}");
             if (_battleUI != null)
             {
                 _battleUI.OnSkillSelected += HandleSkillSelected;
                 _battleUI.OnAttackClicked += HandleAttackClicked;
                 _battleUI.OnDefendClicked += HandleDefendClicked;
+                Debug.Log("[BattleController] UI 이벤트 구독 완료");
             }
+            else
+            {
+                Debug.LogWarning("[BattleController] _battleUI가 null입니다! Inspector에서 연결하세요.");
+            }
+            
+            StartTestBattle();
         }
 
         private void HandleSkillSelected(int skillId)
@@ -99,17 +119,34 @@ namespace GreedDungeon.Combat
 
         public void StartTestBattle()
         {
-            if (_gameDataManager == null) return;
+            Debug.Log("[BattleController] StartTestBattle 호출됨");
+            if (_gameDataManager == null)
+            {
+                Debug.LogError("[BattleController] _gameDataManager가 null입니다!");
+                return;
+            }
             
             var monsterData = _gameDataManager.GetMonsterData(1);
-            if (monsterData == null) return;
+            if (monsterData == null)
+            {
+                Debug.LogError("[BattleController] monsterData가 null입니다!");
+                return;
+            }
             
             _currentMonster = new Monster(monsterData);
             _testPlayer = new Player();
+            Debug.Log($"[BattleController] 플레이어/몬스터 생성 완료 - Player: {_testPlayer != null}, Monster: {_currentMonster != null}");
 
             EquipTestItems();
             
+            if (_battleUI != null)
+            {
+                _battleUI.SetupBattle(_testPlayer, _currentMonster);
+                Debug.Log("[BattleController] BattleUI.SetupBattle 호출 완료");
+            }
+            
             _battleManager.StartBattle(_testPlayer, _currentMonster);
+            Debug.Log("[BattleController] 전투 시작 요청 완료");
         }
 
         private void EquipTestItems()
@@ -126,9 +163,16 @@ namespace GreedDungeon.Combat
             {
                 if (equipment != null && equippedCount < 3)
                 {
-                    _testPlayer.Equip(equipment);
-                    equippedCount++;
-                    Debug.Log($"[BattleController] 장비 장착: {equipment.Name} (Type: {equipment.Type}, SkillPool: {equipment.SkillPoolType})");
+                    if (_testPlayer.TryAddEquipment(equipment))
+                    {
+                        int index = _testPlayer.FindItemIndex(equipment.ID);
+                        if (index >= 0)
+                        {
+                            _testPlayer.EquipItem(index);
+                            equippedCount++;
+                            Debug.Log($"[BattleController] 장비 장착: {equipment.Name} (Type: {equipment.Type}, SkillPool: {equipment.SkillPoolType})");
+                        }
+                    }
                 }
             }
 

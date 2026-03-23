@@ -28,3 +28,4 @@ MonoBehaviour:
   Cooldown: 1
   Tier: 1
   IconAddress: Skills/ManaBall
+  Element: 0

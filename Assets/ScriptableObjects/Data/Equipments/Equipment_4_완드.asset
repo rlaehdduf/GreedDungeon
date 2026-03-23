@@ -16,13 +16,13 @@ MonoBehaviour:
   Name: "\uC644\uB4DC"
   Type: 0
   HP: 0
-  MP: 30
-  Attack: 7
-  Defense: 0
+  MP: 0
+  Attack: 30
+  Defense: 7
   Speed: 0
-  CriticalRate: 3
-  SkillPoolType: 2
-  BuyPrice: 250
-  SellPrice: 125
+  CriticalRate: 0
+  SkillPoolType: 0
+  BuyPrice: 0
+  SellPrice: 250
   Description: 
-  IconAddress: Weapons/Wand
+  IconAddress: 125

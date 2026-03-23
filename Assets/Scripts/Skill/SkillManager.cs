@@ -13,18 +13,33 @@ namespace GreedDungeon.Skill
         
         private readonly Dictionary<SkillPoolType, List<SkillDataSO>> _skillPools = new();
         private readonly Dictionary<int, int> _cooldowns = new();
+        private bool _isInitialized;
 
         public SkillManager(IGameDataManager gameDataManager)
         {
             _gameDataManager = gameDataManager;
+        }
+
+        private void EnsureInitialized()
+        {
+            if (_isInitialized) return;
+            if (_gameDataManager == null || !_gameDataManager.IsInitialized) return;
+            
+            _isInitialized = true;
             InitializeSkillPools();
         }
 
         private void InitializeSkillPools()
         {
             var allSkills = _gameDataManager.GetAllSkillData();
-            if (allSkills == null) return;
+            if (allSkills == null)
+            {
+                Debug.LogWarning("[SkillManager] GetAllSkillData() returned null");
+                return;
+            }
 
+            Debug.Log($"[SkillManager] 로드된 스킬 수: {allSkills.Count}");
+            
             foreach (var skill in allSkills)
             {
                 var poolType = ConvertSkillTypeToPoolType(skill.Type);
@@ -37,6 +52,10 @@ namespace GreedDungeon.Skill
                 _skillPools[SkillPoolType.Random] = new List<SkillDataSO>(allSkills);
 
             Debug.Log($"[SkillManager] 스킬 풀 초기화 완료: {_skillPools.Count}개 타입");
+            foreach (var pool in _skillPools)
+            {
+                Debug.Log($"  - {pool.Key}: {pool.Value.Count}개 스킬");
+            }
         }
 
         private SkillPoolType ConvertSkillTypeToPoolType(SkillType skillType)
@@ -54,10 +73,14 @@ namespace GreedDungeon.Skill
 
         public SkillDataSO GetRandomSkill(SkillPoolType poolType)
         {
+            EnsureInitialized();
+            
             if (!_skillPools.TryGetValue(poolType, out var pool) || pool.Count == 0)
             {
+                Debug.Log($"[SkillManager] {poolType} 풀이 비어있음, Random 풀 사용");
                 if (_skillPools.TryGetValue(SkillPoolType.Random, out var randomPool) && randomPool.Count > 0)
                     return randomPool[UnityEngine.Random.Range(0, randomPool.Count)];
+                Debug.LogWarning($"[SkillManager] 모든 스킬 풀이 비어있음!");
                 return null;
             }
             return pool[UnityEngine.Random.Range(0, pool.Count)];

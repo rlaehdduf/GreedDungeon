@@ -28,3 +28,4 @@ MonoBehaviour:
   Cooldown: 5
   Tier: 1
   IconAddress: Skills/PowerBuff
+  Element: 0

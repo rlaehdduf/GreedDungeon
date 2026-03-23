@@ -60,19 +60,25 @@ namespace GreedDungeon.Testing
                 return;
             }
             
-            player.AddItem(_healPotionSmall, 3);
-            int count = player.GetItemCount(_healPotionSmall.ID);
+            player.TryAddConsumable(_healPotionSmall, 3);
+            int index = player.FindItemIndex(_healPotionSmall.ID);
+            var item = player.GetItemAt(index);
+            int count = item?.Quantity ?? 0;
             Debug.Log($"  아이템 추가 (x3): {count}개");
             
-            bool hasItem = player.HasItem(_healPotionSmall.ID);
+            bool hasItem = index >= 0;
             Debug.Log($"  아이템 보유 확인: {hasItem}");
             
-            bool removed = player.RemoveItem(_healPotionSmall.ID, 1);
-            count = player.GetItemCount(_healPotionSmall.ID);
+            player.UseItemAt(index);
+            index = player.FindItemIndex(_healPotionSmall.ID);
+            item = player.GetItemAt(index);
+            count = item?.Quantity ?? 0;
             Debug.Log($"  아이템 사용 (x1): {count}개 남음");
             
-            player.RemoveItem(_healPotionSmall.ID, 2);
-            hasItem = player.HasItem(_healPotionSmall.ID);
+            player.UseItemAt(index);
+            player.UseItemAt(index);
+            index = player.FindItemIndex(_healPotionSmall.ID);
+            hasItem = index >= 0;
             Debug.Log($"  아이템 모두 사용: 보유={hasItem}");
             
             Debug.Log("  ✓ 인벤토리 기본 기능 테스트 통과");
@@ -97,8 +103,9 @@ namespace GreedDungeon.Testing
             int hpBefore = player.CurrentHP;
             Debug.Log($"  HP before: {hpBefore}/{player.TotalStats.MaxHP}");
             
-            player.AddItem(_healPotionLarge, 1);
-            var item = player.GetItem(_healPotionLarge.ID);
+            player.TryAddConsumable(_healPotionLarge, 1);
+            int itemIndex = player.FindItemIndex(_healPotionLarge.ID);
+            var item = player.GetItemAt(itemIndex);
             
             battleManager.ExecuteItem(item, player);
             
@@ -127,8 +134,9 @@ namespace GreedDungeon.Testing
             int attackBefore = player.TotalStats.Attack;
             Debug.Log($"  공격력 before: {attackBefore}");
             
-            player.AddItem(_attackBuff, 1);
-            var item = player.GetItem(_attackBuff.ID);
+            player.TryAddConsumable(_attackBuff, 1);
+            int itemIndex = player.FindItemIndex(_attackBuff.ID);
+            var item = player.GetItemAt(itemIndex);
             battleManager.ExecuteItem(item, player);
             
             int attackAfter = player.TotalStats.Attack;
@@ -159,8 +167,9 @@ namespace GreedDungeon.Testing
             
             Debug.Log($"  몬스터 상태이상 개수 before: {monster.StatusEffects.Count}");
             
-            player.AddItem(_poisonFlask, 1);
-            var item = player.GetItem(_poisonFlask.ID);
+            player.TryAddConsumable(_poisonFlask, 1);
+            int itemIndex = player.FindItemIndex(_poisonFlask.ID);
+            var item = player.GetItemAt(itemIndex);
             battleManager.ExecuteItem(item, monster);
             
             Debug.Log($"  몬스터 상태이상 개수 after: {monster.StatusEffects.Count}");
@@ -195,8 +204,9 @@ namespace GreedDungeon.Testing
             int hpBefore = monster.CurrentHP;
             Debug.Log($"  몬스터 HP before: {hpBefore}");
             
-            player.AddItem(_magicArrow, 1);
-            var item = player.GetItem(_magicArrow.ID);
+            player.TryAddConsumable(_magicArrow, 1);
+            int itemIndex = player.FindItemIndex(_magicArrow.ID);
+            var item = player.GetItemAt(itemIndex);
             battleManager.ExecuteItem(item, monster);
             
             int hpAfter = monster.CurrentHP;
@@ -221,8 +231,9 @@ namespace GreedDungeon.Testing
                 return;
             }
             
-            player.AddItem(_attackBuff, 1);
-            var item = player.GetItem(_attackBuff.ID);
+            player.TryAddConsumable(_attackBuff, 1);
+            int itemIndex = player.FindItemIndex(_attackBuff.ID);
+            var item = player.GetItemAt(itemIndex);
             battleManager.ExecuteItem(item, player);
             
             Debug.Log($"  버프 적용: {player.Buffs.Count}개");
@@ -258,21 +269,27 @@ namespace GreedDungeon.Testing
             var monster = new Monster(_testMonster, null);
             battleManager.StartBattle(player, monster);
             
-            player.AddItem(_healPotionSmall, 5);
-            player.AddItem(_attackBuff, 2);
+            player.TryAddConsumable(_healPotionSmall, 5);
+            player.TryAddConsumable(_attackBuff, 2);
+            
+            int healIndex = player.FindItemIndex(_healPotionSmall.ID);
+            int buffIndex = player.FindItemIndex(_attackBuff.ID);
+            var healItem = player.GetItemAt(healIndex);
+            var buffItem = player.GetItemAt(buffIndex);
             
             Debug.Log($"  초기 상태:");
             Debug.Log($"    Player HP: {player.CurrentHP}/{player.TotalStats.MaxHP}");
             Debug.Log($"    Monster HP: {monster.CurrentHP}/{monster.TotalStats.MaxHP}");
-            Debug.Log($"    인벤토리: 회복포션 x{player.GetItemCount(_healPotionSmall.ID)}, 공격버프 x{player.GetItemCount(_attackBuff.ID)}");
+            Debug.Log($"    인벤토리: 회복포션 x{healItem?.Quantity ?? 0}, 공격버프 x{buffItem?.Quantity ?? 0}");
             
             for (int turn = 1; turn <= 5; turn++)
             {
                 Debug.Log($"\n  === 턴 {turn} ===");
                 
-                if (turn == 1 && player.HasItem(_attackBuff.ID))
+                buffIndex = player.FindItemIndex(_attackBuff.ID);
+                if (turn == 1 && buffIndex >= 0)
                 {
-                    var buffItem = player.GetItem(_attackBuff.ID);
+                    buffItem = player.GetItemAt(buffIndex);
                     battleManager.ExecuteItem(buffItem, player);
                     Debug.Log($"    공격력: {player.TotalStats.Attack}");
                 }
@@ -284,9 +301,10 @@ namespace GreedDungeon.Testing
                     battleManager.ExecuteAttack(monster, player, null);
                 }
                 
-                if (player.CurrentHP < player.TotalStats.MaxHP * 0.5f && player.HasItem(_healPotionSmall.ID))
+                healIndex = player.FindItemIndex(_healPotionSmall.ID);
+                if (player.CurrentHP < player.TotalStats.MaxHP * 0.5f && healIndex >= 0)
                 {
-                    var healItem = player.GetItem(_healPotionSmall.ID);
+                    healItem = player.GetItemAt(healIndex);
                     battleManager.ExecuteItem(healItem, player);
                 }
                 

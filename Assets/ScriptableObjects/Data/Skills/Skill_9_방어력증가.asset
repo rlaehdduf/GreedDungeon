@@ -28,3 +28,4 @@ MonoBehaviour:
   Cooldown: 0
   Tier: 2
   IconAddress: Skills/DefenseBuff
+  Element: 0

@@ -9,80 +9,208 @@ namespace GreedDungeon.Character
 {
     public class Player : BattleEntity
     {
-        private readonly Dictionary<EquipmentType, EquipmentDataSO> _equippedItems = new();
-        private readonly Dictionary<int, ConsumableItem> _inventory = new();
+        private const int INVENTORY_SIZE = 20;
+        
+        private readonly List<InventoryItem> _inventory = new List<InventoryItem>(INVENTORY_SIZE);
+        private readonly Dictionary<EquipmentType, InventoryItem> _equippedItems = new();
         private int _gold;
 
         public override string Name => "Player";
         public int Gold => _gold;
         public int DungeonLevel { get; private set; }
-        public IReadOnlyDictionary<int, ConsumableItem> Inventory => _inventory;
-
-        public void AddItem(ConsumableDataSO data, int count = 1)
-        {
-            if (data == null || count <= 0) return;
-            
-            if (_inventory.TryGetValue(data.ID, out var existing))
-            {
-                existing.Add(count);
-            }
-            else
-            {
-                _inventory[data.ID] = new ConsumableItem(data, count);
-            }
-        }
-
-        public bool HasItem(int itemId)
-        {
-            return _inventory.TryGetValue(itemId, out var item) && item.Quantity > 0;
-        }
-
-        public int GetItemCount(int itemId)
-        {
-            return _inventory.TryGetValue(itemId, out var item) ? item.Quantity : 0;
-        }
-
-        public ConsumableItem GetItem(int itemId)
-        {
-            return _inventory.TryGetValue(itemId, out var item) ? item : null;
-        }
-
-        public bool RemoveItem(int itemId, int count = 1)
-        {
-            if (!_inventory.TryGetValue(itemId, out var item)) return false;
-            
-            for (int i = 0; i < count; i++)
-            {
-                if (!item.Use()) return false;
-            }
-            
-            if (item.Quantity <= 0)
-            {
-                _inventory.Remove(itemId);
-            }
-            return true;
-        }
+        public IReadOnlyList<InventoryItem> Inventory => _inventory;
+        public int InventorySize => INVENTORY_SIZE;
+        
+        public event System.Action OnInventoryChanged;
 
         public Player()
         {
             InitializeStats(new Stats(maxHP: 100, maxMP: 50, attack: 10, defense: 5, speed: 10, criticalRate: 5f));
             _gold = 0;
             DungeonLevel = 1;
+            
+            for (int i = 0; i < INVENTORY_SIZE; i++)
+            {
+                _inventory.Add(null);
+            }
+        }
+
+        public bool IsInventoryFull()
+        {
+            return _inventory.All(item => item != null);
+        }
+
+        public int FindEmptySlot()
+        {
+            for (int i = 0; i < _inventory.Count; i++)
+            {
+                if (_inventory[i] == null) return i;
+            }
+            return -1;
+        }
+
+        public bool TryAddItem(InventoryItem item)
+        {
+            if (item == null) return false;
+            
+            if (item.Type == ItemType.Consumable)
+            {
+                for (int i = 0; i < _inventory.Count; i++)
+                {
+                    if (_inventory[i] != null && 
+                        _inventory[i].Type == ItemType.Consumable && 
+                        _inventory[i].Consumable.ID == item.Consumable.ID)
+                    {
+                        _inventory[i].AddQuantity(item.Quantity);
+                        OnInventoryChanged?.Invoke();
+                        return true;
+                    }
+                }
+            }
+            
+            int emptySlot = FindEmptySlot();
+            if (emptySlot < 0) return false;
+            
+            _inventory[emptySlot] = item;
+            OnInventoryChanged?.Invoke();
+            return true;
+        }
+
+        public bool TryAddEquipment(EquipmentDataSO equipment)
+        {
+            if (equipment == null) return false;
+            if (IsInventoryFull()) return false;
+            
+            var rarity = RollRarity();
+            var item = new InventoryItem(equipment, rarity);
+            return TryAddItem(item);
+        }
+
+        public bool TryAddConsumable(ConsumableDataSO consumable, int count = 1)
+        {
+            if (consumable == null || count <= 0) return false;
+            
+            var item = new InventoryItem(consumable, count);
+            return TryAddItem(item);
+        }
+
+        public InventoryItem GetItemAt(int index)
+        {
+            if (index < 0 || index >= _inventory.Count) return null;
+            return _inventory[index];
+        }
+
+        public void RemoveItemAt(int index)
+        {
+            if (index < 0 || index >= _inventory.Count) return;
+            _inventory[index] = null;
+            OnInventoryChanged?.Invoke();
+        }
+
+        public bool UseItemAt(int index)
+        {
+            var item = GetItemAt(index);
+            if (item == null || item.Type != ItemType.Consumable) return false;
+            
+            if (item.RemoveQuantity(1))
+            {
+                if (item.Quantity <= 0)
+                {
+                    _inventory[index] = null;
+                }
+                OnInventoryChanged?.Invoke();
+                return true;
+            }
+            return false;
+        }
+
+        public bool EquipItem(int index)
+        {
+            var item = GetItemAt(index);
+            if (item == null || item.Type != ItemType.Equipment) return false;
+            
+            var currentEquipped = GetEquippedItem(item.Equipment.Type);
+            
+            if (currentEquipped != null)
+            {
+                _inventory[index] = currentEquipped;
+            }
+            else
+            {
+                _inventory[index] = null;
+            }
+            
+            _equippedItems[item.Equipment.Type] = item;
+            var skill = GetRandomSkillFromPool(item.Equipment.SkillPoolType);
+            if (skill != null) AddSkill(skill);
+            
+            OnInventoryChanged?.Invoke();
+            return true;
+        }
+
+        public bool Unequip(EquipmentType type)
+        {
+            var equipped = GetEquippedItem(type);
+            if (equipped == null) return false;
+            
+            int emptySlot = FindEmptySlot();
+            if (emptySlot < 0) return false;
+            
+            _inventory[emptySlot] = equipped;
+            _equippedItems.Remove(type);
+            OnInventoryChanged?.Invoke();
+            return true;
+        }
+
+        public InventoryItem GetEquippedItem(EquipmentType type)
+        {
+            return _equippedItems.TryGetValue(type, out var item) ? item : null;
+        }
+
+        public int FindItemIndex(int itemId)
+        {
+            for (int i = 0; i < _inventory.Count; i++)
+            {
+                if (_inventory[i] != null && _inventory[i].ID == itemId)
+                    return i;
+            }
+            return -1;
+        }
+
+        public InventoryItem FindItem(int itemId)
+        {
+            foreach (var item in _inventory)
+            {
+                if (item != null && item.ID == itemId)
+                    return item;
+            }
+            return null;
+        }
+
+        public bool UseItemById(int itemId)
+        {
+            int index = FindItemIndex(itemId);
+            if (index < 0) return false;
+            return UseItemAt(index);
         }
 
         protected override Stats GetEquipmentStats()
         {
             var equipmentStats = new Stats();
-            foreach (var equipment in _equippedItems.Values)
+            
+            foreach (var item in _equippedItems.Values)
             {
-                if (equipment != null)
+                if (item?.Equipment != null)
                 {
-                    equipmentStats.MaxHP += equipment.HP;
-                    equipmentStats.MaxMP += equipment.MP;
-                    equipmentStats.Attack += equipment.Attack;
-                    equipmentStats.Defense += equipment.Defense;
-                    equipmentStats.Speed += equipment.Speed;
-                    equipmentStats.CriticalRate += equipment.CriticalRate;
+                    var equip = item.Equipment;
+                    var multiplier = item.Rarity?.StatMultiplier ?? 1f;
+                    
+                    equipmentStats.MaxHP += (int)(equip.HP * multiplier);
+                    equipmentStats.MaxMP += (int)(equip.MP * multiplier);
+                    equipmentStats.Attack += (int)(equip.Attack * multiplier);
+                    equipmentStats.Defense += (int)(equip.Defense * multiplier);
+                    equipmentStats.Speed += (int)(equip.Speed * multiplier);
+                    equipmentStats.CriticalRate += (int)(equip.CriticalRate * multiplier);
                 }
             }
 
@@ -97,24 +225,6 @@ namespace GreedDungeon.Character
             }
 
             return equipmentStats;
-        }
-
-        public void Equip(EquipmentDataSO equipment)
-        {
-            if (equipment == null) return;
-            _equippedItems[equipment.Type] = equipment;
-            var skill = GetRandomSkillFromPool(equipment.SkillPoolType);
-            if (skill != null) AddSkill(skill);
-        }
-
-        public void Unequip(EquipmentType type)
-        {
-            _equippedItems.Remove(type);
-        }
-
-        public EquipmentDataSO GetEquipped(EquipmentType type)
-        {
-            return _equippedItems.TryGetValue(type, out var equipment) ? equipment : null;
         }
 
         public SkillDataSO GetSkill(int skillId)
@@ -151,6 +261,33 @@ namespace GreedDungeon.Character
         {
             SetInitialHP(TotalStats.MaxHP);
             SetInitialMP(TotalStats.MaxMP);
+        }
+
+        private RarityDataSO RollRarity()
+        {
+            if (!Services.IsInitialized) return null;
+            
+            var gameDataManager = Services.Get<IGameDataManager>();
+            var rarities = gameDataManager.GetAllRarityData();
+            
+            if (rarities == null || rarities.Count == 0) return null;
+            
+            int totalWeight = 0;
+            foreach (var r in rarities)
+            {
+                totalWeight += r.DropWeight;
+            }
+            
+            int roll = UnityEngine.Random.Range(0, totalWeight);
+            int cumulative = 0;
+            
+            foreach (var r in rarities)
+            {
+                cumulative += r.DropWeight;
+                if (roll < cumulative) return r;
+            }
+            
+            return rarities[0];
         }
 
         private SkillDataSO GetRandomSkillFromPool(SkillPoolType poolType)

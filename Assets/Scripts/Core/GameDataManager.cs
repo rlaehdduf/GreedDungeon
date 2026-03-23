@@ -23,6 +23,7 @@ namespace GreedDungeon.Core
         private readonly List<SkillDataSO> _skillList = new List<SkillDataSO>();
         private readonly List<EquipmentDataSO> _equipmentList = new List<EquipmentDataSO>();
         private readonly List<ConsumableDataSO> _consumableList = new List<ConsumableDataSO>();
+        private readonly List<RarityDataSO> _rarityList = new List<RarityDataSO>();
 
         public async Task InitializeAsync()
         {
@@ -40,7 +41,7 @@ namespace GreedDungeon.Core
                 LoadDataAsync("SkillData", _skills, _skillList),
                 LoadDataAsync("EquipmentData", _equipments, _equipmentList),
                 LoadDataAsync("ConsumableData", _consumables, _consumableList),
-                LoadDataAsync("RarityData", _rarities),
+                LoadDataAsync("RarityData", _rarities, _rarityList),
                 LoadDataAsync("StatusEffectData", _statusEffects)
             );
         }
@@ -69,6 +70,7 @@ namespace GreedDungeon.Core
         public IReadOnlyList<SkillDataSO> GetAllSkillData() => _skillList;
         public IReadOnlyList<EquipmentDataSO> GetAllEquipmentData() => _equipmentList;
         public IReadOnlyList<ConsumableDataSO> GetAllConsumableData() => _consumableList;
+        public IReadOnlyList<RarityDataSO> GetAllRarityData() => _rarityList;
 
         public async Task<GameObject> LoadMonsterPrefabAsync(string address)
         {

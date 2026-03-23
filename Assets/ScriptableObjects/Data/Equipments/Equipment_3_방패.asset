@@ -15,14 +15,14 @@ MonoBehaviour:
   ID: 3
   Name: "\uBC29\uD328"
   Type: 0
-  HP: 20
-  MP: 0
-  Attack: 4
-  Defense: 3
-  Speed: -5
-  CriticalRate: 1
+  HP: 0
+  MP: 20
+  Attack: 0
+  Defense: 4
+  Speed: 3
+  CriticalRate: -5
   SkillPoolType: 0
-  BuyPrice: 180
-  SellPrice: 90
+  BuyPrice: 0
+  SellPrice: 180
   Description: 
-  IconAddress: Weapons/Shield
+  IconAddress: 90

@@ -13,6 +13,7 @@ namespace GreedDungeon.ScriptableObjects
         [Range(0f, 1f)] public float DamageMaxPercent;
         public int Duration;
         public bool SkipTurn;
+        public string IconAddress;
         
         int IData.ID => ID;
     }

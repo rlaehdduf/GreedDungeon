@@ -115,6 +115,74 @@ public class ScriptableObjectAddressablesSetter : EditorWindow
         Debug.Log($"═══ ScriptableObject 주소/라벨 설정 완료! 총 {count}개 ═══");
     }
 
+    [MenuItem("Tools/Addressables/Set Skill Icon Sprites")]
+    public static void SetSkillIconSprites()
+    {
+        settings = AddressableAssetSettingsDefaultObject.Settings;
+        if (settings == null)
+        {
+            Debug.LogError("Addressable Asset Settings not found!");
+            return;
+        }
+
+        int count = 0;
+        string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets/Prefabs/SkillIcon" });
+
+        foreach (string guid in guids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            string fileName = System.IO.Path.GetFileNameWithoutExtension(path);
+            
+            string address = $"Skills/{fileName}";
+            
+            SetAddress(guid, address, "SkillIcon");
+            count++;
+            Debug.Log($"[SkillIcon] {fileName} -> {address}");
+        }
+
+        AssetDatabase.SaveAssets();
+        Debug.Log($"═══ 스킬 아이콘 Sprite 등록 완료! 총 {count}개 ═══");
+    }
+
+    [MenuItem("Tools/Addressables/Set All (SO + SkillIcons)")]
+    public static void SetAllAddressables()
+    {
+        SetAllSOLabels();
+        SetSkillIconSprites();
+        SetElementIcons();
+        Debug.Log("═══ 모든 Addressables 설정 완료! ═══");
+    }
+
+    [MenuItem("Tools/Addressables/Set Element Icons")]
+    public static void SetElementIcons()
+    {
+        settings = AddressableAssetSettingsDefaultObject.Settings;
+        if (settings == null)
+        {
+            Debug.LogError("Addressable Asset Settings not found!");
+            return;
+        }
+
+        int count = 0;
+        string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets/Prefabs/Elementer" });
+
+        foreach (string guid in guids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            string fileName = System.IO.Path.GetFileNameWithoutExtension(path);
+            
+            string elementName = fileName.Replace("Icon_", "");
+            string address = $"Elements/{elementName}";
+            
+            SetAddress(guid, address, "ElementIcon");
+            count++;
+            Debug.Log($"[ElementIcon] {fileName} -> {address}");
+        }
+
+        AssetDatabase.SaveAssets();
+        Debug.Log($"═══ 속성 아이콘 Sprite 등록 완료! 총 {count}개 ═══");
+    }
+
     private static void SetAddress(string guid, string address, string label)
     {
         AddressableAssetEntry entry = settings.FindAssetEntry(guid);

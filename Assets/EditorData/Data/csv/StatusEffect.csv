@@ -1,4 +1,4 @@
-﻿ID,Name,DamagePerTurn,Current%,Max%,Duration,SkipTurn
-1,Burn,0,0.1,0,2,FALSE
-2,Poison,0,0,0.05,3,FALSE
-3,Stun,0,0,0,1,TRUE
+ID,Name,DamagePerTurn,Current%,Max%,Duration,SkipTurn,IconAddress
+1,Burn,0,0.1,0,2,FALSE,Skills/BurnDeBuff
+2,Poison,0,0,0.05,3,FALSE,Skills/PoisonDeBuff
+3,Stun,0,0,0,1,TRUE,Skills/Stun

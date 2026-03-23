@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using GreedDungeon.Character;
+using GreedDungeon.Core;
 
 namespace GreedDungeon.UI.Battle
 {
@@ -12,19 +14,28 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private Text _hpText;
         [SerializeField] private Slider _mpBar;
         [SerializeField] private Text _mpText;
-        [Header("Status Effects")]
-        [SerializeField] private Transform _statusEffectsContainer;
-        [SerializeField] private GameObject _statusEffectPrefab;
-        [SerializeField] private Transform _buffsContainer;
-        [SerializeField] private GameObject _buffPrefab;
 
-        private readonly List<GameObject> _statusEffectIcons = new();
-        private readonly List<GameObject> _buffIcons = new();
+        [Header("Status Effects (Debuffs)")]
+        [SerializeField] private List<StatusEffectSlotUI> _debuffSlots = new();
+
+        [Header("Buffs")]
+        [SerializeField] private List<StatusEffectSlotUI> _buffSlots = new();
+
+        private IAssetLoader _assetLoader;
+
+        private void Start()
+        {
+            if (Services.IsInitialized)
+            {
+                _assetLoader = Services.Get<IAssetLoader>();
+            }
+            ClearAllSlots();
+        }
 
         public void Setup(Player player)
         {
             UpdateStatus(player);
-            UpdateStatusEffects(player);
+            UpdateDebuffs(player);
             UpdateBuffs(player);
         }
 
@@ -51,57 +62,92 @@ namespace GreedDungeon.UI.Battle
                 _mpText.text = $"{player.CurrentMP}/{stats.MaxMP}";
         }
 
-        public void UpdateStatusEffects(Player player)
+        public void UpdateDebuffs(Player player)
         {
-            ClearIcons(_statusEffectIcons);
-
-            if (_statusEffectsContainer == null || _statusEffectPrefab == null) return;
-
+            int index = 0;
             foreach (var effect in player.StatusEffects)
             {
-                var icon = Instantiate(_statusEffectPrefab, _statusEffectsContainer);
-                var texts = icon.GetComponentsInChildren<Text>();
-                
-                foreach (var text in texts)
+                if (index >= _debuffSlots.Count) break;
+
+                var slot = _debuffSlots[index];
+                slot.Show();
+
+                if (effect.Data != null && !string.IsNullOrEmpty(effect.Data.IconAddress))
                 {
-                    if (text.name.Contains("Count") || text.name.Contains("Duration"))
-                        text.text = effect.RemainingDuration.ToString();
+                    LoadIconAsync(slot, effect.Data.IconAddress, effect.RemainingDuration);
                 }
-                
-                _statusEffectIcons.Add(icon);
+                else
+                {
+                    slot.SetDuration(effect.RemainingDuration);
+                }
+                index++;
+            }
+
+            for (int i = index; i < _debuffSlots.Count; i++)
+            {
+                _debuffSlots[i].Hide();
             }
         }
 
         public void UpdateBuffs(Player player)
         {
-            ClearIcons(_buffIcons);
-
-            if (_buffsContainer == null || _buffPrefab == null) return;
-
+            int index = 0;
             foreach (var buff in player.Buffs)
             {
-                var icon = Instantiate(_buffPrefab, _buffsContainer);
-                var texts = icon.GetComponentsInChildren<Text>();
-                
-                foreach (var text in texts)
+                if (index >= _buffSlots.Count) break;
+
+                var slot = _buffSlots[index];
+                slot.Show();
+
+                string iconAddress = buff.GetIconAddress();
+                if (!string.IsNullOrEmpty(iconAddress))
                 {
-                    if (text.name.Contains("Count") || text.name.Contains("Duration"))
-                        text.text = buff.RemainingDuration.ToString();
-                    else if (text.name.Contains("Value"))
-                        text.text = $"+{buff.Value}%";
+                    LoadIconAsync(slot, iconAddress, buff.RemainingDuration);
                 }
-                
-                _buffIcons.Add(icon);
+                else
+                {
+                    slot.SetDuration(buff.RemainingDuration);
+                }
+                index++;
+            }
+
+            for (int i = index; i < _buffSlots.Count; i++)
+            {
+                _buffSlots[i].Hide();
             }
         }
 
-        private void ClearIcons(List<GameObject> icons)
+        private async void LoadIconAsync(StatusEffectSlotUI slot, string address, int duration)
         {
-            foreach (var icon in icons)
+            if (_assetLoader == null && Services.IsInitialized)
             {
-                if (icon != null) Destroy(icon);
+                _assetLoader = Services.Get<IAssetLoader>();
             }
-            icons.Clear();
+            if (_assetLoader == null) return;
+
+            try
+            {
+                var sprite = await _assetLoader.LoadAssetAsync<Sprite>(address);
+                if (sprite != null && slot != null)
+                {
+                    slot.SetIcon(sprite, duration);
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void ClearAllSlots()
+        {
+            foreach (var slot in _debuffSlots)
+            {
+                slot.Hide();
+            }
+            foreach (var slot in _buffSlots)
+            {
+                slot.Hide();
+            }
         }
     }
 }

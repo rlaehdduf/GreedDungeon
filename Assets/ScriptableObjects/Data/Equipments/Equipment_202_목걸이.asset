@@ -15,14 +15,14 @@ MonoBehaviour:
   ID: 202
   Name: "\uBAA9\uAC78\uC774"
   Type: 2
-  HP: 10
-  MP: 5
-  Attack: 0
-  Defense: 3
-  Speed: 0
+  HP: 0
+  MP: 10
+  Attack: 5
+  Defense: 0
+  Speed: 3
   CriticalRate: 0
-  SkillPoolType: 4
-  BuyPrice: 200
-  SellPrice: 100
+  SkillPoolType: 0
+  BuyPrice: 0
+  SellPrice: 200
   Description: 
-  IconAddress: Accessories/NeckGlass
+  IconAddress: 100

@@ -15,14 +15,14 @@ MonoBehaviour:
   ID: 101
   Name: "\uAC00\uC8FD\uAC11\uC637"
   Type: 1
-  HP: 15
-  MP: 0
+  HP: 0
+  MP: 15
   Attack: 0
-  Defense: 3
-  Speed: 2
-  CriticalRate: 0
-  SkillPoolType: 3
-  BuyPrice: 150
-  SellPrice: 75
+  Defense: 0
+  Speed: 3
+  CriticalRate: 2
+  SkillPoolType: 0
+  BuyPrice: 0
+  SellPrice: 150
   Description: 
-  IconAddress: Armors/LeatherArmor
+  IconAddress: 75

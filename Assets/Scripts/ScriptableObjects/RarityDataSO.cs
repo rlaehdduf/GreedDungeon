@@ -13,6 +13,7 @@ namespace GreedDungeon.ScriptableObjects
         public int SkillTierMin;
         public int SkillTierMax;
         public int DropWeight;
+        public Color Color = Color.white;
         
         int IData.ID => ID;
     }

@@ -17,12 +17,12 @@ MonoBehaviour:
   Type: 0
   HP: 0
   MP: 0
-  Attack: 10
-  Defense: 0
+  Attack: 0
+  Defense: 10
   Speed: 0
-  CriticalRate: 8
-  SkillPoolType: 1
-  BuyPrice: 200
-  SellPrice: 100
+  CriticalRate: 0
+  SkillPoolType: 0
+  BuyPrice: 0
+  SellPrice: 200
   Description: 
-  IconAddress: Weapons/Sword
+  IconAddress: 100

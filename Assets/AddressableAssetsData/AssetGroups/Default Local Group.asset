@@ -15,11 +15,25 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: f5b207d8f4b0e89419ce3c98850537d6
   m_SerializeEntries:
+  - m_GUID: 05e0e2c614000634eac4bdbb704f8a86
+    m_Address: Skills/Slash
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    - SkillIcon
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 08a93400ccae9034180f0a96abc9e261
     m_Address: Armors/ChainArmor
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 09c453f019a764a43a08e043debe82c7
+    m_Address: Skills/Smash
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 13ae1fda925893d4e92dab617d9725dc
     m_Address: Weapons/Shield
@@ -81,17 +95,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - StatusEffectData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2a3b818a8ce38b3498a7dfbff1711c65
-    m_Address: Skills/PowerBuff
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2ba1a9e4305728744a392b2926447cf9
     m_Address: Armors/LeatherArmor
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2bd8576d70967a042aab028266827ce8
+    m_Address: Skills/FireBall
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 30001b6258d0d8f4c888bf1f29f0b20c
     m_Address: Monsters/Spider
@@ -105,6 +120,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 318b189e0067b2347a074834f09364ed
+    m_Address: Elements/Water
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Element
+    - ElementIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 31c496c7c2639264f8c59a43efdee563
     m_Address: Armors/PlateArmor
@@ -136,6 +158,13 @@ MonoBehaviour:
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b96569265a1b87479c5964fc2eebf23
+    m_Address: Elements/Leaf
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Element
+    - ElementIcon
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3e1cf46b0899a0e42a77bea33093ab4a
     m_Address: Skills/SpeedBuff
     m_ReadOnly: 0
@@ -147,12 +176,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 42bd1f493fd8e5e41b8d2f625e3f51b6
-    m_Address: Skills/HealthBuff
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 43584142b6b3d3644bc43f957e0bdc73
     m_Address: Accessories/NeckGlass
@@ -171,12 +194,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4cb61b3fb6648b3408b507dee36ca6a3
-    m_Address: Skills/DoubleSmash
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4d0247269139fba4fb9579bc0b9f7f57
     m_Address: Skills/AttackBuff
@@ -238,12 +255,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - MonsterData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5f5e5f280d6d3b14ebbb713015915146
-    m_Address: Skills/CrossSlash
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6607406473602914d9d56d951cbcf445
     m_Address: Skills/Slash
     m_ReadOnly: 0
@@ -269,17 +280,12 @@ MonoBehaviour:
     - MonsterData
     - MonsterSprites
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 748caa16df9a23445953be71724dbb15
-    m_Address: Skills/Slash
+  - m_GUID: 78bbfbe2a75954e42bdb6215b53fc953
+    m_Address: Skills/IceRain
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 766c00f57fa800e4ea64698aff1647a7
-    m_Address: Skills/ManaBall
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 78e88f9902dd8d747aa5473e9414b691
     m_Address: Skills/HealthBuff
@@ -299,6 +305,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86d2c5bdb42f0c345b965523b0f4866c
+    m_Address: Skills/BurnDeBuff
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 877641a06af9dc544a804911e293d06b
     m_Address: Weapons/Shield
@@ -330,18 +343,19 @@ MonoBehaviour:
     m_SerializedLabels:
     - MonsterData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8d3d83f0cd0448e44884b19486fe3e77
-    m_Address: Skills/FireBall
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 90267c571c2f5b4469f6326ef11b320a
     m_Address: Monsters/Rat
     m_ReadOnly: 0
     m_SerializedLabels:
     - MonsterData
     - MonsterSprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 953cb894c4f1ea04aaf1b4ca83004836
+    m_Address: Skills/DoubleSlash
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 96102cff2e0af6848bf0477c17a7c0f0
     m_Address: Items/CursePotion
@@ -355,18 +369,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - MonsterData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 964a60391b3c6834595a6e487690c344
-    m_Address: Skills/BurnDeBuff
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9725049e328476f449f7c1ce22fad806
-    m_Address: Skills/IceRain
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 988ff81d2230a324f82fd78556613e1c
     m_Address: Skills/Heal
     m_ReadOnly: 0
@@ -378,6 +380,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - RarityData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a30ba685f1113c14ca63c8cfe2cd3b2e
+    m_Address: Skills/DefenseBuff
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aa33403550ce921449698206e4094f64
     m_Address: Weapons/Stick
@@ -404,6 +413,13 @@ MonoBehaviour:
     - MonsterData
     - MonsterSprites
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b0e0a5cb72954c94a8e69e3716bc6c34
+    m_Address: Skills/SpeedBuff
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    - SkillIcon
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b49141cdedeba7644bbfb98b3a6498c5
     m_Address: Skills/DefenseSkillBuff
     m_ReadOnly: 0
@@ -422,11 +438,19 @@ MonoBehaviour:
     m_SerializedLabels:
     - ConsumableData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ba6cc05706718a74daf15d06a0e12144
-    m_Address: Skills/SpeedBuff
+  - m_GUID: bb897ac4a351a634abd3629dfe5408be
+    m_Address: Elements/Fire
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Element
+    - ElementIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf38ae46665db6540ba3b664684780fc
+    m_Address: Skills/HealthBuff
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bfbca17120f6759429a65d258457399b
     m_Address: Rarities/Legend
@@ -434,29 +458,31 @@ MonoBehaviour:
     m_SerializedLabels:
     - RarityData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c0400677242aa0e4f998f178fa71ecb6
-    m_Address: Skills/Heal
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c077b15258d5c6743a4519c3c5864536
     m_Address: Accessories/Cloak
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c2fc6157ee90dbf4f9728d6c3b3d14bd
-    m_Address: Skills/DefenseBuff
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c3ac347139d0ead4b81a6a92a068ad7d
     m_Address: Monsters/Cerberus
     m_ReadOnly: 0
     m_SerializedLabels:
     - MonsterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c5e8719dd371efc4e9e78c42ad66eff7
+    m_Address: Skills/DoubleSmash
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    - SkillIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c620dba0dbdedd2449d1d127c39e3090
+    m_Address: Skills/PoisonDeBuff
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c795b921dbf6241498fd3b5555b55f96
     m_Address: Skills/CrossSlash
@@ -476,17 +502,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - ConsumableData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce010254754f83d498a0052e3d8ea049
+    m_Address: Skills/ManaBall
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    - SkillIcon
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ce82f3b978276084398fd4e99668031b
     m_Address: Armors/PlateArmor
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d0d404439c7cb7f46b3b6ffe86a1cb55
-    m_Address: Skills/Smash
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d22328d9258fa6c448aa639abdf2bd12
     m_Address: Skills/FireBall
@@ -530,17 +557,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - ConsumableData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e9338da88549ca643a47a351c4498a21
+    m_Address: Skills/PowerBuff
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    - SkillIcon
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eb208a16751e20f47b6dd0c0f260aa3c
     m_Address: Accessories/Jewel
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ef902a8130d8df849b1d42894441a254
-    m_Address: Skills/DoubleSlash
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f26a2355239c83947902d8ba8549cd63
     m_Address: Items/DeBuffPotion
@@ -560,6 +588,13 @@ MonoBehaviour:
     m_SerializedLabels:
     - StatusEffectData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f60970ec879a91e4ab78927b400c822a
+    m_Address: Elements/Neutral
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Element
+    - ElementIcon
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f778f1a055ac6094897f26af244ef070
     m_Address: StatusEffects/Burn
     m_ReadOnly: 0
@@ -578,14 +613,22 @@ MonoBehaviour:
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fe0c0eb900ed16e4b9f58d2277e264d2
-    m_Address: Skills/SpeedSkillBuff
+  - m_GUID: fb3e55a683a81b344b6e5d5476dfb24a
+    m_Address: Skills/CrossSlash
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ff6ce3f093e03514196131fdbdbced90
-    m_Address: Skills/PoisonDeBuff
+  - m_GUID: fc30b473280281f448574c11a445bed2
+    m_Address: Skills/Heal
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    - SkillIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe0c0eb900ed16e4b9f58d2277e264d2
+    m_Address: Skills/SpeedSkillBuff
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData

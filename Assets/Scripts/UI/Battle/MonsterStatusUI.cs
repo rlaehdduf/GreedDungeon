@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using GreedDungeon.Core;
+using GreedDungeon.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
 using GreedDungeon.Character;
@@ -12,12 +16,75 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private Text _hpText;
         [SerializeField] private Image _elementIcon;
 
+        [Header("Status Effects (Debuffs)")]
+        [SerializeField] private List<StatusEffectSlotUI> _debuffSlots = new();
+
+        private IAssetLoader _assetLoader;
+
+        private void Start()
+        {
+            if (Services.IsInitialized)
+            {
+                _assetLoader = Services.Get<IAssetLoader>();
+            }
+            ClearAllSlots();
+        }
+
         public void Setup(Monster monster)
         {
             if (_nameText != null)
                 _nameText.text = monster.Name;
 
+            LoadElementIcon(monster.Element);
             UpdateStatus(monster);
+            UpdateDebuffs(monster);
+        }
+
+        private async void LoadElementIcon(Element element)
+        {
+            if (_elementIcon == null) return;
+            if (_assetLoader == null && Services.IsInitialized)
+            {
+                _assetLoader = Services.Get<IAssetLoader>();
+            }
+            if (_assetLoader == null) return;
+
+            string address = GetElementAddress(element);
+            if (string.IsNullOrEmpty(address))
+            {
+                _elementIcon.gameObject.SetActive(false);
+                return;
+            }
+
+            try
+            {
+                var sprite = await _assetLoader.LoadAssetAsync<Sprite>(address);
+                if (sprite != null)
+                {
+                    _elementIcon.sprite = sprite;
+                    _elementIcon.gameObject.SetActive(true);
+                }
+                else
+                {
+                    _elementIcon.gameObject.SetActive(false);
+                }
+            }
+            catch
+            {
+                _elementIcon.gameObject.SetActive(false);
+            }
+        }
+
+        private string GetElementAddress(Element element)
+        {
+            return element switch
+            {
+                Element.Fire => "Elements/Fire",
+                Element.Water => "Elements/Water",
+                Element.Grass => "Elements/Leaf",
+                Element.None => "Elements/Neutral",
+                _ => null
+            };
         }
 
         public void UpdateStatus(Monster monster)
@@ -32,6 +99,62 @@ namespace GreedDungeon.UI.Battle
 
             if (_hpText != null)
                 _hpText.text = $"{monster.CurrentHP}/{stats.MaxHP}";
+        }
+
+        public void UpdateDebuffs(Monster monster)
+        {
+            int index = 0;
+            foreach (var effect in monster.StatusEffects)
+            {
+                if (index >= _debuffSlots.Count) break;
+
+                var slot = _debuffSlots[index];
+                slot.Show();
+
+                if (effect.Data != null && !string.IsNullOrEmpty(effect.Data.IconAddress))
+                {
+                    LoadIconAsync(slot, effect.Data.IconAddress, effect.RemainingDuration);
+                }
+                else
+                {
+                    slot.SetDuration(effect.RemainingDuration);
+                }
+                index++;
+            }
+
+            for (int i = index; i < _debuffSlots.Count; i++)
+            {
+                _debuffSlots[i].Hide();
+            }
+        }
+
+        private async void LoadIconAsync(StatusEffectSlotUI slot, string address, int duration)
+        {
+            if (_assetLoader == null && Services.IsInitialized)
+            {
+                _assetLoader = Services.Get<IAssetLoader>();
+            }
+            if (_assetLoader == null) return;
+
+            try
+            {
+                var sprite = await _assetLoader.LoadAssetAsync<Sprite>(address);
+                if (sprite != null && slot != null)
+                {
+                    slot.SetIcon(sprite, duration);
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void ClearAllSlots()
+        {
+            foreach (var slot in _debuffSlots)
+            {
+                slot.Hide();
+            }
         }
     }
 }

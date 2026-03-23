@@ -19,16 +19,17 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private float _damageDuration = 0.3f;
         [SerializeField] private Color _damageColor = new Color(1f, 0.3f, 0.3f);
         
-        private Vector3 _baseScale;
+        private Vector3 _baseScale = Vector3.one;
         private float _breathTimer;
         private bool _isAnimatingDamage;
+        private bool _isSetupComplete;
         private Coroutine _damageCoroutine;
 
         public event Action OnDamageAnimationComplete;
 
         private void Update()
         {
-            if (!_isAnimatingDamage)
+            if (!_isAnimatingDamage && _isSetupComplete)
             {
                 UpdateBreathAnimation();
             }
@@ -52,6 +53,8 @@ namespace GreedDungeon.UI.Battle
             _baseScale = new Vector3(scaleX, scaleY, 1f);
             transform.localScale = _baseScale;
             _breathTimer = 0f;
+            _isSetupComplete = true;
+            Debug.Log($"[MonsterSpriteView] Setup 완료 - Scale: {_baseScale}");
         }
 
         public void PlayDamageAnimation()

@@ -17,12 +17,12 @@ MonoBehaviour:
   Type: 0
   HP: 0
   MP: 0
-  Attack: 3
-  Defense: 0
+  Attack: 0
+  Defense: 3
   Speed: 0
-  CriticalRate: 2
+  CriticalRate: 0
   SkillPoolType: 0
-  BuyPrice: 50
-  SellPrice: 25
+  BuyPrice: 0
+  SellPrice: 50
   Description: 
-  IconAddress: Weapons/Stick
+  IconAddress: 25

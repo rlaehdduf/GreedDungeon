@@ -16,13 +16,13 @@ MonoBehaviour:
   Name: "\uC655\uAD00"
   Type: 2
   HP: 0
-  MP: 15
-  Attack: 5
-  Defense: 0
+  MP: 0
+  Attack: 15
+  Defense: 5
   Speed: 0
   CriticalRate: 0
-  SkillPoolType: 4
-  BuyPrice: 220
-  SellPrice: 110
+  SkillPoolType: 0
+  BuyPrice: 0
+  SellPrice: 220
   Description: 
-  IconAddress: Accessories/Crown
+  IconAddress: 110

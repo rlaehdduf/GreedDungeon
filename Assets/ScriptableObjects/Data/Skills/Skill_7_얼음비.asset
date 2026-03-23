@@ -28,3 +28,4 @@ MonoBehaviour:
   Cooldown: 3
   Tier: 2
   IconAddress: Skills/IceRain
+  Element: 0

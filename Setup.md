@@ -87,12 +87,48 @@ Battle.unity
 | `_slot1` | SkillSlot_1 Button |
 | `_slot2` | SkillSlot_2 Button |
 | `_slot3` | SkillSlot_3 Button |
-| `_cooldownText1` | SkillSlot_1 쿨다운 Text (선택) |
-| `_cooldownText2` | SkillSlot_2 쿨다운 Text (선택) |
-| `_cooldownText3` | SkillSlot_3 쿨다운 Text (선택) |
+| `_icon1` | SkillSlot_1 자식 Image (아이콘) |
+| `_icon2` | SkillSlot_2 자식 Image (아이콘) |
+| `_icon3` | SkillSlot_3 자식 Image (아이콘) |
+| `_tooltipPanel` | Tooltip Panel (초기 비활성화) |
+| `_tooltipName` | Tooltip 이름 Text |
+| `_tooltipDesc` | Tooltip 설명 Text |
+| `_tooltipCooldown` | Tooltip 쿨타임 Text |
+| `_defaultSkillIcon` | 기본 스킬 아이콘 Sprite (선택) |
 
-> 스킬은 장비 장착 시 SkillPoolType별 랜덤 획득
-> 쿨다운은 전역 (전투 간 유지)
+> **스킬 슬롯 구조:**
+> ```
+> SkillSlot_1 (Button)
+> └── Icon (Image) ← alpha 0으로 시작, 스킬 있으면 표시
+> ```
+>
+> **툴팁 구조 (Canvas 하위에 배치):**
+> ```
+> TooltipPanel (GameObject, 초기 비활성화)
+> ├── (Vertical Layout Group 컴포넌트)
+> ├── (Content Size Fitter 컴포넌트 - Horizontal: Preferred, Vertical: Preferred)
+> ├── NameText (Text) ← 스킬 이름
+> ├── DescText (Text) ← 설명
+> └── CooldownText (Text) ← "쿨타임: 1/3"
+> ```
+>
+> **툴팁 Panel 설정 (Inspector):**
+> 1. `Vertical Layout Group` 컴포넌트 추가
+>    - Padding: Left 30, Right 30, Top 30, Bottom 50
+>    - Spacing: 4
+>    - Child Alignment: Upper Left
+>    - Child Force Expand: Width ✓, Height ✗
+> 2. `Content Size Fitter` 컴포넌트 추가
+>    - Horizontal Fit: Preferred Size
+>    - Vertical Fit: Preferred Size
+> 3. `Image` 컴포넌트 추가 (배경)
+> 
+> **Text 설정:**
+> - NameText: Font Size 16, Bold, Alignment: Left
+> - DescText: Font Size 12, Alignment: Left
+> - CooldownText: Font Size 12, Alignment: Left
+>
+> 마우스를 슬롯에 올리면 툴팁이 마우스를 따라다님
 
 ### PlayerStatusUI (PlayerInfomation에 추가)
 | 필드 | 연결 대상 |
@@ -101,13 +137,12 @@ Battle.unity
 | `_hpText` | HP Text |
 | `_mpBar` | MP Slider |
 | `_mpText` | MP Text |
-| `_statusEffectsContainer` | DeBuff 아이콘 부모 Transform |
-| `_statusEffectPrefab` | DeBuff 아이콘 프리팹 (Text "Count" 포함) |
-| `_buffsContainer` | Buff 아이콘 부모 Transform |
-| `_buffPrefab` | Buff 아이콘 프리팹 (Text "Count", "Value" 포함) |
+| `_debuffSlots` | DeBuff 슬롯들 (StatusEffectSlotUI 컴포넌트) |
+| `_buffSlots` | Buff 슬롯들 (StatusEffectSlotUI 컴포넌트) |
 
 > Player 이름은 고정 "Player", 레벨 없음
-> 프리팹 구조: Image (아이콘) + Text (이름에 "Count" 또는 "Duration" 포함 시 지속시간 표시)
+> 슬롯 구조: Image (아이콘) + Text (이름에 "Count" 포함 → 지속시간 표시)
+> 버프/디버프 없으면 슬롯 비활성화, 발생 시 활성화하고 아이콘 로드
 
 ### MonsterStatusUI (EnemyInfomation에 추가)
 | 필드 | 연결 대상 |
@@ -116,8 +151,11 @@ Battle.unity
 | `_hpBar` | HP Slider |
 | `_hpText` | HP Text |
 | `_elementIcon` | 속성 아이콘 Image |
+| `_debuffSlots` | DeBuff 슬롯들 (StatusEffectSlotUI 컴포넌트) |
 
-> Monster 레벨, 상태이상 없음
+> Monster 레벨 없음
+> 디버프 아이콘: Addressables에서 로드 (`StatusEffectDataSO.IconAddress`)
+> 디버프 없으면 슬롯 비활성화, 발생 시 활성화하고 아이콘 로드 + Count 표시
 
 ### BattleLogUI (LogUI에 추가)
 | 필드 | 연결 대상 |

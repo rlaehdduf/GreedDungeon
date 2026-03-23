@@ -43,9 +43,9 @@ private void InitializeBattle()
 
         _player = new Player();
         
-        if (_healPotionSmall != null) _player.AddItem(_healPotionSmall, 3);
-        if (_healPotionLarge != null) _player.AddItem(_healPotionLarge, 1);
-        if (_attackBuffPotion != null) _player.AddItem(_attackBuffPotion, 2);
+        if (_healPotionSmall != null) _player.TryAddConsumable(_healPotionSmall, 3);
+        if (_healPotionLarge != null) _player.TryAddConsumable(_healPotionLarge, 1);
+        if (_attackBuffPotion != null) _player.TryAddConsumable(_attackBuffPotion, 2);
         
         LogPlayerStats();
 
@@ -115,11 +115,14 @@ private void InitializeBattle()
     private void ExecutePlayerTurn()
     {
         bool lowHp = _player.CurrentHP < _player.TotalStats.MaxHP * 0.4f;
-        bool hasHealPotion = _player.GetItemCount(1) > 0 || _player.GetItemCount(3) > 0;
+        var smallPotionIndex = _player.FindItemIndex(_healPotionSmall?.ID ?? 1);
+        var largePotionIndex = _player.FindItemIndex(_healPotionLarge?.ID ?? 3);
+        bool hasHealPotion = smallPotionIndex >= 0 || largePotionIndex >= 0;
 
         if (lowHp && hasHealPotion && Random.value < 0.6f)
         {
-            var item = _player.GetItem(1) ?? _player.GetItem(3);
+            int potionIndex = largePotionIndex >= 0 ? largePotionIndex : smallPotionIndex;
+            var item = _player.GetItemAt(potionIndex);
             if (item != null)
             {
                 _battleManager.ExecuteItem(item, _player);
@@ -129,11 +132,15 @@ private void InitializeBattle()
 
         if (Random.value < 0.15f && _player.Buffs.Count == 0 && _attackBuffPotion != null)
         {
-            var item = _player.GetItem(_attackBuffPotion.ID);
-            if (item != null)
+            int buffIndex = _player.FindItemIndex(_attackBuffPotion.ID);
+            if (buffIndex >= 0)
             {
-                _battleManager.ExecuteItem(item, _player);
-                return;
+                var item = _player.GetItemAt(buffIndex);
+                if (item != null)
+                {
+                    _battleManager.ExecuteItem(item, _player);
+                    return;
+                }
             }
         }
 
