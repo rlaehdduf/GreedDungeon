@@ -13,6 +13,7 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private MonsterStatusUI _monsterStatus;
         [SerializeField] private ActionMenuUI _actionMenu;
         [SerializeField] private BattleLogUI _battleLog;
+        [SerializeField] private SkillSlotUI _skillSlotUI;
 
         public event Action<int> OnSkillSelected;
         public event Action OnAttackClicked;
@@ -33,6 +34,11 @@ namespace GreedDungeon.UI.Battle
                 _actionMenu.OnSkillSelected += (id) => OnSkillSelected?.Invoke(id);
                 _actionMenu.OnItemSelected += (id) => OnItemSelected?.Invoke(id);
             }
+
+            if (_skillSlotUI != null)
+            {
+                _skillSlotUI.OnSkillSlotClicked += (id) => OnSkillSelected?.Invoke(id);
+            }
         }
 
         public void SetupBattle(Player player, Monster monster)
@@ -48,6 +54,9 @@ namespace GreedDungeon.UI.Battle
 
             if (_actionMenu != null)
                 _actionMenu.Setup(player);
+
+            if (_skillSlotUI != null)
+                _skillSlotUI.SetPlayer(player);
         }
 
         public void UpdatePlayerStatus(Player player)
@@ -72,6 +81,9 @@ namespace GreedDungeon.UI.Battle
         {
             if (_actionMenu != null)
                 _actionMenu.EnableButtons(enabled);
+
+            if (_skillSlotUI != null)
+                _skillSlotUI.SetInteractable(enabled);
         }
 
         public void ShowBattleResult(bool playerWon, int goldEarned)
