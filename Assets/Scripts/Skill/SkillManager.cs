@@ -10,15 +10,13 @@ namespace GreedDungeon.Skill
     public class SkillManager : ISkillManager
     {
         private readonly IGameDataManager _gameDataManager;
-        private readonly IBattleManager _battleManager;
         
         private readonly Dictionary<SkillPoolType, List<SkillDataSO>> _skillPools = new();
         private readonly Dictionary<int, int> _cooldowns = new();
 
-        public SkillManager(IGameDataManager gameDataManager, IBattleManager battleManager)
+        public SkillManager(IGameDataManager gameDataManager)
         {
             _gameDataManager = gameDataManager;
-            _battleManager = battleManager;
             InitializeSkillPools();
         }
 
@@ -121,8 +119,11 @@ namespace GreedDungeon.Skill
             switch (skill.EffectType)
             {
                 case EffectType.Damage:
-                    if (target != null)
-                        _battleManager.ExecuteAttack(caster, target, skill);
+                    if (target != null && Services.IsInitialized)
+                    {
+                        var battleManager = Services.Get<IBattleManager>();
+                        battleManager?.ExecuteAttack(caster, target, skill);
+                    }
                     break;
 
                 case EffectType.Buff:

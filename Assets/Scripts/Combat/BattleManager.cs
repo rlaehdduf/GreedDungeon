@@ -28,7 +28,6 @@ namespace GreedDungeon.Combat
         private readonly IDamageCalculator _damageCalculator;
         private readonly ITurnManager _turnManager;
         private readonly IGameDataManager _gameDataManager;
-        private readonly ISkillManager _skillManager;
 
         private Player _player;
         private Monster _monster;
@@ -41,12 +40,11 @@ namespace GreedDungeon.Combat
         public event Action<Monster> OnBattleStarted;
         public event Action<Monster, int> OnMonsterDamaged;
 
-        public BattleManager(IDamageCalculator damageCalculator, ITurnManager turnManager, IGameDataManager gameDataManager, ISkillManager skillManager)
+        public BattleManager(IDamageCalculator damageCalculator, ITurnManager turnManager, IGameDataManager gameDataManager)
         {
             _damageCalculator = damageCalculator;
             _turnManager = turnManager;
             _gameDataManager = gameDataManager;
-            _skillManager = skillManager;
         }
 
         public void StartBattle(Player player, Monster monster)
@@ -240,7 +238,11 @@ namespace GreedDungeon.Combat
             var current = _turnManager.CurrentEntity;
             current?.ProcessTurnEnd();
 
-            _skillManager?.ReduceAllCooldowns();
+            if (Services.IsInitialized)
+            {
+                var skillManager = Services.Get<ISkillManager>();
+                skillManager?.ReduceAllCooldowns();
+            }
 
             _turnManager.NextTurn();
 
