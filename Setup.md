@@ -78,7 +78,7 @@ Battle.unity
 | `_monsterStatus` | EnemyInfomation (MonsterStatusUI 컴포넌트) |
 | `_battleLog` | LogUI (BattleLogUI 컴포넌트) |
 | `_actionMenu` | AttackBtn/DefenseBtn/ItemBtn 부모 (ActionMenuUI 컴포넌트) |
-| `_skillSlotUI` | SkillSlot_1 부모 (SkillSlotUI 컴포넌트) |
+| `_skillSlotUI` | SkillSlot_1~3 부모 (SkillSlotUI 컴포넌트) |
 
 ### SkillSlotUI
 | 필드 | 연결 대상 |
@@ -93,8 +93,11 @@ Battle.unity
 | `_nameText` | 이름 Text |
 | `_hpBar` | HP Slider |
 | `_hpText` | HP Text |
-| `_mpBar` | MP Slider (있는 경우) |
-| `_mpText` | MP Text (있는 경우) |
+| `_mpBar` | MP Slider |
+| `_mpText` | MP Text |
+| `_levelText` | Level Text |
+| `_statusEffectsContainer` | 상태이상 아이콘 부모 Transform |
+| `_statusEffectPrefab` | 상태이상 아이콘 프리팹 |
 
 ### MonsterStatusUI (EnemyInfomation에 추가)
 | 필드 | 연결 대상 |
@@ -102,18 +105,31 @@ Battle.unity
 | `_nameText` | 이름 Text |
 | `_hpBar` | HP Slider |
 | `_hpText` | HP Text |
+| `_levelText` | Level Text |
+| `_elementIcon` | 속성 아이콘 Image |
+| `_statusEffectsContainer` | 상태이상 아이콘 부모 Transform |
+| `_statusEffectPrefab` | 상태이상 아이콘 프리팹 |
 
 ### BattleLogUI (LogUI에 추가)
 | 필드 | 연결 대상 |
 |------|-----------|
-| `_logText` | Log Text |
+| `_logContainer` | 로그 엔트리 부모 Transform |
+| `_logEntryPrefab` | 로그 텍스트 프리팹 (Text 컴포넌트 포함) |
+| `_scrollRect` | ScrollRect (선택) |
 
 ### ActionMenuUI (버튼 부모에 추가)
 | 필드 | 연결 대상 |
 |------|-----------|
 | `_attackButton` | AttackBtn |
 | `_defendButton` | DefenseBtn |
+| `_skillButton` | SkillBtn (선택) |
 | `_itemButton` | ItemBtn |
+| `_skillPanel` | 스킬 선택 패널 (선택) |
+| `_skillContainer` | 스킬 버튼 생성 위치 Transform |
+| `_skillButtonPrefab` | 스킬 버튼 프리팹 |
+| `_itemPanel` | 아이템 선택 패널 (선택) |
+| `_itemContainer` | 아이템 버튼 생성 위치 Transform |
+| `_itemButtonPrefab` | 아이템 버튼 프리팹 |
 
 ---
 
@@ -123,5 +139,6 @@ Battle.unity
 - [ ] Title 씬 DI 설정
 - [ ] CSV 변환 완료
 - [ ] Addressables 주소/라벨 설정 및 빌드
+- [ ] Battle 씬: GameRoot - RootContext, GameInstaller
 - [ ] Battle 씬: Managers - BattleController, MonsterDisplay
 - [ ] Battle 씬: Canvas - BattleUI, SkillSlotUI, PlayerStatusUI, MonsterStatusUI, BattleLogUI, ActionMenuUI
