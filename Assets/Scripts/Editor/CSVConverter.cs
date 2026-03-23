@@ -339,7 +339,7 @@ public class CSVConverter : EditorWindow
         for (int i = 1; i < lines.Count; i++)
         {
             var values = lines[i];
-            if (values.Count < 18 || !int.TryParse(values[0], out int id)) continue;
+            if (values.Count < 17 || !int.TryParse(values[0], out int id)) continue;
 
             var data = FindExistingAsset<MonsterDataSO>(id, outputPath);
             bool isNew = data == null;
@@ -367,9 +367,9 @@ public class CSVConverter : EditorWindow
             data.StatusEffectChance = float.TryParse(values[11], NumberStyles.Float, CultureInfo.InvariantCulture, out float sec) ? sec : 0;
             data.SpecialSkill = values[12];
             data.IsBoss = values[13].ToLower().Replace("fasle", "false") == "true";
-            data.PrefabAddress = values[15];
-            data.ScaleX = float.TryParse(values[16], NumberStyles.Float, CultureInfo.InvariantCulture, out float sx) ? sx : 1f;
-            data.ScaleY = float.TryParse(values[17], NumberStyles.Float, CultureInfo.InvariantCulture, out float sy) ? sy : 1f;
+            data.PrefabAddress = values[14];
+            data.ScaleX = float.TryParse(values[15], NumberStyles.Float, CultureInfo.InvariantCulture, out float sx) ? sx : 1f;
+            data.ScaleY = float.TryParse(values[16], NumberStyles.Float, CultureInfo.InvariantCulture, out float sy) ? sy : 1f;
 
             if (isNew)
             {
