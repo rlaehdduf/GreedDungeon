@@ -24,4 +24,5 @@ MonoBehaviour:
   SkillPoolType: 3
   BuyPrice: 550
   SellPrice: 275
+  Description: 
   IconAddress: Armors/PlateArmor

@@ -24,4 +24,5 @@ MonoBehaviour:
   SkillPoolType: 0
   BuyPrice: 220
   SellPrice: 110
+  Description: 
   IconAddress: Weapons/Axe

@@ -24,4 +24,5 @@ MonoBehaviour:
   SkillPoolType: 4
   BuyPrice: 200
   SellPrice: 100
+  Description: 
   IconAddress: Accessories/NeckGlass

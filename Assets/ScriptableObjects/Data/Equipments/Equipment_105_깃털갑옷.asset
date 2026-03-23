@@ -24,4 +24,5 @@ MonoBehaviour:
   SkillPoolType: 3
   BuyPrice: 350
   SellPrice: 175
+  Description: 
   IconAddress: Armors/FeatherArmor

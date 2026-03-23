@@ -24,4 +24,5 @@ MonoBehaviour:
   SkillPoolType: 3
   BuyPrice: 400
   SellPrice: 200
+  Description: 
   IconAddress: Armors/SpikeArmor

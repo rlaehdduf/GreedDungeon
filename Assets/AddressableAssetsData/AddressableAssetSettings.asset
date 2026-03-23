@@ -104,6 +104,9 @@ MonoBehaviour:
     - MonsterData
     - EquipmentData
     - ConsumableData
+    - RarityData
+    - StatusEffectData
+    - MonsterSprites
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: f51e8900585755f4d895135470bdb862, type: 2}

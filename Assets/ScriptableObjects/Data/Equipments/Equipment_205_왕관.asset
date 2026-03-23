@@ -24,4 +24,5 @@ MonoBehaviour:
   SkillPoolType: 4
   BuyPrice: 220
   SellPrice: 110
+  Description: 
   IconAddress: Accessories/Crown

@@ -24,4 +24,5 @@ MonoBehaviour:
   SkillPoolType: 3
   BuyPrice: 300
   SellPrice: 150
+  Description: 
   IconAddress: Armors/ChainArmor

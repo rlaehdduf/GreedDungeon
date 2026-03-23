@@ -24,4 +24,5 @@ MonoBehaviour:
   SkillPoolType: 3
   BuyPrice: 150
   SellPrice: 75
+  Description: 
   IconAddress: Armors/LeatherArmor

@@ -24,4 +24,5 @@ MonoBehaviour:
   SkillPoolType: 1
   BuyPrice: 200
   SellPrice: 100
+  Description: 
   IconAddress: Weapons/Sword

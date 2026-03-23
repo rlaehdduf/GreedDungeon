@@ -24,4 +24,5 @@ MonoBehaviour:
   SkillPoolType: 4
   BuyPrice: 250
   SellPrice: 125
+  Description: 
   IconAddress: Accessories/Jewel
