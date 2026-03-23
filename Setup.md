@@ -90,14 +90,14 @@ Battle.unity
 ### PlayerStatusUI (PlayerInfomation에 추가)
 | 필드 | 연결 대상 |
 |------|-----------|
-| `_nameText` | 이름 Text |
 | `_hpBar` | HP Slider |
 | `_hpText` | HP Text |
 | `_mpBar` | MP Slider |
 | `_mpText` | MP Text |
-| `_levelText` | Level Text |
 | `_statusEffectsContainer` | 상태이상 아이콘 부모 Transform |
 | `_statusEffectPrefab` | 상태이상 아이콘 프리팹 |
+
+> Player 이름은 고정 "Player", 레벨 없음
 
 ### MonsterStatusUI (EnemyInfomation에 추가)
 | 필드 | 연결 대상 |
@@ -105,10 +105,9 @@ Battle.unity
 | `_nameText` | 이름 Text |
 | `_hpBar` | HP Slider |
 | `_hpText` | HP Text |
-| `_levelText` | Level Text |
 | `_elementIcon` | 속성 아이콘 Image |
-| `_statusEffectsContainer` | 상태이상 아이콘 부모 Transform |
-| `_statusEffectPrefab` | 상태이상 아이콘 프리팹 |
+
+> Monster 레벨, 상태이상 없음
 
 ### BattleLogUI (LogUI에 추가)
 | 필드 | 연결 대상 |
