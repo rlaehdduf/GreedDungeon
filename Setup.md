@@ -124,14 +124,10 @@ Battle.unity
 |------|-----------|
 | `_attackButton` | AttackBtn |
 | `_defendButton` | DefenseBtn |
-| `_skillButton` | SkillBtn (선택) |
 | `_itemButton` | ItemBtn |
-| `_skillPanel` | 스킬 선택 패널 (선택) |
-| `_skillContainer` | 스킬 버튼 생성 위치 Transform |
-| `_skillButtonPrefab` | 스킬 버튼 프리팹 |
-| `_itemPanel` | 아이템 선택 패널 (선택) |
-| `_itemContainer` | 아이템 버튼 생성 위치 Transform |
-| `_itemButtonPrefab` | 아이템 버튼 프리팹 |
+
+> 스킬 슬롯 3개는 SkillSlotUI 사용 (무기/갑옷/악세서리 스킬)
+> 인벤토리 UI는 미구현
 
 ---
 
