@@ -94,10 +94,13 @@ Battle.unity
 | `_hpText` | HP Text |
 | `_mpBar` | MP Slider |
 | `_mpText` | MP Text |
-| `_statusEffectsContainer` | 상태이상 아이콘 부모 Transform |
-| `_statusEffectPrefab` | 상태이상 아이콘 프리팹 |
+| `_statusEffectsContainer` | DeBuff 아이콘 부모 Transform |
+| `_statusEffectPrefab` | DeBuff 아이콘 프리팹 (Text "Count" 포함) |
+| `_buffsContainer` | Buff 아이콘 부모 Transform |
+| `_buffPrefab` | Buff 아이콘 프리팹 (Text "Count", "Value" 포함) |
 
 > Player 이름은 고정 "Player", 레벨 없음
+> 프리팹 구조: Image (아이콘) + Text (이름에 "Count" 또는 "Duration" 포함 시 지속시간 표시)
 
 ### MonsterStatusUI (EnemyInfomation에 추가)
 | 필드 | 연결 대상 |
