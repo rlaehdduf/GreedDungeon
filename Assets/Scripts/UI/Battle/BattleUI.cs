@@ -18,7 +18,7 @@ namespace GreedDungeon.UI.Battle
         public event Action<int> OnSkillSelected;
         public event Action OnAttackClicked;
         public event Action OnDefendClicked;
-        public event Action<int> OnItemSelected;
+        public event Action OnItemClicked;
 
         private void Start()
         {
@@ -31,8 +31,7 @@ namespace GreedDungeon.UI.Battle
             {
                 _actionMenu.OnAttackClicked += () => OnAttackClicked?.Invoke();
                 _actionMenu.OnDefendClicked += () => OnDefendClicked?.Invoke();
-                _actionMenu.OnSkillSelected += (id) => OnSkillSelected?.Invoke(id);
-                _actionMenu.OnItemSelected += (id) => OnItemSelected?.Invoke(id);
+                _actionMenu.OnItemClicked += () => OnItemClicked?.Invoke();
             }
 
             if (_skillSlotUI != null)
@@ -51,9 +50,6 @@ namespace GreedDungeon.UI.Battle
 
             if (_battleLog != null)
                 _battleLog.Clear();
-
-            if (_actionMenu != null)
-                _actionMenu.Setup(player);
 
             if (_skillSlotUI != null)
                 _skillSlotUI.SetPlayer(player);

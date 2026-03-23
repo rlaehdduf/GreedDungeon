@@ -10,10 +10,7 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private Text _nameText;
         [SerializeField] private Slider _hpBar;
         [SerializeField] private Text _hpText;
-        [SerializeField] private Text _levelText;
         [SerializeField] private Image _elementIcon;
-        [SerializeField] private Transform _statusEffectsContainer;
-        [SerializeField] private GameObject _statusEffectPrefab;
 
         public void Setup(Monster monster)
         {

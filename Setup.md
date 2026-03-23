@@ -77,7 +77,7 @@ Battle.unity
 | `_playerStatus` | PlayerInfomation (PlayerStatusUI 컴포넌트) |
 | `_monsterStatus` | EnemyInfomation (MonsterStatusUI 컴포넌트) |
 | `_battleLog` | LogUI (BattleLogUI 컴포넌트) |
-| `_actionMenu` | AttackBtn/DefenseBtn/ItemBtn 부모 (ActionMenuUI 컴포넌트) |
+| `_actionMenu` | 버튼 부모 (ActionMenuUI 컴포넌트) |
 | `_skillSlotUI` | SkillSlot_1~3 부모 (SkillSlotUI 컴포넌트) |
 
 ### SkillSlotUI
