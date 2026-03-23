@@ -176,3 +176,32 @@ AddressablesTest 컴포넌트에 할당:
 - [ ] ScriptableObject 라벨 설정됨
 - [ ] Addressables 빌드 완료
 - [ ] 테스트 씬에서 로드 테스트 성공
+
+---
+
+## 7. Battle 씬 설정
+
+### 7.1 MonsterDisplay 설정
+
+1. `Assets/Scenes/Battle.unity` 씬 열기
+2. 빈 GameObject 생성 (이름: `MonsterDisplay`)
+3. `MonsterDisplay` 컴포넌트 추가
+4. `MonsterSpriteView` 컴포넌트 추가 (또는 자식 GameObject에)
+5. `SpriteRenderer` 컴포넌트 추가
+6. 인스펙터에서 연결:
+   - `MonsterDisplay._spriteView` → MonsterSpriteView 컴포넌트
+   - `MonsterDisplay._spriteRenderer` → SpriteRenderer 컴포넌트
+
+### 7.2 BattleController 설정
+
+1. Battle 씬에 빈 GameObject 생성 (이름: `BattleController`)
+2. `BattleController` 컴포넌트 추가
+3. 인스펙터에서 연결:
+   - `BattleController._monsterDisplay` → MonsterDisplay GameObject
+
+### 7.3 확인 사항
+
+- [ ] MonsterDisplay에 MonsterSpriteView 연결됨
+- [ ] MonsterDisplay에 SpriteRenderer 연결됨
+- [ ] BattleController에 MonsterDisplay 연결됨
+- [ ] 전투 시작 시 몬스터 스프라이트가 ScaleX, ScaleY로 표시됨

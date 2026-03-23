@@ -1,0 +1,86 @@
+using System;
+using GreedDungeon.Character;
+using GreedDungeon.Core;
+using GreedDungeon.ScriptableObjects;
+using UnityEngine;
+
+namespace GreedDungeon.Combat
+{
+    public class BattleController : MonoBehaviour
+    {
+        [Header("UI References")]
+        [SerializeField] private UI.Battle.MonsterDisplay _monsterDisplay;
+
+        private IBattleManager _battleManager;
+        private IGameDataManager _gameDataManager;
+        private Player _testPlayer;
+        private Monster _currentMonster;
+
+        public event Action<Monster> OnBattleStarted;
+        public event Action<Monster, int> OnMonsterDamaged;
+
+        private void Start()
+        {
+            StartCoroutine(WaitForDI());
+        }
+
+        private System.Collections.IEnumerator WaitForDI()
+        {
+            while (!Services.IsInitialized)
+            {
+                yield return null;
+            }
+
+            _battleManager = Services.Get<IBattleManager>();
+            _gameDataManager = Services.Get<IGameDataManager>();
+            
+            if (_battleManager is BattleManager bm)
+            {
+                bm.OnBattleStarted += HandleBattleStarted;
+                bm.OnMonsterDamaged += HandleMonsterDamaged;
+            }
+        }
+
+        public void StartTestBattle()
+        {
+            if (_gameDataManager == null) return;
+            
+            var monsterData = _gameDataManager.GetMonsterData(1);
+            if (monsterData == null) return;
+            
+            _currentMonster = new Monster(monsterData);
+            _testPlayer = new Player();
+            
+            _battleManager.StartBattle(_testPlayer, _currentMonster);
+        }
+
+        private void HandleBattleStarted(Monster monster)
+        {
+            OnBattleStarted?.Invoke(monster);
+            
+            if (_monsterDisplay != null)
+            {
+                _monsterDisplay.DisplayMonster(monster);
+            }
+        }
+
+        private void HandleMonsterDamaged(Monster monster, int damage)
+        {
+            OnMonsterDamaged?.Invoke(monster, damage);
+            
+            if (_monsterDisplay != null)
+            {
+                _monsterDisplay.PlayDamageAnimation();
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (_battleManager is BattleManager bm)
+            {
+                bm.OnBattleStarted -= HandleBattleStarted;
+                bm.OnMonsterDamaged -= HandleMonsterDamaged;
+            }
+        }
+    }
+}

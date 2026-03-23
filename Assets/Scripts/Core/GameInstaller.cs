@@ -1,3 +1,4 @@
+using GreedDungeon.Combat;
 using Pathfinder.Core;
 using Pathfinder.Core.DI;
 
@@ -13,6 +14,10 @@ namespace GreedDungeon.Core
             container.Register<ISceneLoader, SceneLoader>(lifetime: ServiceLifetime.Singleton);
             container.Register<IAssetLoader, AddressablesLoader>(lifetime: ServiceLifetime.Singleton);
             container.Register<IGameDataManager, GameDataManager>(lifetime: ServiceLifetime.Singleton);
+            
+            container.Register<IDamageCalculator, DamageCalculator>(lifetime: ServiceLifetime.Singleton);
+            container.Register<ITurnManager, TurnManager>(lifetime: ServiceLifetime.Singleton);
+            container.Register<IBattleManager, BattleManager>(lifetime: ServiceLifetime.Singleton);
         }
     }
 }

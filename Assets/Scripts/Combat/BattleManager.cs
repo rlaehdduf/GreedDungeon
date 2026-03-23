@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GreedDungeon.Character;
 using GreedDungeon.Items;
@@ -29,6 +30,9 @@ namespace GreedDungeon.Combat
         public bool IsBattleOver => _player.IsDead || _monster.IsDead;
         public bool PlayerWon => _monster.IsDead && !_player.IsDead;
 
+        public event Action<Monster> OnBattleStarted;
+        public event Action<Monster, int> OnMonsterDamaged;
+
         public BattleManager(IDamageCalculator damageCalculator, ITurnManager turnManager)
         {
             _damageCalculator = damageCalculator;
@@ -43,6 +47,9 @@ namespace GreedDungeon.Combat
 
             _battleEntities = new List<IBattleEntity> { _player, _monster };
             _turnManager.Initialize(_battleEntities);
+
+            _monster.OnDamaged += (damage) => OnMonsterDamaged?.Invoke(_monster, damage);
+            OnBattleStarted?.Invoke(_monster);
 
             Debug.Log($"전투 시작! {_monster.Name} vs Player");
         }
@@ -165,7 +172,7 @@ namespace GreedDungeon.Combat
         {
             if (skill == null || string.IsNullOrEmpty(skill.StatusEffectID)) return;
 
-            float roll = Random.value * 100;
+            float roll = UnityEngine.Random.value * 100;
             Debug.Log($"  [상태이상 시도] {skill.StatusEffectID} (확률: {skill.StatusEffectChance}%, 주사위: {roll:F1}%)");
 
             if (roll > skill.StatusEffectChance)
