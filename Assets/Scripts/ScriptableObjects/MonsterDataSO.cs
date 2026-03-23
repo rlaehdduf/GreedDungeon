@@ -1,3 +1,4 @@
+using GreedDungeon.Core;
 using UnityEngine;
 
 namespace GreedDungeon.ScriptableObjects
@@ -11,7 +12,7 @@ namespace GreedDungeon.ScriptableObjects
     }
 
     [CreateAssetMenu(fileName = "MonsterData", menuName = "GreedDungeon/Data/Monster")]
-    public class MonsterDataSO : ScriptableObject
+    public class MonsterDataSO : ScriptableObject, IData
     {
         public int ID;
         public string Name;
@@ -30,5 +31,7 @@ namespace GreedDungeon.ScriptableObjects
         public string PrefabAddress;
         public float ScaleX = 1f;
         public float ScaleY = 1f;
+        
+        int IData.ID => ID;
     }
 }

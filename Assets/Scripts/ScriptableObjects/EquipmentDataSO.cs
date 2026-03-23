@@ -1,3 +1,4 @@
+using GreedDungeon.Core;
 using UnityEngine;
 
 namespace GreedDungeon.ScriptableObjects
@@ -19,7 +20,7 @@ namespace GreedDungeon.ScriptableObjects
     }
 
     [CreateAssetMenu(fileName = "EquipmentData", menuName = "GreedDungeon/Data/Equipment")]
-    public class EquipmentDataSO : ScriptableObject
+    public class EquipmentDataSO : ScriptableObject, IData
     {
         public int ID;
         public string Name;
@@ -35,5 +36,7 @@ namespace GreedDungeon.ScriptableObjects
         public int SellPrice;
         [TextArea] public string Description;
         public string IconAddress;
+        
+        int IData.ID => ID;
     }
 }

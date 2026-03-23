@@ -478,6 +478,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 339837491}
   m_CullTransparentMesh: 1
+--- !u!1 &393676534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 393676536}
+  - component: {fileID: 393676535}
+  m_Layer: 0
+  m_Name: BattleController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &393676535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393676534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7349733a349aaa4f86d485defbd8639, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.Combat.BattleController
+  _monsterDisplay: {fileID: 2132511565}
+--- !u!4 &393676536
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393676534}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.16504, y: 0.47158, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &502557553
 GameObject:
   m_ObjectHideFlags: 0
@@ -1274,6 +1319,7 @@ MonoBehaviour:
   _loadAllDataButton: {fileID: 1297588163}
   _spawnPoint: {fileID: 2132511560}
   _statusText: {fileID: 502557555}
+  _monsterSpriteView: {fileID: 0}
 --- !u!114 &1108687158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2973,6 +3019,7 @@ GameObject:
   - component: {fileID: 2132511562}
   - component: {fileID: 2132511564}
   - component: {fileID: 2132511563}
+  - component: {fileID: 2132511565}
   m_Layer: 5
   m_Name: EnemySpawnPoint
   m_TagString: Untagged
@@ -3084,6 +3131,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &2132511565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132511559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e537de6ec4666a4cbb2e35959a2053a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.UI.Battle.MonsterDisplay
+  _spriteView: {fileID: 2132511563}
+  _spriteRenderer: {fileID: 2132511564}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -3094,3 +3155,4 @@ SceneRoots:
   - {fileID: 1375621192}
   - {fileID: 1833536359}
   - {fileID: 2132511560}
+  - {fileID: 393676536}

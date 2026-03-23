@@ -1,3 +1,4 @@
+using GreedDungeon.Core;
 using UnityEngine;
 
 namespace GreedDungeon.ScriptableObjects
@@ -26,7 +27,7 @@ namespace GreedDungeon.ScriptableObjects
     }
 
     [CreateAssetMenu(fileName = "SkillData", menuName = "GreedDungeon/Data/Skill")]
-    public class SkillDataSO : ScriptableObject
+    public class SkillDataSO : ScriptableObject, IData
     {
         public int ID;
         public string Name;
@@ -44,5 +45,8 @@ namespace GreedDungeon.ScriptableObjects
         public int Cooldown;
         public int Tier;
         public string IconAddress;
+        public Element Element;
+        
+        int IData.ID => ID;
     }
 }

@@ -62,13 +62,7 @@ namespace GreedDungeon.Combat
 
         private Element GetSkillElement(SkillDataSO skill)
         {
-            return skill.Name switch
-            {
-                string s when s.Contains("파이어") || s.Contains("화염") => Element.Fire,
-                string s when s.Contains("워터") || s.Contains("물") => Element.Water,
-                string s when s.Contains("그라스") || s.Contains("풀") => Element.Grass,
-                _ => Element.None
-            };
+            return skill?.Element ?? Element.None;
         }
 
         public float GetElementMultiplier(Element attacker, Element defender)

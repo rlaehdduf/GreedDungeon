@@ -34,11 +34,8 @@ namespace GreedDungeon.Combat
             _battleManager = Services.Get<IBattleManager>();
             _gameDataManager = Services.Get<IGameDataManager>();
             
-            if (_battleManager is BattleManager bm)
-            {
-                bm.OnBattleStarted += HandleBattleStarted;
-                bm.OnMonsterDamaged += HandleMonsterDamaged;
-            }
+            _battleManager.OnBattleStarted += HandleBattleStarted;
+            _battleManager.OnMonsterDamaged += HandleMonsterDamaged;
         }
 
         public void StartTestBattle()
@@ -76,10 +73,10 @@ namespace GreedDungeon.Combat
 
         private void OnDestroy()
         {
-            if (_battleManager is BattleManager bm)
+            if (_battleManager != null)
             {
-                bm.OnBattleStarted -= HandleBattleStarted;
-                bm.OnMonsterDamaged -= HandleMonsterDamaged;
+                _battleManager.OnBattleStarted -= HandleBattleStarted;
+                _battleManager.OnMonsterDamaged -= HandleMonsterDamaged;
             }
         }
     }

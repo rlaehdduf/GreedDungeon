@@ -36,70 +36,25 @@ namespace GreedDungeon.Core
         private async Task LoadAllDataAsync()
         {
             await Task.WhenAll(
-                LoadMonstersAsync(),
-                LoadSkillsAsync(),
-                LoadEquipmentsAsync(),
-                LoadConsumablesAsync(),
-                LoadRaritiesAsync(),
-                LoadStatusEffectsAsync()
+                LoadDataAsync("MonsterData", _monsters, _monsterList),
+                LoadDataAsync("SkillData", _skills, _skillList),
+                LoadDataAsync("EquipmentData", _equipments, _equipmentList),
+                LoadDataAsync("ConsumableData", _consumables, _consumableList),
+                LoadDataAsync("RarityData", _rarities),
+                LoadDataAsync("StatusEffectData", _statusEffects)
             );
         }
 
-        private async Task LoadMonstersAsync()
+        private async Task LoadDataAsync<T>(string label, Dictionary<int, T> dict, List<T> list = null) where T : ScriptableObject
         {
-            var assets = await _assetLoader.LoadAllAssetsByLabelAsync<MonsterDataSO>("MonsterData");
+            var assets = await _assetLoader.LoadAllAssetsByLabelAsync<T>(label);
             foreach (var asset in assets)
             {
-                _monsters[asset.ID] = asset;
-                _monsterList.Add(asset);
-            }
-        }
-
-        private async Task LoadSkillsAsync()
-        {
-            var assets = await _assetLoader.LoadAllAssetsByLabelAsync<SkillDataSO>("SkillData");
-            foreach (var asset in assets)
-            {
-                _skills[asset.ID] = asset;
-                _skillList.Add(asset);
-            }
-        }
-
-        private async Task LoadEquipmentsAsync()
-        {
-            var assets = await _assetLoader.LoadAllAssetsByLabelAsync<EquipmentDataSO>("EquipmentData");
-            foreach (var asset in assets)
-            {
-                _equipments[asset.ID] = asset;
-                _equipmentList.Add(asset);
-            }
-        }
-
-        private async Task LoadConsumablesAsync()
-        {
-            var assets = await _assetLoader.LoadAllAssetsByLabelAsync<ConsumableDataSO>("ConsumableData");
-            foreach (var asset in assets)
-            {
-                _consumables[asset.ID] = asset;
-                _consumableList.Add(asset);
-            }
-        }
-
-        private async Task LoadRaritiesAsync()
-        {
-            var assets = await _assetLoader.LoadAllAssetsByLabelAsync<RarityDataSO>("RarityData");
-            foreach (var asset in assets)
-            {
-                _rarities[asset.ID] = asset;
-            }
-        }
-
-        private async Task LoadStatusEffectsAsync()
-        {
-            var assets = await _assetLoader.LoadAllAssetsByLabelAsync<StatusEffectDataSO>("StatusEffectData");
-            foreach (var asset in assets)
-            {
-                _statusEffects[asset.ID] = asset;
+                if (asset is IData data)
+                {
+                    dict[data.ID] = asset;
+                    list?.Add(asset);
+                }
             }
         }
 
@@ -124,5 +79,10 @@ namespace GreedDungeon.Core
         {
             return await _assetLoader.LoadAssetAsync<GameObject>(address);
         }
+    }
+
+    public interface IData
+    {
+        int ID { get; }
     }
 }

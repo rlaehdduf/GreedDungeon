@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GreedDungeon.Character;
+using GreedDungeon.Core;
 using GreedDungeon.Items;
 using GreedDungeon.ScriptableObjects;
 using UnityEngine;
@@ -9,6 +10,9 @@ namespace GreedDungeon.Combat
 {
     public interface IBattleManager
     {
+        event Action<Monster> OnBattleStarted;
+        event Action<Monster, int> OnMonsterDamaged;
+        
         void StartBattle(Player player, Monster monster);
         void ExecuteAttack(IBattleEntity attacker, IBattleEntity defender, SkillDataSO skill);
         void ExecuteDefend(IBattleEntity defender);
@@ -22,9 +26,11 @@ namespace GreedDungeon.Combat
     {
         private readonly IDamageCalculator _damageCalculator;
         private readonly ITurnManager _turnManager;
+        private readonly IGameDataManager _gameDataManager;
 
         private Player _player;
         private Monster _monster;
+        private Monster _previousMonster;
         private List<IBattleEntity> _battleEntities;
 
         public bool IsBattleOver => _player.IsDead || _monster.IsDead;
@@ -33,14 +39,17 @@ namespace GreedDungeon.Combat
         public event Action<Monster> OnBattleStarted;
         public event Action<Monster, int> OnMonsterDamaged;
 
-        public BattleManager(IDamageCalculator damageCalculator, ITurnManager turnManager)
+        public BattleManager(IDamageCalculator damageCalculator, ITurnManager turnManager, IGameDataManager gameDataManager)
         {
             _damageCalculator = damageCalculator;
             _turnManager = turnManager;
+            _gameDataManager = gameDataManager;
         }
 
         public void StartBattle(Player player, Monster monster)
         {
+            CleanupPreviousBattle();
+            
             _player = player;
             _monster = monster;
             _monster.InitializeForBattle();
@@ -48,10 +57,23 @@ namespace GreedDungeon.Combat
             _battleEntities = new List<IBattleEntity> { _player, _monster };
             _turnManager.Initialize(_battleEntities);
 
-            _monster.OnDamaged += (damage) => OnMonsterDamaged?.Invoke(_monster, damage);
+            _monster.OnDamaged += HandleMonsterDamaged;
             OnBattleStarted?.Invoke(_monster);
 
             Debug.Log($"전투 시작! {_monster.Name} vs Player");
+        }
+
+        private void HandleMonsterDamaged(int damage)
+        {
+            OnMonsterDamaged?.Invoke(_monster, damage);
+        }
+
+        private void CleanupPreviousBattle()
+        {
+            if (_monster != null)
+            {
+                _monster.OnDamaged -= HandleMonsterDamaged;
+            }
         }
 
         public void ExecuteAttack(IBattleEntity attacker, IBattleEntity defender, SkillDataSO skill)
@@ -202,6 +224,11 @@ namespace GreedDungeon.Combat
 
         private StatusEffectDataSO FindStatusEffect(string effectId)
         {
+            if (string.IsNullOrEmpty(effectId) || _gameDataManager == null) return null;
+            if (int.TryParse(effectId, out int id))
+            {
+                return _gameDataManager.GetStatusEffectData(id);
+            }
             return null;
         }
 

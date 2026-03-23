@@ -11,6 +11,8 @@ namespace GreedDungeon.Character
         private readonly List<SkillDataSO> _skills = new();
         private readonly List<ActiveBuff> _buffs = new();
         private Stats _baseStats;
+        private Stats _cachedTotalStats;
+        private bool _statsCacheDirty = true;
 
         public abstract string Name { get; }
         public Stats BaseStats => _baseStats;
@@ -30,11 +32,26 @@ namespace GreedDungeon.Character
         {
             get
             {
-                var total = BaseStats.Clone();
-                total += GetEquipmentStats();
-                ApplyBuffModifiers(total);
-                return total;
+                if (_statsCacheDirty)
+                {
+                    _cachedTotalStats = CalculateTotalStats();
+                    _statsCacheDirty = false;
+                }
+                return _cachedTotalStats;
             }
+        }
+
+        private Stats CalculateTotalStats()
+        {
+            var total = BaseStats.Clone();
+            total += GetEquipmentStats();
+            ApplyBuffModifiers(total);
+            return total;
+        }
+
+        private void InvalidateStatsCache()
+        {
+            _statsCacheDirty = true;
         }
 
         private void ApplyBuffModifiers(Stats stats)
@@ -172,6 +189,7 @@ namespace GreedDungeon.Character
                 Debug.Log($"  [{Name}] 버프 지속시간 처리");
             }
 
+            bool anyBuffRemoved = false;
             for (int i = _buffs.Count - 1; i >= 0; i--)
             {
                 var buff = _buffs[i];
@@ -181,11 +199,17 @@ namespace GreedDungeon.Character
                 {
                     Debug.Log($"    [{buff.Type}] 버프 종료");
                     _buffs.RemoveAt(i);
+                    anyBuffRemoved = true;
                 }
                 else
                 {
                     Debug.Log($"    [{buff.Type}] 남은 지속: {buff.RemainingDuration}턴");
                 }
+            }
+            
+            if (anyBuffRemoved)
+            {
+                InvalidateStatsCache();
             }
         }
 
@@ -205,12 +229,14 @@ namespace GreedDungeon.Character
                 return;
             }
             _buffs.Add(new ActiveBuff(type, value, duration));
+            InvalidateStatsCache();
             Debug.Log($"  [{Name}] {type} 버프 적용: +{value}% (지속: {duration}턴)");
         }
 
         public void RemoveBuff(ActiveBuff buff)
         {
             _buffs.Remove(buff);
+            InvalidateStatsCache();
         }
 
         public void ClearDebuffs()

@@ -31,15 +31,15 @@ public class BattleSceneTester : MonoBehaviour
         InitializeBattle();
     }
 
-    private void InitializeBattle()
-    {
-        Debug.Log("═══════════════════════════════════════════════════════════");
-        Debug.Log("                    전투 테스트 시작                        ");
-        Debug.Log("═══════════════════════════════════════════════════════════");
+private void InitializeBattle()
+        {
+            Debug.Log("═══════════════════════════════════════════════════════════");
+            Debug.Log("                    전투 테스트 시작                        ");
+            Debug.Log("═══════════════════════════════════════════════════════════");
 
-        _damageCalculator = new DamageCalculator();
-        _turnManager = new TurnManager();
-        _battleManager = new BattleManager(_damageCalculator, _turnManager);
+            _damageCalculator = new DamageCalculator();
+            _turnManager = new TurnManager();
+            _battleManager = new BattleManager(_damageCalculator, _turnManager, null);
 
         _player = new Player();
         

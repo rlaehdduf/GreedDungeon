@@ -1,9 +1,10 @@
+using GreedDungeon.Core;
 using UnityEngine;
 
 namespace GreedDungeon.ScriptableObjects
 {
     [CreateAssetMenu(fileName = "StatusEffectData", menuName = "GreedDungeon/Data/StatusEffect")]
-    public class StatusEffectDataSO : ScriptableObject
+    public class StatusEffectDataSO : ScriptableObject, IData
     {
         public int ID;
         public string Name;
@@ -12,5 +13,7 @@ namespace GreedDungeon.ScriptableObjects
         [Range(0f, 1f)] public float DamageMaxPercent;
         public int Duration;
         public bool SkipTurn;
+        
+        int IData.ID => ID;
     }
 }

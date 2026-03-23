@@ -85,7 +85,7 @@ namespace GreedDungeon.Testing
             var player = new Player();
             var calculator = new DamageCalculator();
             var turnManager = new TurnManager();
-            var battleManager = new BattleManager(calculator, turnManager);
+            var battleManager = new BattleManager(calculator, turnManager, null);
             
             if (_healPotionLarge == null)
             {
@@ -116,7 +116,7 @@ namespace GreedDungeon.Testing
             var player = new Player();
             var calculator = new DamageCalculator();
             var turnManager = new TurnManager();
-            var battleManager = new BattleManager(calculator, turnManager);
+            var battleManager = new BattleManager(calculator, turnManager, null);
             
             if (_attackBuff == null)
             {
@@ -146,7 +146,7 @@ namespace GreedDungeon.Testing
             var player = new Player();
             var calculator = new DamageCalculator();
             var turnManager = new TurnManager();
-            var battleManager = new BattleManager(calculator, turnManager);
+            var battleManager = new BattleManager(calculator, turnManager, null);
             
             if (_testMonster == null || _poisonFlask == null)
             {
@@ -181,7 +181,7 @@ namespace GreedDungeon.Testing
             var player = new Player();
             var calculator = new DamageCalculator();
             var turnManager = new TurnManager();
-            var battleManager = new BattleManager(calculator, turnManager);
+            var battleManager = new BattleManager(calculator, turnManager, null);
             
             if (_testMonster == null || _magicArrow == null)
             {
@@ -213,7 +213,7 @@ namespace GreedDungeon.Testing
             var player = new Player();
             var calculator = new DamageCalculator();
             var turnManager = new TurnManager();
-            var battleManager = new BattleManager(calculator, turnManager);
+            var battleManager = new BattleManager(calculator, turnManager, null);
             
             if (_attackBuff == null)
             {
@@ -247,7 +247,7 @@ namespace GreedDungeon.Testing
             var player = new Player();
             var calculator = new DamageCalculator();
             var turnManager = new TurnManager();
-            var battleManager = new BattleManager(calculator, turnManager);
+            var battleManager = new BattleManager(calculator, turnManager, null);
             
             if (_testMonster == null || _healPotionSmall == null || _attackBuff == null)
             {

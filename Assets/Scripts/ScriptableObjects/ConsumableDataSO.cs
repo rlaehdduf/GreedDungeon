@@ -1,3 +1,4 @@
+using GreedDungeon.Core;
 using UnityEngine;
 
 namespace GreedDungeon.ScriptableObjects
@@ -28,7 +29,7 @@ namespace GreedDungeon.ScriptableObjects
     }
 
     [CreateAssetMenu(fileName = "ConsumableData", menuName = "GreedDungeon/Data/Consumable")]
-    public class ConsumableDataSO : ScriptableObject
+    public class ConsumableDataSO : ScriptableObject, IData
     {
         public int ID;
         public string Name;
@@ -42,5 +43,7 @@ namespace GreedDungeon.ScriptableObjects
         public int SellPrice;
         [TextArea] public string Description;
         public string IconAddress;
+        
+        int IData.ID => ID;
     }
 }
