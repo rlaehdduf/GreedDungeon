@@ -51,8 +51,38 @@ namespace GreedDungeon.Combat
             
             _currentMonster = new Monster(monsterData);
             _testPlayer = new Player();
+
+            EquipTestItems();
             
             _battleManager.StartBattle(_testPlayer, _currentMonster);
+        }
+
+        private void EquipTestItems()
+        {
+            var allEquipment = _gameDataManager.GetAllEquipmentData();
+            if (allEquipment == null || allEquipment.Count == 0)
+            {
+                Debug.Log("[BattleController] 장비 데이터 없음");
+                return;
+            }
+
+            int equippedCount = 0;
+            foreach (var equipment in allEquipment)
+            {
+                if (equipment != null && equippedCount < 3)
+                {
+                    _testPlayer.Equip(equipment);
+                    equippedCount++;
+                    Debug.Log($"[BattleController] 장비 장착: {equipment.Name} (Type: {equipment.Type}, SkillPool: {equipment.SkillPoolType})");
+                }
+            }
+
+            Debug.Log($"[BattleController] 총 {equippedCount}개 장비 장착 완료");
+            Debug.Log($"[BattleController] 스킬 개수: {_testPlayer.Skills.Count}");
+            foreach (var skill in _testPlayer.Skills)
+            {
+                Debug.Log($"  - {skill.Name} (Type: {skill.Type}, Effect: {skill.EffectType})");
+            }
         }
 
         public bool UseSkill(int skillId)
