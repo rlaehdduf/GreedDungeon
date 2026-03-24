@@ -183,6 +183,7 @@ Battle.unity
 | `_inventoryGrid` | 인벤토리 슬롯 부모 Transform |
 | `_slotPrefab` | InventorySlotUI 프리팹 |
 | `_goldText` | 골드 Text |
+| `_tooltip` | ItemTooltipUI 컴포넌트 |
 | `_dropPopup` | ConfirmDropPopup 컴포넌트 |
 
 > **인벤토리 패널 구조:**
@@ -196,6 +197,7 @@ Battle.unity
 > ├── InventoryGrid (Grid Layout Group)
 > │   └── (InventorySlotUI 프리팹으로 21개 생성)
 > ├── GoldText
+> ├── ItemTooltipUI (단일 툴팁)
 > └── ConfirmDropPopup
 > ```
 
@@ -211,7 +213,6 @@ Battle.unity
 | `_iconImage` | 아이콘 Image |
 | `_quantityText` | 수량 Text |
 | `_backgroundImage` | 배경 Image (등급 색상) |
-| `_tooltip` | ItemTooltipUI 컴포넌트 |
 
 > **슬롯 프리팹 구조:**
 > ```
@@ -220,6 +221,8 @@ Battle.unity
 > ├── Icon (Image) ← 아이템 아이콘
 > └── Quantity (Text) ← 소모품 수량
 > ```
+>
+> **주의:** 툴팁은 InventoryUI에서 단일로 관리됨
 
 ### EquipSlotUI 구조
 | 필드 | 연결 대상 |
