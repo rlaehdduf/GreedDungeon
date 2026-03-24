@@ -15,14 +15,15 @@ MonoBehaviour:
   ID: 105
   Name: "\uAE43\uD138\uAC11\uC637"
   Type: 1
-  HP: 0
-  MP: 25
+  HP: 25
+  MP: 0
   Attack: 0
-  Defense: 0
-  Speed: 2
-  CriticalRate: 10
-  SkillPoolType: 0
-  BuyPrice: 0
-  SellPrice: 350
-  Description: 
-  IconAddress: 175
+  Defense: 2
+  Speed: 10
+  CriticalRate: 0
+  SkillPoolType: 3
+  BuyPrice: 350
+  SellPrice: 175
+  Description: "\uC5C4\uCCAD\uB09C \uAC15\uB3C4\uC758 \uAE43\uD138\uC744 \uC5EE\uC740
+    \uAC11\uC637\uC774\uB2E4 \uB9E4\uC6B0\uAC00\uBCBC\uC6B4\uAC8C \uD2B9\uC9D5\uC774\uB2E4"
+  IconAddress: Armors/FeatherArmor

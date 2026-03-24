@@ -18,11 +18,12 @@ MonoBehaviour:
   HP: 0
   MP: 0
   Attack: 0
-  Defense: 0
-  Speed: 2
-  CriticalRate: 8
-  SkillPoolType: 0
-  BuyPrice: 0
-  SellPrice: 180
-  Description: 
-  IconAddress: 90
+  Defense: 2
+  Speed: 8
+  CriticalRate: 2
+  SkillPoolType: 4
+  BuyPrice: 180
+  SellPrice: 90
+  Description: "\uB9DD\uD1A0\uC758 \uC5ED\uD560\uC744 \uD558\uC9C0\uBABB\uD558\uB294
+    \uCC22\uC5B4\uC9C4 \uB9DD\uD1A0\uB2E4"
+  IconAddress: Accessories/Cloak

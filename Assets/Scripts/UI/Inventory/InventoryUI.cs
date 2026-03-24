@@ -4,10 +4,12 @@ using GreedDungeon.Items;
 using GreedDungeon.ScriptableObjects;
 using GreedDungeon.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 namespace GreedDungeon.UI.Inventory
 {
-    public class InventoryUI : UIView
+    public class InventoryUI : UIView, IPointerClickHandler
     {
         [Header("Equip Slots")]
         [SerializeField] private EquipSlotUI _weaponSlot;
@@ -31,9 +33,14 @@ namespace GreedDungeon.UI.Inventory
         [Header("Popups")]
         [SerializeField] private ConfirmDropPopup _dropPopup;
 
+        [Header("Close")]
+        [SerializeField] private GameObject _closeArea;
+
         private Player _player;
         private readonly List<InventorySlotUI> _inventorySlots = new List<InventorySlotUI>();
         private int _pendingDropIndex = -1;
+
+        public event System.Action<InventoryItem> OnItemUsed;
 
         public override void Show()
         {
@@ -63,6 +70,18 @@ namespace GreedDungeon.UI.Inventory
             {
                 _player.OnInventoryChanged -= RefreshAll;
             }
+        }
+
+        private void Update()
+        {
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+            {
+                Hide();
+            }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
         }
 
         private void SetupEquipSlots()
@@ -118,6 +137,16 @@ namespace GreedDungeon.UI.Inventory
             if (_dropPopup != null)
             {
                 _dropPopup.OnConfirmed += OnDropConfirmed;
+            }
+
+            if (_closeArea != null)
+            {
+                var button = _closeArea.GetComponent<UnityEngine.UI.Button>();
+                if (button == null)
+                {
+                    button = _closeArea.AddComponent<UnityEngine.UI.Button>();
+                }
+                button.onClick.AddListener(Hide);
             }
         }
 
@@ -246,8 +275,8 @@ namespace GreedDungeon.UI.Inventory
 
         private void UseConsumable(int index, InventoryItem item)
         {
-            Debug.Log($"[InventoryUI] 아이템 사용: {item.Name}");
-            _player.UseItemAt(index);
+            Debug.Log($"[InventoryUI] 아이템 사용 요청: {item.Name}");
+            OnItemUsed?.Invoke(item);
         }
 
         private void EquipItem(int index)

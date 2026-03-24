@@ -13,20 +13,28 @@ MonoBehaviour:
   m_Name: Default Local Group
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Default Local Group
-  m_GUID: f5b207d8f4b0e89419ce3c98850537d6
+  m_GUID: dfbcf8b871df4484abb9d8745179ccfd
   m_SerializeEntries:
+  - m_GUID: 00a89a5c169fbee499984ecf4e1bd9d2
+    m_Address: Weapons/Wand
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    - WeaponIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02b8db8dee0ed2f4b8a44aaf02617c43
+    m_Address: Accessories/Ring
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AccessoryIcon
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 05e0e2c614000634eac4bdbb704f8a86
     m_Address: Skills/Slash
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
     - SkillIcon
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 08a93400ccae9034180f0a96abc9e261
-    m_Address: Armors/ChainArmor
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 09c453f019a764a43a08e043debe82c7
     m_Address: Skills/Smash
@@ -35,68 +43,58 @@ MonoBehaviour:
     - SkillData
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12947832221444c4892173de4df2565c
+    m_Address: Items/MagicArrow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ConsumableData
+    - ItemIcon
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 13ae1fda925893d4e92dab617d9725dc
-    m_Address: Weapons/Shield
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1900e72a9aa6d64419f675337bd75b46
-    m_Address: Weapons/Axe
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1aeaaed992d7dfd49847bf909a61a700
-    m_Address: Weapons/Sword
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_3_\uBC29\uD328.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 21192d206d2fca242b118617967def59
-    m_Address: Weapons/Wand
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_4_\uC644\uB4DC.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21350a05e1c006147b7572919994dc9e
+    m_Address: Weapons/Sword
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    - WeaponIcon
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 22a356ec2ca85b1499ff34859992171e
-    m_Address: Skills/Smash
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_1_\uAC15\uD0C0.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 261b23393f864154986e73d2a48db358
-    m_Address: Armors/SpikeArmor
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2654f89d5095a3145957d20007ae01b4
-    m_Address: Items/MagicArrow
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ConsumableData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 26fa688c5ae6a804c8b18cdaf25e8fdd
-    m_Address: Rarities/Common
+    m_Address: Assets/ScriptableObjects/Data/Rarities/Rarity_1_Common.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - RarityData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 290006c9e9bc3c746ae64019b16614fd
-    m_Address: Skills/IceRain
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_7_\uC5BC\uC74C\uBE44.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 296debeead649cc419d484dadd9e4b41
-    m_Address: StatusEffects/Poison
+    m_Address: Assets/ScriptableObjects/Data/StatusEffects/StatusEffect_2_Poison.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - StatusEffectData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2ba1a9e4305728744a392b2926447cf9
-    m_Address: Armors/LeatherArmor
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_101_\uAC00\uC8FD\uAC11\uC637.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
@@ -108,52 +106,47 @@ MonoBehaviour:
     - SkillData
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d77f9593330afe469b3b0bca98db11f
+    m_Address: Weapons/Axe
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    - WeaponIcon
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 30001b6258d0d8f4c888bf1f29f0b20c
     m_Address: Monsters/Spider
     m_ReadOnly: 0
     m_SerializedLabels:
     - MonsterData
-    - MonsterSprites
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 30ede6ac6f447fb4bb648c462c08edf8
-    m_Address: Items/Antidote
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ConsumableData
+    - MonsterSprite
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 318b189e0067b2347a074834f09364ed
     m_Address: Elements/Water
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Element
     - ElementIcon
+    - ElementerData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 31c496c7c2639264f8c59a43efdee563
-    m_Address: Armors/PlateArmor
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_103_\uAC15\uCCA0\uAC11\uC637.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 325c720bf9d70df49b7010e02d300b83
-    m_Address: Rarities/Epic
+    m_Address: Assets/ScriptableObjects/Data/Rarities/Rarity_4_Epic.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - RarityData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 366f101e21c1d534a936b4d0b26fd57d
-    m_Address: Weapons/Sword
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_2_\uAC80.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3765be365ed196640b1558f403c33046
-    m_Address: Weapons/Stick
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3ae513f9670df224f8b0e3fe56ba268c
-    m_Address: Accessories/Cloak
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_1_\uB9C9\uB300\uAE30.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
@@ -162,113 +155,104 @@ MonoBehaviour:
     m_Address: Elements/Leaf
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Element
     - ElementIcon
+    - ElementerData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3e1cf46b0899a0e42a77bea33093ab4a
-    m_Address: Skills/SpeedBuff
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_11_\uC18D\uB3C4\uC99D\uAC00.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 40bc4ebb34b287c40848fa44d0632a72
-    m_Address: Armors/LeatherArmor
+  - m_GUID: 41c7359ba4189ef4f8fd69f99eee1b6a
+    m_Address: Accessories/Cloak
     m_ReadOnly: 0
     m_SerializedLabels:
+    - AccessoryIcon
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 43584142b6b3d3644bc43f957e0bdc73
-    m_Address: Accessories/NeckGlass
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 49e21ff3420763a4b8837a6e469b05f8
-    m_Address: Armors/ChainArmor
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4a13696839600404099897cc09373110
-    m_Address: Items/Explosion
+  - m_GUID: 45f35b0d5bf23204ca3c4e891d07869a
+    m_Address: Items/BuffPotion
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
+    - ItemIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4d0247269139fba4fb9579bc0b9f7f57
-    m_Address: Skills/AttackBuff
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4fa89cc5f28c8db43b8a07afba610954
-    m_Address: Accessories/Crown
+  - m_GUID: 49e21ff3420763a4b8837a6e469b05f8
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_102_\uC0AC\uC2AC\uAC11\uC637.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d0247269139fba4fb9579bc0b9f7f57
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_12_\uACF5\uACA9\uB825\uBC84\uD504.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4fe9609ce5b36f34990c270a5ba6455a
+    m_Address: Armors/PlateArmor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ArmorIcon
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 501c28b1068e4f14c9b377fe8eec8a2f
-    m_Address: Items/PotionLarge
+    m_Address: "Assets/ScriptableObjects/Data/Consumables/Consumable_3_\uD68C\uBCF5\uD3EC\uC158(\uB300).asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 522f62c11b46f204aa03eaac3e51e195
-    m_Address: Items/ExplosionBook
+    m_Address: "Assets/ScriptableObjects/Data/Consumables/Consumable_10_\uD3ED\uBC1C\uC758\uC11C.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 55d7724fae1fab440af1b17a42ed42f7
-    m_Address: Accessories/Crown
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_205_\uC655\uAD00.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 57015b9dde10f2c4686ad3b1eb224c32
-    m_Address: Accessories/Ring
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_201_\uBC18\uC9C0.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5b457bb65bb2639449f693c19529fd08
-    m_Address: Skills/DefenseBuff
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_9_\uBC29\uC5B4\uB825\uC99D\uAC00.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5c0bc344e25cd3741a88086afdf4806e
-    m_Address: Accessories/Ring
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5de7f7e0b7b9acd48a6f4f03f43fd04a
-    m_Address: Items/MagicArrow
+    m_Address: "Assets/ScriptableObjects/Data/Consumables/Consumable_9_\uB9C8\uBC95\uD654\uC0B4.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5f1f13b368165b54f88be571d89dd5c9
-    m_Address: Monsters/Spider
+    m_Address: "Assets/ScriptableObjects/Data/Monsters/Monster_3_\uAC70\uBBF8.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - MonsterData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6607406473602914d9d56d951cbcf445
-    m_Address: Skills/Slash
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_3_\uAC00\uB85C\uBCA0\uAE30.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 67a984ace70044343af82f0ed972444e
-    m_Address: Armors/FeatherArmor
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_105_\uAE43\uD138\uAC11\uC637.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6f69a574f3888d74e8d9e9e97494be8c
-    m_Address: Items/Potion
+    m_Address: "Assets/ScriptableObjects/Data/Consumables/Consumable_1_\uD68C\uBCF5\uD3EC\uC158(\uC18C).asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
@@ -278,7 +262,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - MonsterData
-    - MonsterSprites
+    - MonsterSprite
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 78bbfbe2a75954e42bdb6215b53fc953
     m_Address: Skills/IceRain
@@ -288,20 +272,27 @@ MonoBehaviour:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 78e88f9902dd8d747aa5473e9414b691
-    m_Address: Skills/HealthBuff
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_10_\uCCB4\uB825\uC99D\uAC00.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7b1d8346076ad9649b3d093052da0840
+    m_Address: Skills/Stun_Icon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8326dc32fee911e438ba131c907d02f6
     m_Address: Monsters/Skull
     m_ReadOnly: 0
     m_SerializedLabels:
     - MonsterData
-    - MonsterSprites
+    - MonsterSprite
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 859484d43a5371641a9c1d275b9818e1
-    m_Address: Items/PowerPotion
+    m_Address: "Assets/ScriptableObjects/Data/Consumables/Consumable_5_\uD798\uC758\uBB3C\uC57D.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
@@ -313,32 +304,26 @@ MonoBehaviour:
     - SkillData
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 877641a06af9dc544a804911e293d06b
-    m_Address: Weapons/Shield
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 893b0841803489c46aa8453ebdafb765
-    m_Address: Skills/ManaBall
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_5_\uB9C8\uB098\uBCFC.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 89a1e0d1315233649b8285dc9bf977d0
-    m_Address: Items/PotionMedium
+    m_Address: "Assets/ScriptableObjects/Data/Consumables/Consumable_2_\uD68C\uBCF5\uD3EC\uC158(\uC911).asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8b442dac097a2494bad789a75fbe03f8
-    m_Address: Skills/PowerBuff
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_8_\uACF5\uACA9\uB825\uC99D\uAC00.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8ce3bf45cf055cb48a2295a1c7d1757d
-    m_Address: Monsters/Skull
+    m_Address: "Assets/ScriptableObjects/Data/Monsters/Monster_4_\uD574\uACE8.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - MonsterData
@@ -348,7 +333,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - MonsterData
-    - MonsterSprites
+    - MonsterSprite
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 953cb894c4f1ea04aaf1b4ca83004836
     m_Address: Skills/DoubleSlash
@@ -358,28 +343,56 @@ MonoBehaviour:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 96102cff2e0af6848bf0477c17a7c0f0
-    m_Address: Items/CursePotion
+    m_Address: "Assets/ScriptableObjects/Data/Consumables/Consumable_7_\uC800\uC8FC\uC758\uBB3C\uC57D.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 96288ffeee4363e41a3dec98c34d58c1
-    m_Address: Monsters/Rat
+    m_Address: "Assets/ScriptableObjects/Data/Monsters/Monster_2_\uC5ED\uBCD1\uC950.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - MonsterData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 988ff81d2230a324f82fd78556613e1c
-    m_Address: Skills/Heal
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_15_\uD68C\uBCF5.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a8cf76f2cdd95748a3d41ea10d71b5a
+    m_Address: Armors/LeatherArmor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ArmorIcon
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e59f64ef1a86094493f573310e161c6
+    m_Address: Items/Antidote
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ConsumableData
+    - ItemIcon
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9e5aaeb0c96fec742b9f04912b0c3f92
-    m_Address: Rarities/Uncommon
+    m_Address: Assets/ScriptableObjects/Data/Rarities/Rarity_2_UnCommon.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - RarityData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f8842d301d637e4497b4f1e409f297c
+    m_Address: Armors/SpikeArmor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ArmorIcon
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1abb8ae795ec1f4c9b9e7579be6bc01
+    m_Address: Items/DeBuffPotion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ConsumableData
+    - ItemIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a30ba685f1113c14ca63c8cfe2cd3b2e
     m_Address: Skills/DefenseBuff
@@ -388,20 +401,14 @@ MonoBehaviour:
     - SkillData
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: aa33403550ce921449698206e4094f64
-    m_Address: Weapons/Stick
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: abdd5c608ecf563469660f5326c1e2a2
-    m_Address: Rarities/Rare
+    m_Address: Assets/ScriptableObjects/Data/Rarities/Rarity_3_Rare.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - RarityData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ad3e9bc6bf38e0b4aa56fcedf02665a9
-    m_Address: Items/IronPotion
+    m_Address: "Assets/ScriptableObjects/Data/Consumables/Consumable_6_\uCCA0\uC758\uBB3C\uC57D.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
@@ -411,7 +418,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - MonsterData
-    - MonsterSprites
+    - MonsterSprite
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b0e0a5cb72954c94a8e69e3716bc6c34
     m_Address: Skills/SpeedBuff
@@ -420,30 +427,45 @@ MonoBehaviour:
     - SkillData
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b226ce16e60039946bfacacb984169d3
+    m_Address: Weapons/Shield
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    - WeaponIcon
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b49141cdedeba7644bbfb98b3a6498c5
-    m_Address: Skills/DefenseSkillBuff
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_13_\uBC29\uC5B4\uB825\uBC84\uD504.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b54a4dea043eab14ca470c6c911b4440
-    m_Address: Skills/DoubleSlash
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - SkillData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b78cb2016acc9484393143a60142e162
-    m_Address: Items/BuffPotion
+  - m_GUID: b4d2b2d9ffbe8ef45bb8350d38be5d41
+    m_Address: Items/Potion
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
+    - ItemIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b54a4dea043eab14ca470c6c911b4440
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_2_\uC774\uC911\uD0C0\uACA9.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b7f1c40a57ce53147b06227e9d2f1028
+    m_Address: Armors/ChainArmor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ArmorIcon
+    - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bb897ac4a351a634abd3629dfe5408be
     m_Address: Elements/Fire
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Element
     - ElementIcon
+    - ElementerData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bf38ae46665db6540ba3b664684780fc
     m_Address: Skills/HealthBuff
@@ -453,22 +475,29 @@ MonoBehaviour:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bfbca17120f6759429a65d258457399b
-    m_Address: Rarities/Legend
+    m_Address: Assets/ScriptableObjects/Data/Rarities/Rarity_5_Legend.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - RarityData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c077b15258d5c6743a4519c3c5864536
-    m_Address: Accessories/Cloak
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_203_\uB9DD\uD1A0.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c3ac347139d0ead4b81a6a92a068ad7d
-    m_Address: Monsters/Cerberus
+    m_Address: "Assets/ScriptableObjects/Data/Monsters/Monster_5_\uCF08\uBCA0\uB85C\uC2A4.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - MonsterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c42caf8c991a10d4ba742c48c7265ff1
+    m_Address: Armors/FeatherArmor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ArmorIcon
+    - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c5e8719dd371efc4e9e78c42ad66eff7
     m_Address: Skills/DoubleSmash
@@ -485,22 +514,17 @@ MonoBehaviour:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c795b921dbf6241498fd3b5555b55f96
-    m_Address: Skills/CrossSlash
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_4_\uC2ED\uC790\uBCA0\uAE30.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c94760d49f7279c4988fe564077bb895
-    m_Address: Weapons/Wand
+  - m_GUID: c796467282b7ab6408934d53ab95eb00
+    m_Address: Accessories/NeckGlass
     m_ReadOnly: 0
     m_SerializedLabels:
+    - AccessoryIcon
     - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c9727940029f2fd4c9891cb040bbad26
-    m_Address: Items/Potion
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ConsumableData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ce010254754f83d498a0052e3d8ea049
     m_Address: Skills/ManaBall
@@ -509,50 +533,53 @@ MonoBehaviour:
     - SkillData
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ce82f3b978276084398fd4e99668031b
-    m_Address: Armors/PlateArmor
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d22328d9258fa6c448aa639abdf2bd12
-    m_Address: Skills/FireBall
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_6_\uD30C\uC774\uC5B4\uBCFC.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d3e3548e4ee71dd4995aa523380b4595
+    m_Address: Items/Explosion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ConsumableData
+    - ItemIcon
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d5ff14d3bb052b2458609465b27e010f
-    m_Address: Items/FlameBottle
+    m_Address: "Assets/ScriptableObjects/Data/Consumables/Consumable_8_\uD654\uC5FC\uBCD1.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d61c54a4808b98a4889bce97750a3d1e
-    m_Address: Accessories/Necklace
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_202_\uBAA9\uAC78\uC774.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d764a5592262bf047ad27cc3d3367636
+  - m_GUID: d9eb7a88c98cff04b88d17113f05c42d
+    m_Address: Weapons/Stick
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    - WeaponIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dbb0fc2dcb5332c4fb70bb3b3844463e
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_104_\uAC00\uC2DC\uAC11\uC637.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5de63f56c9c938449f34012f22ef502
     m_Address: Items/Coins
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: dbb0fc2dcb5332c4fb70bb3b3844463e
-    m_Address: Armors/SpikeArmor
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: df817168436653446b70cbc8c63442a1
-    m_Address: Accessories/Jewel
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
+    - ItemIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e800ae21ab0f05d41a7d6dce443743c4
-    m_Address: Items/Antidote
+    m_Address: "Assets/ScriptableObjects/Data/Consumables/Consumable_4_\uD574\uB3C5\uC81C.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
@@ -565,25 +592,26 @@ MonoBehaviour:
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eb208a16751e20f47b6dd0c0f260aa3c
-    m_Address: Accessories/Jewel
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_204_\uBCF4\uC11D.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f26a2355239c83947902d8ba8549cd63
-    m_Address: Items/DeBuffPotion
+  - m_GUID: eeb3bbe0d8b2cae4fadedc931c2ecfb3
+    m_Address: Accessories/Jewel
     m_ReadOnly: 0
     m_SerializedLabels:
-    - ConsumableData
+    - AccessoryIcon
+    - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f2dbef45f390253499577c9df244bf06
-    m_Address: Monsters/Slime
+    m_Address: "Assets/ScriptableObjects/Data/Monsters/Monster_1_\uC2AC\uB77C\uC784.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - MonsterData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f4760cd66255ea446a4f176bc3569ccb
-    m_Address: StatusEffects/Stun
+    m_Address: Assets/ScriptableObjects/Data/StatusEffects/StatusEffect_3_Stun.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - StatusEffectData
@@ -592,23 +620,17 @@ MonoBehaviour:
     m_Address: Elements/Neutral
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Element
     - ElementIcon
+    - ElementerData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f778f1a055ac6094897f26af244ef070
-    m_Address: StatusEffects/Burn
+    m_Address: Assets/ScriptableObjects/Data/StatusEffects/StatusEffect_1_Burn.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - StatusEffectData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f89d368e24db4cc43b47f531b0a0e56d
-    m_Address: Weapons/Axe
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EquipmentData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f90647962ff07f54a8664f2665704966
-    m_Address: Armors/FeatherArmor
+    m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_5_\uB3C4\uB07C.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
@@ -627,8 +649,15 @@ MonoBehaviour:
     - SkillData
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fd437ad1471ea90469888d06530e3640
+    m_Address: Accessories/Crown
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AccessoryIcon
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe0c0eb900ed16e4b9f58d2277e264d2
-    m_Address: Skills/SpeedSkillBuff
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_14_\uC18D\uB3C4\uBC84\uD504.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData

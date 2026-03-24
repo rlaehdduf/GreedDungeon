@@ -15,14 +15,15 @@ MonoBehaviour:
   ID: 104
   Name: "\uAC00\uC2DC\uAC11\uC637"
   Type: 1
-  HP: 0
-  MP: 20
-  Attack: 0
+  HP: 20
+  MP: 0
+  Attack: 5
   Defense: 5
-  Speed: 5
-  CriticalRate: 0
-  SkillPoolType: 0
-  BuyPrice: 0
-  SellPrice: 400
-  Description: 
-  IconAddress: 200
+  Speed: 0
+  CriticalRate: 5
+  SkillPoolType: 3
+  BuyPrice: 400
+  SellPrice: 200
+  Description: "\uCD5C\uC120\uC758 \uBC29\uC5B4\uB294 \uACF5\uACA9\uC774\uB2E4 \uAC11\uC637\uC5D0
+    \uAC00\uC2DC\uB97C\uBC15\uC544 \uBC18\uC0AC \uD53C\uD574\uB97C\uC8FC\uB294 \uAC11\uC637\uC774\uB2E4"
+  IconAddress: Armors/SpikeArmor

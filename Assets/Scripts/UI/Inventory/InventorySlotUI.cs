@@ -72,7 +72,7 @@ namespace GreedDungeon.UI.Inventory
                 _quantityText.text = "";
 
             if (_backgroundImage != null)
-                _backgroundImage.color = new Color(0.2f, 0.2f, 0.2f, 1f);
+                _backgroundImage.color = new Color(0f, 0f, 0f, 0f);
         }
 
         private async void SetItemIcon()
@@ -131,15 +131,7 @@ namespace GreedDungeon.UI.Inventory
         private void SetBackgroundColor()
         {
             if (_backgroundImage == null) return;
-
-            if (_item.Rarity != null)
-            {
-                _backgroundImage.color = _item.Rarity.Color * 0.3f;
-            }
-            else
-            {
-                _backgroundImage.color = new Color(0.3f, 0.3f, 0.3f, 1f);
-            }
+            _backgroundImage.color = new Color(0f, 0f, 0f, 0f);
         }
 
         public void OnPointerClick(PointerEventData eventData)

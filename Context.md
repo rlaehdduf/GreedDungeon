@@ -3,7 +3,7 @@
 
 던전 크롤러 턴제 RPG 프로토타입 개발 (Unity 2D)
 
-**현재 작업:** Unity에서 UI 프리팹 구성 (StatusEffectSlotUI 슬롯 할당)
+**현재 작업:** 던전 시스템 개발 대기 중
 
 ## Instructions
 
@@ -11,7 +11,7 @@
 - **Unity 수동 설정 사항은 Setup.md에 기록하고 Git 커밋**
 - **Pathfinder Core DI 시스템 사용** - MonoBehaviour는 `Services.Get<T>()` 사용
 - **SOLID 준수** - 클래스 300행/메서드 10개 제한
-- **순환 의존성 주의** - DI 생성자 주입 대신 `Services.Get<T>()` 런타임 호출로 해결
+- **CSV 데이터 워크플로우**: GameData.xlsm → 자동 CSV 저장 → CSVConverter → ScriptableObject
 
 ## Discoveries
 
@@ -20,6 +20,7 @@
 3. **Unity 코루틴과 Task** - `yield return Task`는 대기하지 않음 → `IsInitialized` 폴링
 4. **툴팁 Raycast 차단** - CanvasGroup `blocksRaycasts = false`
 5. **Addressables 타입** - Sprite 폴더에 아이콘 배치 후 Addressables 등록
+6. **Input System** - 새 Input System 사용 (`UnityEngine.InputSystem`)
 
 ## Accomplished
 
@@ -28,32 +29,26 @@
 - 인벤토리 UI 시스템 (InventoryItem, InventorySlotUI, EquipSlotUI, ItemTooltipUI, ConfirmDropPopup) ✅
 - 버프/디버프 아이콘 시스템 (StatusEffectSlotUI, Addressables 로드) ✅
 - 데이터 워크플로우 (CSV → ScriptableObject, VBA 매크로) ✅
+- 인벤토리 UI 수정 (툴팁 Raycast, ESC 닫기, 외부클릭 닫기) ✅
+- Input System 새 버전 적용 ✅
+- Addressables 자동화 메뉴 (`Tools → Addressables → 🔄 Setup & Build`) ✅
+- 인벤토리 소모품 사용 이벤트 연결 ✅
+- 테스트 코드 정리 (AddTestItemsToInventory만 유지) ✅
 
 ## In Progress
 
-- Unity UI 프리팹 구성 (StatusEffectSlotUI 슬롯 할당)
+- 없음
 
 ## Pending
 
 - 던전 시스템
 
-## Key Files
+## Test Code
 
-```
-Assets/Scripts/
-├── UI/Battle/
-│   ├── StatusEffectSlotUI.cs   ← 아이콘 + Count 텍스트
-│   ├── PlayerStatusUI.cs       ← _debuffSlots, _buffSlots
-│   └── MonsterStatusUI.cs      ← _debuffSlots
-├── Character/
-│   ├── ActiveBuff.cs           ← GetIconAddress()
-│   └── IBattleEntity.cs        ← ActiveStatusEffect
-└── ScriptableObjects/
-    └── StatusEffectDataSO.cs   ← IconAddress
-
-Assets/EditorData/Data/csv/
-└── StatusEffect.csv            ← IconAddress 컬럼
-```
+`BattleController.AddTestItemsToInventory()`:
+- 모든 장비 인벤토리 추가
+- 모든 소모품 x5 인벤토리 추가
+- 골드 1000G 추가
 
 ## Icon Addresses
 

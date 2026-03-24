@@ -17,12 +17,13 @@ MonoBehaviour:
   Type: 2
   HP: 0
   MP: 0
-  Attack: 0
-  Defense: 1
+  Attack: 1
+  Defense: 0
   Speed: 0
-  CriticalRate: 0
-  SkillPoolType: 0
-  BuyPrice: 0
-  SellPrice: 250
-  Description: 
-  IconAddress: 125
+  CriticalRate: 10
+  SkillPoolType: 4
+  BuyPrice: 250
+  SellPrice: 125
+  Description: "\uC77C\uBC18 \uBCF4\uC11D\uBCF4\uB2E4\uB294 \uBABB\uC0DD\uAE34 \uC218\uC694\uAC00
+    \uC5C6\uC744\uAC83\uAC19\uC740 \uBCF4\uC11D\uC774\uB2E4"
+  IconAddress: Accessories/Jewel

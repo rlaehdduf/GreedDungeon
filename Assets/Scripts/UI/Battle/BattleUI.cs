@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using GreedDungeon.Character;
+using GreedDungeon.Items;
 using GreedDungeon.ScriptableObjects;
 using System;
 
@@ -22,6 +23,7 @@ namespace GreedDungeon.UI.Battle
         public event Action OnAttackClicked;
         public event Action OnDefendClicked;
         public event Action OnItemClicked;
+        public event Action<InventoryItem> OnItemUsed;
 
         private Player _cachedPlayer;
 
@@ -76,6 +78,7 @@ namespace GreedDungeon.UI.Battle
             {
                 _inventoryUI.Setup(player);
                 _inventoryUI.Hide();
+                _inventoryUI.OnItemUsed += (item) => OnItemUsed?.Invoke(item);
             }
         }
 

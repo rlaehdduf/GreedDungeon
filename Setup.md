@@ -174,32 +174,43 @@ Battle.unity
 > 스킬 슬롯 3개는 SkillSlotUI 사용 (무기/갑옷/악세서리 스킬)
 
 ### InventoryUI (InventoryPanel에 추가)
-| 필드 | 연결 대상 |
-|------|-----------|
-| `_statsText` | 스탯 Text (HP/MP/ATK/DEF/SPD/CRIT) |
-| `_weaponSlot` | WeaponSlot (EquipSlotUI 컴포넌트) |
-| `_armorSlot` | ArmorSlot (EquipSlotUI 컴포넌트) |
-| `_accessorySlot` | AccessorySlot (EquipSlotUI 컴포넌트) |
-| `_inventoryGrid` | 인벤토리 슬롯 부모 Transform |
-| `_slotPrefab` | InventorySlotUI 프리팹 |
-| `_goldText` | 골드 Text |
-| `_tooltip` | ItemTooltipUI 컴포넌트 |
-| `_dropPopup` | ConfirmDropPopup 컴포넌트 |
+        | 필드 | 연결 대상 |
+        |------|-----------|
+        | `_statsText` | 스탯 Text (HP/MP/ATK/DEF/SPD/CRIT) |
+        | `_weaponSlot` | WeaponSlot (EquipSlotUI 컴포넌트) |
+        | `_armorSlot` | ArmorSlot (EquipSlotUI 컴포넌트) |
+        | `_accessorySlot` | AccessorySlot (EquipSlotUI 컴포넌트) |
+        | `_inventoryGrid` | 인벤토리 슬롯 부모 Transform |
+        | `_slotPrefab` | InventorySlotUI 프리팹 |
+        | `_goldText` | 골드 Text |
+        | `_tooltip` | ItemTooltipUI 컴포넌트 |
+        | `_dropPopup` | ConfirmDropPopup 컴포넌트 |
+        | `_closeArea` | CloseArea (투명 배경 Image) |
 
-> **인벤토리 패널 구조:**
-> ```
-> InventoryPanel (GameObject, 초기 비활성화)
-> ├── StatsText (우상단, 왼쪽 정렬)
-> ├── EquipSlots
-> │   ├── WeaponSlot (EquipSlotUI)
-> │   ├── ArmorSlot (EquipSlotUI)
-> │   └── AccessorySlot (EquipSlotUI)
-> ├── InventoryGrid (Grid Layout Group)
-> │   └── (InventorySlotUI 프리팹으로 21개 생성)
-> ├── GoldText
-> ├── ItemTooltipUI (단일 툴팁)
-> └── ConfirmDropPopup
-> ```
+        > **인벤토리 패널 구조:**
+        > ```
+        > InventoryPanel (GameObject, 초기 비활성화)
+        > ├── CloseArea (Image, Color.a=0, Raycast Target=true) ← 외부 클릭 닫기
+        > │   └── InventoryContent (실제 UI)
+        > │       ├── StatsText (우상단, 왼쪽 정렬)
+        > │       ├── EquipSlots
+        > │       │   ├── WeaponSlot (EquipSlotUI)
+        > │       │   ├── ArmorSlot (EquipSlotUI)
+        > │       │   └── AccessorySlot (EquipSlotUI)
+        > │       ├── InventoryGrid (Grid Layout Group)
+        > │       │   └── (InventorySlotUI 프리팹으로 21개 생성)
+        > │       ├── GoldText
+        > │       ├── ItemTooltipUI (단일 툴팁)
+        > │       └── ConfirmDropPopup
+        > ```
+        >
+        > **CloseArea 설정:**
+        > - Image 컴포넌트 추가 (Color: R=0, G=0, B=0, A=0)
+        > - Raycast Target: true
+        > - Anchors: Stretch/Stretch (전체 화면)
+        > - 클릭 시 인벤토리 닫기
+        >
+        > **ESC 키로도 인벤토리 닫기 가능**
 
 > **Grid Layout Group 설정:**
 > - Cell Size: X=150, Y=150
@@ -241,29 +252,34 @@ Battle.unity
 > ```
 
 ### ItemTooltipUI 구조
-| 필드 | 연결 대상 |
-|------|-----------|
-| `_nameText` | 아이템 이름 Text |
-| `_descriptionText` | 설명 Text |
-| `_statsText` | 스탯 Text |
-| `_skillIcon` | 스킬 아이콘 Image |
-| `_skillTooltipPanel` | 스킬 툴팁 패널 GameObject |
-| `_skillTooltipName` | 스킬 이름 Text |
-| `_skillTooltipDesc` | 스킬 설명 Text |
+        | 필드 | 연결 대상 |
+        |------|-----------|
+        | `_nameText` | 아이템 이름 Text |
+        | `_descriptionText` | 설명 Text |
+        | `_statsText` | 스탯 Text |
+        | `_skillIcon` | 스킬 아이콘 Image |
+        | `_skillTooltipPanel` | 스킬 툴팁 패널 GameObject |
+        | `_skillTooltipName` | 스킬 이름 Text |
+        | `_skillTooltipDesc` | 스킬 설명 Text |
 
-> **툴팁 구조:**
-> ```
-> ItemTooltipUI (GameObject, 초기 비활성화)
-> ├── Background (Image)
-> └── Content (Vertical Layout Group)
->     ├── NameText
->     ├── DescriptionText
->     ├── StatsText
->     ├── SkillIcon (Image)
->     └── SkillTooltipPanel (초기 비활성화)
->         ├── SkillTooltipName
->         └── SkillTooltipDesc
-> ```
+        > **툴팁 구조:**
+        > ```
+        > ItemTooltipUI (GameObject, 초기 비활성화)
+        > ├── CanvasGroup (blocksRaycasts=false) ← 포인터 이벤트 투과
+        > ├── Background (Image)
+        > └── Content (Vertical Layout Group)
+        >     ├── NameText
+        >     ├── DescriptionText
+        >     ├── StatsText
+        >     ├── SkillIcon (Image)
+        >     └── SkillTooltipPanel (초기 비활성화)
+        >         ├── SkillTooltipName
+        >         └── SkillTooltipDesc
+        > ```
+        >
+        > **CanvasGroup 필수 설정:**
+        > - `blocksRaycasts = false` (코드에서 자동 추가되지만 Inspector에서 확인)
+        > - 이 설정이 없으면 툴팁이 포인터 이벤트를 가로채서 슬롯 hover가 끊김
 
 ### ConfirmDropPopup 구조
 | 필드 | 연결 대상 |

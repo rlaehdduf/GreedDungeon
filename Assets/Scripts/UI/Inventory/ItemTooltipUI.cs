@@ -24,6 +24,17 @@ namespace GreedDungeon.UI.Inventory
         private IGameDataManager _gameDataManager;
         private InventoryItem _currentItem;
         private SkillDataSO _cachedSkill;
+        private CanvasGroup _canvasGroup;
+
+        private void Awake()
+        {
+            _canvasGroup = GetComponent<CanvasGroup>();
+            if (_canvasGroup == null)
+            {
+                _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            }
+            _canvasGroup.blocksRaycasts = false;
+        }
 
         private void Start()
         {

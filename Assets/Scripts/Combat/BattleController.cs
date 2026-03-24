@@ -41,14 +41,12 @@ namespace GreedDungeon.Combat
             
             if (!_gameDataManager.IsInitialized)
             {
-                Debug.Log("[BattleController] GameDataManager 초기화 대기 중...");
                 _gameDataManager.InitializeAsync();
                 
                 while (!_gameDataManager.IsInitialized)
                 {
                     yield return null;
                 }
-                Debug.Log("[BattleController] GameDataManager 초기화 완료");
             }
             
             _battleManager.OnBattleStarted += HandleBattleStarted;
@@ -59,18 +57,13 @@ namespace GreedDungeon.Combat
 
         private void SetupUIEvents()
         {
-            Debug.Log($"[BattleController] SetupUIEvents - _battleUI: {_battleUI != null}");
             if (_battleUI != null)
             {
                 _battleUI.OnSkillSelected += HandleSkillSelected;
                 _battleUI.OnAttackClicked += HandleAttackClicked;
                 _battleUI.OnDefendClicked += HandleDefendClicked;
                 _battleUI.OnItemClicked += HandleItemClicked;
-                Debug.Log("[BattleController] UI 이벤트 구독 완료");
-            }
-            else
-            {
-                Debug.LogWarning("[BattleController] _battleUI가 null입니다! Inspector에서 연결하세요.");
+                _battleUI.OnItemUsed += HandleItemUsed;
             }
             
             StartTestBattle();
@@ -78,10 +71,8 @@ namespace GreedDungeon.Combat
 
         private void HandleSkillSelected(int skillId)
         {
-            Debug.Log($"[BattleController] 스킬 선택: {skillId}");
             if (UseSkill(skillId))
             {
-                Debug.Log($"[BattleController] 스킬 사용 성공!");
                 _battleUI?.UpdatePlayerStatus(_testPlayer);
                 _battleUI?.UpdateMonsterStatus(_currentMonster);
                 _skillSlotUI?.UpdateCooldownDisplay();
@@ -90,7 +81,6 @@ namespace GreedDungeon.Combat
 
         private void HandleAttackClicked()
         {
-            Debug.Log("[BattleController] 공격 버튼 클릭");
             _battleManager.ExecuteAttack(_testPlayer, _currentMonster, null);
             _battleUI?.UpdatePlayerStatus(_testPlayer);
             _battleUI?.UpdateMonsterStatus(_currentMonster);
@@ -98,15 +88,37 @@ namespace GreedDungeon.Combat
 
         private void HandleDefendClicked()
         {
-            Debug.Log("[BattleController] 방어 버튼 클릭");
             _battleManager.ExecuteDefend(_testPlayer);
             _battleUI?.UpdatePlayerStatus(_testPlayer);
         }
 
         private void HandleItemClicked()
         {
-            Debug.Log("[BattleController] 아이템 버튼 클릭 - 인벤토리 토글");
             _battleUI?.ToggleInventory();
+        }
+
+        private void HandleItemUsed(Items.InventoryItem item)
+        {
+            if (item == null || item.Type != Items.ItemType.Consumable) return;
+            
+            var target = GetConsumableTarget(item);
+            _battleManager.ExecuteItem(item, target);
+            
+            _battleUI?.UpdatePlayerStatus(_testPlayer);
+            _battleUI?.UpdateMonsterStatus(_currentMonster);
+        }
+
+        private Character.IBattleEntity GetConsumableTarget(Items.InventoryItem item)
+        {
+            if (item.Consumable == null) return _testPlayer;
+            
+            return item.Consumable.Target switch
+            {
+                ConsumableTarget.Player => _testPlayer,
+                ConsumableTarget.Single => _currentMonster,
+                ConsumableTarget.All => _currentMonster,
+                _ => _testPlayer
+            };
         }
 
         private UI.Battle.SkillSlotUI _skillSlotUI;
@@ -126,69 +138,45 @@ namespace GreedDungeon.Combat
 
         public void StartTestBattle()
         {
-            Debug.Log("[BattleController] StartTestBattle 호출됨");
-            if (_gameDataManager == null)
-            {
-                Debug.LogError("[BattleController] _gameDataManager가 null입니다!");
-                return;
-            }
+            if (_gameDataManager == null) return;
             
             var monsterData = _gameDataManager.GetMonsterData(1);
-            if (monsterData == null)
-            {
-                Debug.LogError("[BattleController] monsterData가 null입니다!");
-                return;
-            }
+            if (monsterData == null) return;
             
             _currentMonster = new Monster(monsterData);
             _testPlayer = new Player();
-            Debug.Log($"[BattleController] 플레이어/몬스터 생성 완료 - Player: {_testPlayer != null}, Monster: {_currentMonster != null}");
 
-            EquipTestItems();
+            AddTestItemsToInventory();
             
             if (_battleUI != null)
             {
                 _battleUI.SetupBattle(_testPlayer, _currentMonster);
-                Debug.Log("[BattleController] BattleUI.SetupBattle 호출 완료");
             }
             
             _battleManager.StartBattle(_testPlayer, _currentMonster);
-            Debug.Log("[BattleController] 전투 시작 요청 완료");
         }
 
-        private void EquipTestItems()
+        private void AddTestItemsToInventory()
         {
             var allEquipment = _gameDataManager.GetAllEquipmentData();
-            if (allEquipment == null || allEquipment.Count == 0)
+            if (allEquipment != null)
             {
-                Debug.Log("[BattleController] 장비 데이터 없음");
-                return;
-            }
-
-            int equippedCount = 0;
-            foreach (var equipment in allEquipment)
-            {
-                if (equipment != null && equippedCount < 3)
+                foreach (var equipment in allEquipment)
                 {
-                    if (_testPlayer.TryAddEquipment(equipment))
-                    {
-                        int index = _testPlayer.FindItemIndex(equipment.ID);
-                        if (index >= 0)
-                        {
-                            _testPlayer.EquipItem(index);
-                            equippedCount++;
-                            Debug.Log($"[BattleController] 장비 장착: {equipment.Name} (Type: {equipment.Type}, SkillPool: {equipment.SkillPoolType})");
-                        }
-                    }
+                    _testPlayer.TryAddEquipment(equipment);
                 }
             }
 
-            Debug.Log($"[BattleController] 총 {equippedCount}개 장비 장착 완료");
-            Debug.Log($"[BattleController] 스킬 개수: {_testPlayer.Skills.Count}");
-            foreach (var skill in _testPlayer.Skills)
+            var allConsumables = _gameDataManager.GetAllConsumableData();
+            if (allConsumables != null)
             {
-                Debug.Log($"  - {skill.Name} (Type: {skill.Type}, Effect: {skill.EffectType})");
+                foreach (var consumable in allConsumables)
+                {
+                    _testPlayer.TryAddConsumable(consumable, 5);
+                }
             }
+
+            _testPlayer.AddGold(1000);
         }
 
         public bool UseSkill(int skillId)

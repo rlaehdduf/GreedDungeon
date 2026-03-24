@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetSettings
-  m_DefaultGroup: f5b207d8f4b0e89419ce3c98850537d6
+  m_DefaultGroup: dfbcf8b871df4484abb9d8745179ccfd
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: f42373a3d01c6542ccdca00ab0a62d8f
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -51,7 +51,7 @@ MonoBehaviour:
   m_CheckForContentUpdateRestrictionsOption: 0
   m_MonoScriptBundleCustomNaming: 
   m_RemoteCatalogBuildPath:
-    m_Id: 
+    m_Id: 72ff9b2e5467af4469e7d3a9f5fbba80
   m_RemoteCatalogLoadPath:
     m_Id: 
   m_ContentStateBuildPathProfileVariableName: 
@@ -67,49 +67,53 @@ MonoBehaviour:
   m_ProfileSettings:
     m_Profiles:
     - m_InheritedParent: 
-      m_Id: 0174486d60c6c3d488549fe3cbe95f87
+      m_Id: c9a612fb8a53e2449869944119d95086
       m_ProfileName: Default
       m_Values:
-      - m_Id: 1951e7c2baf48794dbbc805004688ae7
-        m_Value: <undefined>
-      - m_Id: 70a3488c0819a984b9868b19cfe29aea
-        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
-      - m_Id: b5b7d3124e5a51348be0461e34c65ba3
+      - m_Id: 0abbe84298559a84ab6207acce831df2
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
-      - m_Id: da3b5c2d337962a48b929471b8e8f752
-        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
-      - m_Id: f61ce07568624bf4baa62813b53fcd09
+      - m_Id: 72ff9b2e5467af4469e7d3a9f5fbba80
         m_Value: 'ServerData/[BuildTarget]'
+      - m_Id: 872737bc0f85b894092f3c1fb0b90392
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+      - m_Id: 8e07ee37d0539c94fb3dc6a78cc2a6bc
+        m_Value: <undefined>
+      - m_Id: a9896c5e74eac9f47ad9cfdbffe19ad5
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
     m_ProfileEntryNames:
-    - m_Id: 1951e7c2baf48794dbbc805004688ae7
-      m_Name: Remote.LoadPath
-      m_InlineUsage: 0
-    - m_Id: 70a3488c0819a984b9868b19cfe29aea
-      m_Name: Local.BuildPath
-      m_InlineUsage: 0
-    - m_Id: b5b7d3124e5a51348be0461e34c65ba3
+    - m_Id: 0abbe84298559a84ab6207acce831df2
       m_Name: Local.LoadPath
       m_InlineUsage: 0
-    - m_Id: da3b5c2d337962a48b929471b8e8f752
-      m_Name: BuildTarget
-      m_InlineUsage: 0
-    - m_Id: f61ce07568624bf4baa62813b53fcd09
+    - m_Id: 72ff9b2e5467af4469e7d3a9f5fbba80
       m_Name: Remote.BuildPath
+      m_InlineUsage: 0
+    - m_Id: 872737bc0f85b894092f3c1fb0b90392
+      m_Name: Local.BuildPath
+      m_InlineUsage: 0
+    - m_Id: 8e07ee37d0539c94fb3dc6a78cc2a6bc
+      m_Name: Remote.LoadPath
+      m_InlineUsage: 0
+    - m_Id: a9896c5e74eac9f47ad9cfdbffe19ad5
+      m_Name: BuildTarget
       m_InlineUsage: 0
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
     - default
-    - SkillData
-    - MonsterData
     - EquipmentData
+    - SkillData
     - ConsumableData
+    - MonsterData
+    - ElementerData
     - RarityData
     - StatusEffectData
-    - MonsterSprites
+    - WeaponIcon
+    - ArmorIcon
+    - AccessoryIcon
+    - ItemIcon
     - SkillIcon
-    - Element
     - ElementIcon
+    - MonsterSprite
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: f51e8900585755f4d895135470bdb862, type: 2}
@@ -122,4 +126,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e3b2ce3998441b247b1a3f48b9872a26, type: 2}
   - {fileID: 11400000, guid: 82d69e9d384db5a41b059005497c27c4, type: 2}
   - {fileID: 11400000, guid: 5da2527dc331ca546abb1fec1d7a6dc6, type: 2}
-  m_ActiveProfileId: 0174486d60c6c3d488549fe3cbe95f87
+  m_ActiveProfileId: c9a612fb8a53e2449869944119d95086

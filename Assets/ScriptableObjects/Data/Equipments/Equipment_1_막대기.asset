@@ -17,12 +17,13 @@ MonoBehaviour:
   Type: 0
   HP: 0
   MP: 0
-  Attack: 0
-  Defense: 3
+  Attack: 3
+  Defense: 0
   Speed: 0
-  CriticalRate: 0
+  CriticalRate: 2
   SkillPoolType: 0
-  BuyPrice: 0
-  SellPrice: 50
-  Description: 
-  IconAddress: 25
+  BuyPrice: 50
+  SellPrice: 25
+  Description: "\uAE38 \uAC00\uB2E4\uBCF4\uBA74 \uD754\uD788 \uBCF4\uC774\uB294 \uB098\uBB34
+    \uB9C9\uB300\uAE30\uB2E4"
+  IconAddress: Weapons/Stick

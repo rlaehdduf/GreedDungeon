@@ -19,3 +19,4 @@ MonoBehaviour:
   DamageMaxPercent: 0.05
   Duration: 3
   SkipTurn: 0
+  IconAddress: Skills/PoisonDeBuff
