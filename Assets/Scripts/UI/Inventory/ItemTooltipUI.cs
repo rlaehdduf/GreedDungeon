@@ -77,10 +77,12 @@ namespace GreedDungeon.UI.Inventory
 
             if (item.Rarity != null)
             {
+                Debug.Log($"[ItemTooltipUI] SetName: {item.Name}, Rarity: {item.Rarity.Name}, Color: {item.Rarity.Color}");
                 _nameText.color = item.Rarity.Color;
             }
             else
             {
+                Debug.Log($"[ItemTooltipUI] SetName: {item.Name}, Rarity is null");
                 _nameText.color = Color.white;
             }
         }

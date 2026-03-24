@@ -4,6 +4,7 @@ using GreedDungeon.Core;
 using GreedDungeon.Items;
 using GreedDungeon.ScriptableObjects;
 using GreedDungeon.Skill;
+using UnityEngine;
 
 namespace GreedDungeon.Character
 {
@@ -27,6 +28,7 @@ namespace GreedDungeon.Character
         
         public event System.Action OnInventoryChanged;
         public event System.Action OnLevelUp;
+        public event System.Action OnSkillsChanged;
 
         public Player()
         {
@@ -129,6 +131,9 @@ namespace GreedDungeon.Character
             
             var rarity = RollRarity();
             var skill = RollSkillForEquipment(equipment.SkillPoolType, rarity);
+            
+            Debug.Log($"[Player] 장비 추가: {equipment.Name}, SkillPoolType: {equipment.SkillPoolType}, Rarity: {rarity?.Name}, Skill: {skill?.Name ?? "null"}");
+            
             var item = new InventoryItem(equipment, rarity, skill);
             return TryAddItem(item);
         }
@@ -198,6 +203,10 @@ namespace GreedDungeon.Character
             
             if (currentEquipped != null)
             {
+                if (currentEquipped.Skill != null)
+                {
+                    RemoveSkill(currentEquipped.Skill);
+                }
                 _inventory[index] = currentEquipped;
             }
             else
@@ -206,8 +215,12 @@ namespace GreedDungeon.Character
             }
             
             _equippedItems[item.Equipment.Type] = item;
-            if (item.Skill != null) AddSkill(item.Skill);
+            if (item.Skill != null)
+            {
+                AddSkill(item.Skill);
+            }
             
+            OnSkillsChanged?.Invoke();
             OnInventoryChanged?.Invoke();
             return true;
         }
@@ -220,8 +233,15 @@ namespace GreedDungeon.Character
             int emptySlot = FindEmptySlot();
             if (emptySlot < 0) return false;
             
+            if (equipped.Skill != null)
+            {
+                RemoveSkill(equipped.Skill);
+            }
+            
             _inventory[emptySlot] = equipped;
             _equippedItems.Remove(type);
+            
+            OnSkillsChanged?.Invoke();
             OnInventoryChanged?.Invoke();
             return true;
         }
@@ -229,6 +249,12 @@ namespace GreedDungeon.Character
         public InventoryItem GetEquippedItem(EquipmentType type)
         {
             return _equippedItems.TryGetValue(type, out var item) ? item : null;
+        }
+
+        public SkillDataSO GetEquippedSkill(EquipmentType type)
+        {
+            var item = GetEquippedItem(type);
+            return item?.Skill;
         }
 
         public int FindItemIndex(int itemId)
@@ -362,6 +388,40 @@ namespace GreedDungeon.Character
             }
             
             return rarities[0];
+        }
+
+        private RarityDataSO GetHighestRarity()
+        {
+            if (!Services.IsInitialized) return null;
+            
+            var gameDataManager = Services.Get<IGameDataManager>();
+            var rarities = gameDataManager.GetAllRarityData();
+            
+            if (rarities == null || rarities.Count == 0) return null;
+            
+            RarityDataSO highest = rarities[0];
+            foreach (var r in rarities)
+            {
+                if (r.HasSkill && (highest == null || !highest.HasSkill || r.StatMultiplier > highest.StatMultiplier))
+                {
+                    highest = r;
+                }
+            }
+            return highest;
+        }
+
+        public bool TryAddEquipmentWithHighestRarity(EquipmentDataSO equipment)
+        {
+            if (equipment == null) return false;
+            if (IsInventoryFull()) return false;
+            
+            var rarity = GetHighestRarity();
+            var skill = RollSkillForEquipment(equipment.SkillPoolType, rarity);
+            
+            Debug.Log($"[Player] 장비 추가(최고레어도): {equipment.Name}, SkillPoolType: {equipment.SkillPoolType}, Rarity: {rarity?.Name}, Skill: {skill?.Name ?? "null"}");
+            
+            var item = new InventoryItem(equipment, rarity, skill);
+            return TryAddItem(item);
         }
 
         private SkillDataSO RollSkillForEquipment(SkillPoolType poolType, RarityDataSO rarity)

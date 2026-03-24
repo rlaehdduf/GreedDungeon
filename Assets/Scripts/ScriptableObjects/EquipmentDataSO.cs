@@ -12,10 +12,11 @@ namespace GreedDungeon.ScriptableObjects
 
     public enum SkillPoolType
     {
-        Common,
+        Neutral,
         Melee,
         Magic,
         Passive,
+        Buff,
         Random
     }
 

@@ -131,7 +131,16 @@ namespace GreedDungeon.UI.Inventory
         private void SetBackgroundColor()
         {
             if (_backgroundImage == null) return;
-            _backgroundImage.color = new Color(0f, 0f, 0f, 0f);
+            
+            if (_item != null && _item.Rarity != null)
+            {
+                Color rarityColor = _item.Rarity.Color;
+                _backgroundImage.color = new Color(rarityColor.r * 0.3f, rarityColor.g * 0.3f, rarityColor.b * 0.3f, 0.8f);
+            }
+            else
+            {
+                _backgroundImage.color = new Color(0f, 0f, 0f, 0f);
+            }
         }
 
         public void OnPointerClick(PointerEventData eventData)

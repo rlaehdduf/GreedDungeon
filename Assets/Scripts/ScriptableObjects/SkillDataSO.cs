@@ -5,7 +5,7 @@ namespace GreedDungeon.ScriptableObjects
 {
     public enum SkillType
     {
-        Common,
+        Neutral,
         Melee,
         Magic,
         Passive,

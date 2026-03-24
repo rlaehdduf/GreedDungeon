@@ -257,6 +257,12 @@ namespace GreedDungeon.Character
                 _skills.Add(skill);
         }
 
+        protected void RemoveSkill(SkillDataSO skill)
+        {
+            if (skill == null) return;
+            _skills.Remove(skill);
+        }
+
         protected void SetInitialHP(int hp)
         {
             CurrentHP = hp;

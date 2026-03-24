@@ -501,12 +501,12 @@ public class CSVConverter : EditorWindow
     {
         return value switch
         {
-            "Common" => SkillType.Common,
+            "Neutral" => SkillType.Neutral,
             "Melee" => SkillType.Melee,
             "Magic" => SkillType.Magic,
             "Passive" => SkillType.Passive,
             "Buff" => SkillType.Buff,
-            _ => SkillType.Common
+            _ => SkillType.Neutral
         };
     }
 
@@ -548,12 +548,13 @@ private static SkillPoolType ParseSkillPoolType(string value)
         {
             return value switch
             {
-                "Common" => SkillPoolType.Common,
+                "Neutral" => SkillPoolType.Neutral,
                 "Melee" => SkillPoolType.Melee,
                 "Magic" => SkillPoolType.Magic,
                 "Passive" => SkillPoolType.Passive,
+                "Buff" => SkillPoolType.Buff,
                 "Random" => SkillPoolType.Random,
-                _ => SkillPoolType.Common
+                _ => SkillPoolType.Neutral
             };
         }
 

@@ -167,7 +167,7 @@ namespace GreedDungeon.Combat
             {
                 foreach (var equipment in allEquipment)
                 {
-                    _testPlayer.TryAddEquipment(equipment);
+                    _testPlayer.TryAddEquipmentWithHighestRarity(equipment);
                 }
             }
 

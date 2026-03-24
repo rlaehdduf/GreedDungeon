@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: def1d029482283b4ebe75910398d54f0, type: 3}
-  m_Name: "Skill_4_\uC2ED\uC790\uBCA0\uAE30"
+  m_Name: "Skill_5_\uC2ED\uC790\uBCA0\uAE30"
   m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.SkillDataSO
-  ID: 4
+  ID: 5
   Name: "\uC2ED\uC790\uBCA0\uAE30"
   Type: 1
   MPCost: 20

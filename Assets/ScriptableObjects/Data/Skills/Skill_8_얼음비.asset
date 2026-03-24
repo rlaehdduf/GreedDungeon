@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: def1d029482283b4ebe75910398d54f0, type: 3}
-  m_Name: "Skill_8_\uACF5\uACA9\uB825\uC99D\uAC00"
+  m_Name: "Skill_8_\uC5BC\uC74C\uBE44"
   m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.SkillDataSO
   ID: 8
-  Name: "\uACF5\uACA9\uB825\uC99D\uAC00"
-  Type: 3
-  MPCost: 0
-  Description: "\uACF5\uACA9\uB825\uC774 5 \uC99D\uAC00\uD569\uB2C8\uB2E4"
-  EffectType: 1
-  EffectValue: 5
-  ValueFloat: i
-  HitCount: 0
+  Name: "\uC5BC\uC74C\uBE44"
+  Type: 2
+  MPCost: 20
+  Description: "\uC801\uB4E4\uC5D0\uAC8C \uAD11\uC5ED \uACF5\uACA9"
+  EffectType: 0
+  EffectValue: 0.6
+  ValueFloat: m
+  HitCount: 3
   Duration: 0
-  Target: 2
+  Target: 1
   StatusEffectID: 
   StatusEffectChance: 0
-  Cooldown: 0
+  Cooldown: 3
   Tier: 2
-  IconAddress: Skills/PowerBuff
+  IconAddress: Skills/IceRain
   Element: 0

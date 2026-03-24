@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: def1d029482283b4ebe75910398d54f0, type: 3}
-  m_Name: "Skill_2_\uC774\uC911\uD0C0\uACA9"
+  m_Name: "Skill_7_\uD30C\uC774\uC5B4\uBCFC"
   m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.SkillDataSO
-  ID: 2
-  Name: "\uC774\uC911\uD0C0\uACA9"
-  Type: 0
-  MPCost: 12
-  Description: "\uC801\uC5D0\uAC8C \uB450\uBC88 \uACF5\uACA9"
+  ID: 7
+  Name: "\uD30C\uC774\uC5B4\uBCFC"
+  Type: 2
+  MPCost: 18
+  Description: "\uC801\uC5D0\uAC8C \uD654\uC0C1 \uACF5\uACA9"
   EffectType: 0
-  EffectValue: 0.8
+  EffectValue: 2
   ValueFloat: m
-  HitCount: 2
-  Duration: 0
+  HitCount: 1
+  Duration: 2
   Target: 0
-  StatusEffectID: 
-  StatusEffectChance: 0
-  Cooldown: 1
+  StatusEffectID: Burn
+  StatusEffectChance: 50
+  Cooldown: 2
   Tier: 2
-  IconAddress: Skills/DoubleSmash
+  IconAddress: Skills/FireBall
   Element: 0

@@ -335,6 +335,12 @@ MonoBehaviour:
     - MonsterData
     - MonsterSprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 93f8e19f1cc90c149884465cd256e4a3
+    m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_16_\uD68C\uBCF5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 953cb894c4f1ea04aaf1b4ca83004836
     m_Address: Skills/DoubleSlash
     m_ReadOnly: 0

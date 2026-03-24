@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: def1d029482283b4ebe75910398d54f0, type: 3}
-  m_Name: "Skill_9_\uBC29\uC5B4\uB825\uC99D\uAC00"
+  m_Name: "Skill_4_\uC774\uC911\uBCA0\uAE30"
   m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.SkillDataSO
-  ID: 9
-  Name: "\uBC29\uC5B4\uB825\uC99D\uAC00"
-  Type: 3
-  MPCost: 0
-  Description: "\uBC29\uC5B4\uB825\uC774 5 \uC99D\uAC00\uD569\uB2C8\uB2E4"
-  EffectType: 1
-  EffectValue: 5
-  ValueFloat: i
-  HitCount: 0
+  ID: 4
+  Name: "\uC774\uC911\uBCA0\uAE30"
+  Type: 1
+  MPCost: 15
+  Description: "\uC801\uC5D0\uAC8C \uB450\uBC88 \uACF5\uACA9"
+  EffectType: 0
+  EffectValue: 0.7
+  ValueFloat: m
+  HitCount: 2
   Duration: 0
-  Target: 2
+  Target: 0
   StatusEffectID: 
   StatusEffectChance: 0
-  Cooldown: 0
-  Tier: 2
-  IconAddress: Skills/DefenseBuff
+  Cooldown: 1
+  Tier: 1
+  IconAddress: Skills/DoubleSlash
   Element: 0

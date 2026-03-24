@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: def1d029482283b4ebe75910398d54f0, type: 3}
-  m_Name: "Skill_6_\uD30C\uC774\uC5B4\uBCFC"
+  m_Name: "Skill_16_\uD68C\uBCF5"
   m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.SkillDataSO
-  ID: 6
-  Name: "\uD30C\uC774\uC5B4\uBCFC"
-  Type: 2
-  MPCost: 18
-  Description: "\uC801\uC5D0\uAC8C \uD654\uC0C1 \uACF5\uACA9"
-  EffectType: 0
-  EffectValue: 2
+  ID: 16
+  Name: "\uD68C\uBCF5"
+  Type: 4
+  MPCost: 20
+  Description: "\uCD5C\uB300\uCCB4\uB825 25%\uB9CC\uD07C \uD68C\uBCF5\uD569\uB2C8\uB2E4"
+  EffectType: 2
+  EffectValue: 1.25
   ValueFloat: m
-  HitCount: 1
-  Duration: 2
-  Target: 0
-  StatusEffectID: Burn
-  StatusEffectChance: 50
-  Cooldown: 2
+  HitCount: 0
+  Duration: 0
+  Target: 2
+  StatusEffectID: 
+  StatusEffectChance: 0
+  Cooldown: 3
   Tier: 2
-  IconAddress: Skills/FireBall
+  IconAddress: Skills/Heal
   Element: 0

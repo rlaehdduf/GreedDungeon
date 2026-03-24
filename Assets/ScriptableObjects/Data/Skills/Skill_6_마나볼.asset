@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: def1d029482283b4ebe75910398d54f0, type: 3}
-  m_Name: "Skill_7_\uC5BC\uC74C\uBE44"
+  m_Name: "Skill_6_\uB9C8\uB098\uBCFC"
   m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.SkillDataSO
-  ID: 7
-  Name: "\uC5BC\uC74C\uBE44"
+  ID: 6
+  Name: "\uB9C8\uB098\uBCFC"
   Type: 2
-  MPCost: 20
-  Description: "\uC801\uB4E4\uC5D0\uAC8C \uAD11\uC5ED \uACF5\uACA9"
+  MPCost: 8
+  Description: "\uC801\uC5D0\uAC8C \uB9C8\uB825 \uACF5\uACA9"
   EffectType: 0
-  EffectValue: 0.6
+  EffectValue: 1.3
   ValueFloat: m
-  HitCount: 3
+  HitCount: 1
   Duration: 0
-  Target: 1
+  Target: 0
   StatusEffectID: 
   StatusEffectChance: 0
-  Cooldown: 3
-  Tier: 2
-  IconAddress: Skills/IceRain
+  Cooldown: 1
+  Tier: 1
+  IconAddress: Skills/ManaBall
   Element: 0

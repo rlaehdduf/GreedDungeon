@@ -1,9 +1,9 @@
 ﻿ID,Name,Type,Description,HP,MP,Attack,Defense,Speed,CriticalRate,SkillPoolType,BuyPrice,SellPrice,IconAddress
-1,막대기,Weapon,길 가다보면 흔히 보이는 나무 막대기다,0,0,3,0,0,2,Common,50,25,Weapons/Stick
+1,막대기,Weapon,길 가다보면 흔히 보이는 나무 막대기다,0,0,3,0,0,2,Neutral,50,25,Weapons/Stick
 2,검,Weapon,날이 무뎌진 낡은 검이다,0,0,10,0,0,8,Melee,200,100,Weapons/Sword
-3,방패,Weapon,오랫동안 방치된듯 거미줄이 쳐진 먼지많은 방패다,20,0,4,3,-5,1,Common,180,90,Weapons/Shield
+3,방패,Weapon,오랫동안 방치된듯 거미줄이 쳐진 먼지많은 방패다,20,0,4,3,-5,1,Neutral,180,90,Weapons/Shield
 4,완드,Weapon,마법사의 시체에서 주운 완드다 아직까진 보석의 빛이 꺼지지않았다,0,30,7,0,0,3,Magic,250,125,Weapons/Wand
-5,도끼,Weapon,평범한 사람이 휘두르면 바로 지칠것같은 커다란 도끼다,0,0,8,0,-3,10,Common,220,110,Weapons/Axe
+5,도끼,Weapon,평범한 사람이 휘두르면 바로 지칠것같은 커다란 도끼다,0,0,8,0,-3,10,Neutral,220,110,Weapons/Axe
 101,가죽갑옷,Armor,동물의 가죽으로 만들어진 갑옷이다,15,0,0,3,2,0,Passive,150,75,Armors/LeatherArmor
 102,사슬갑옷,Armor,사슬들을 꼬아놓은 갑옷이다 움직일때마다 짤랑인다,30,0,0,7,-2,0,Passive,300,150,Armors/ChainArmor
 103,강철갑옷,Armor,너무 단단하고 무거운 갑옷이다 갑옷을입고 생활하긴 힘들것같다,50,0,0,12,-8,0,Passive,550,275,Armors/PlateArmor

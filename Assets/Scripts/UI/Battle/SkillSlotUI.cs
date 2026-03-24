@@ -202,19 +202,40 @@ namespace GreedDungeon.UI.Battle
 
         public void SetPlayer(Player player)
         {
+            if (_player != null)
+            {
+                _player.OnSkillsChanged -= UpdateSlots;
+            }
+            
             _player = player;
+            
+            if (_player != null)
+            {
+                _player.OnSkillsChanged += UpdateSlots;
+            }
+            
             UpdateSlots();
+        }
+
+        private void OnDestroy()
+        {
+            if (_player != null)
+            {
+                _player.OnSkillsChanged -= UpdateSlots;
+            }
         }
 
         public void UpdateSlots()
         {
             if (_player == null) return;
 
-            var skills = _player.Skills;
+            SkillDataSO weaponSkill = _player.GetEquippedSkill(EquipmentType.Weapon);
+            SkillDataSO armorSkill = _player.GetEquippedSkill(EquipmentType.Armor);
+            SkillDataSO accessorySkill = _player.GetEquippedSkill(EquipmentType.Accessory);
             
-            UpdateSlot(_slot1, 0, skills.Count > 0 ? skills[0] : null);
-            UpdateSlot(_slot2, 1, skills.Count > 1 ? skills[1] : null);
-            UpdateSlot(_slot3, 2, skills.Count > 2 ? skills[2] : null);
+            UpdateSlot(_slot1, 0, weaponSkill);
+            UpdateSlot(_slot2, 1, armorSkill);
+            UpdateSlot(_slot3, 2, accessorySkill);
         }
 
         private async void UpdateSlot(Button slot, int index, SkillDataSO skill)

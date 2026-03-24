@@ -62,12 +62,12 @@ namespace GreedDungeon.Skill
         {
             return skillType switch
             {
-                SkillType.Common => SkillPoolType.Common,
+                SkillType.Neutral => SkillPoolType.Neutral,
                 SkillType.Melee => SkillPoolType.Melee,
                 SkillType.Magic => SkillPoolType.Magic,
                 SkillType.Passive => SkillPoolType.Passive,
-                SkillType.Buff => SkillPoolType.Common,
-                _ => SkillPoolType.Common
+                SkillType.Buff => SkillPoolType.Buff,
+                _ => SkillPoolType.Neutral
             };
         }
 
@@ -92,7 +92,7 @@ namespace GreedDungeon.Skill
             
             if (!_skillPools.TryGetValue(poolType, out var pool) || pool.Count == 0)
             {
-                Debug.Log($"[SkillManager] {poolType} 풀이 비어있음");
+                Debug.LogWarning($"[SkillManager] {poolType} 풀이 비어있음");
                 return null;
             }
 
@@ -105,8 +105,8 @@ namespace GreedDungeon.Skill
 
             if (filteredSkills.Count == 0)
             {
-                Debug.Log($"[SkillManager] {poolType} 풀에 tier {minTier}-{maxTier} 스킬 없음, 풀 전체 사용");
-                return pool[UnityEngine.Random.Range(0, pool.Count)];
+                Debug.LogWarning($"[SkillManager] {poolType} 풀에 tier {minTier}-{maxTier} 스킬 없음");
+                return null;
             }
 
             return filteredSkills[UnityEngine.Random.Range(0, filteredSkills.Count)];
