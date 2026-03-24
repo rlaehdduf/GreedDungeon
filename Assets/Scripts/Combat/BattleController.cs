@@ -73,8 +73,6 @@ namespace GreedDungeon.Combat
 
         private void HandleSkillSelected(int skillId)
         {
-            _battleUI?.AddBattleLog("[플레이어의 턴]");
-            
             if (UseSkill(skillId))
             {
                 _battleManager.EndTurn();
@@ -86,8 +84,6 @@ namespace GreedDungeon.Combat
 
         private void HandleAttackClicked()
         {
-            _battleUI?.AddBattleLog("[플레이어의 턴]");
-            
             _battleManager.ExecuteAttack(_testPlayer, _currentMonster, null);
             _battleManager.EndTurn();
             _battleUI?.UpdatePlayerStatus(_testPlayer);
@@ -96,8 +92,6 @@ namespace GreedDungeon.Combat
 
         private void HandleDefendClicked()
         {
-            _battleUI?.AddBattleLog("[플레이어의 턴]");
-            
             _battleManager.ExecuteDefend(_testPlayer);
             _battleManager.EndTurn();
             _battleUI?.UpdatePlayerStatus(_testPlayer);
@@ -111,8 +105,6 @@ namespace GreedDungeon.Combat
         private void HandleItemUsed(Items.InventoryItem item)
         {
             if (item == null || item.Type != Items.ItemType.Consumable) return;
-            
-            _battleUI?.AddBattleLog("[플레이어의 턴]");
             
             var target = GetConsumableTarget(item);
             _battleManager.ExecuteItem(item, target);
