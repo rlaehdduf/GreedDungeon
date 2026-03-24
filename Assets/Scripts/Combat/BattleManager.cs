@@ -13,6 +13,7 @@ namespace GreedDungeon.Combat
     {
         event Action<Monster> OnBattleStarted;
         event Action<Monster, int> OnMonsterDamaged;
+        event Action<string> OnBattleLog;
         
         void StartBattle(Player player, Monster monster);
         void ExecuteAttack(IBattleEntity attacker, IBattleEntity defender, SkillDataSO skill);
@@ -39,12 +40,19 @@ namespace GreedDungeon.Combat
 
         public event Action<Monster> OnBattleStarted;
         public event Action<Monster, int> OnMonsterDamaged;
+        public event Action<string> OnBattleLog;
 
         public BattleManager(IDamageCalculator damageCalculator, ITurnManager turnManager, IGameDataManager gameDataManager)
         {
             _damageCalculator = damageCalculator;
             _turnManager = turnManager;
             _gameDataManager = gameDataManager;
+        }
+
+        private void LogBattle(string message)
+        {
+            Debug.Log(message);
+            OnBattleLog?.Invoke(message);
         }
 
         public void StartBattle(Player player, Monster monster)
@@ -61,7 +69,7 @@ namespace GreedDungeon.Combat
             _monster.OnDamaged += HandleMonsterDamaged;
             OnBattleStarted?.Invoke(_monster);
 
-            Debug.Log($"전투 시작! {_monster.Name} vs Player");
+            LogBattle($"전투 시작! {_monster.Name} vs Player");
         }
 
         private void HandleMonsterDamaged(int damage)
@@ -84,47 +92,59 @@ namespace GreedDungeon.Combat
             string attackerName = attacker == _player ? "플레이어" : attacker.Name;
             string skillName = skill != null ? $"[{skill.Name}]" : "[기본공격]";
             
-            Debug.Log($"[공격] {attackerName} → {defender.Name} {skillName}");
+            LogBattle($"[공격] {attackerName} → {defender.Name} {skillName}");
 
             if (skill != null && skill.MPCost > 0)
             {
                 if (attacker.CurrentMP < skill.MPCost)
                 {
-                    Debug.Log($"  [실패] MP 부족! (필요: {skill.MPCost}, 현재: {attacker.CurrentMP})");
+                    LogBattle($"  [실패] MP 부족! (필요: {skill.MPCost}, 현재: {attacker.CurrentMP})");
                     return;
                 }
                 attacker.UseMP(skill.MPCost);
-                Debug.Log($"  MP 소모: {skill.MPCost} → {attacker.CurrentMP}/{attacker.TotalStats.MaxMP}");
+                LogBattle($"  MP 소모: {skill.MPCost} → {attacker.CurrentMP}/{attacker.TotalStats.MaxMP}");
             }
 
-            var result = _damageCalculator.CalculateDamage(attacker, defender, skill);
-
-            Debug.Log($"  [데미지 계산]");
-            Debug.Log($"    기본 공격력: {result.BaseAttack}");
-            Debug.Log($"    스킬 배율: x{result.SkillMultiplier}");
-            Debug.Log($"    기본 데미지: {result.BaseDamage}");
-            Debug.Log($"    방어력 감소: -{result.Defense / 2} (DEF: {result.Defense})");
-            Debug.Log($"    방어 후 데미지: {result.DamageAfterDefense}");
-
-            if (result.IsCritical)
+            int hitCount = skill?.HitCount ?? 1;
+            
+            for (int hit = 0; hit < hitCount; hit++)
             {
-                Debug.Log($"    ★ 크리티컬! x{result.CriticalMultiplier}");
+                if (defender.IsDead) break;
+                
+                if (hitCount > 1)
+                {
+                    LogBattle($"  ── {hit + 1}타 ──");
+                }
+
+                var result = _damageCalculator.CalculateDamage(attacker, defender, skill);
+
+                LogBattle($"  [데미지 계산]");
+                LogBattle($"    기본 공격력: {result.BaseAttack}");
+                LogBattle($"    스킬 배율: x{result.SkillMultiplier}");
+                LogBattle($"    기본 데미지: {result.BaseDamage}");
+                LogBattle($"    방어력 감소: -{result.Defense / 2} (DEF: {result.Defense})");
+                LogBattle($"    방어 후 데미지: {result.DamageAfterDefense}");
+
+                if (result.IsCritical)
+                {
+                    LogBattle($"    ★ 크리티컬! x{result.CriticalMultiplier}");
+                }
+
+                if (result.ElementMultiplier != 1f)
+                {
+                    string elementText = result.ElementMultiplier > 1 ? "약점 공격!" : "저항당함...";
+                    LogBattle($"    속성 [{result.AttackElement} → {result.DefenderElement}]: x{result.ElementMultiplier} ({elementText})");
+                }
+
+                if (result.IsDefending)
+                {
+                    LogBattle($"    ■ 방어 태세! 데미지 {result.DefenseMultiplier * 100}%로 감소");
+                }
+
+                LogBattle($"    ▶ 최종 데미지: {result.Damage}");
+
+                defender.TakeDamage(result.Damage);
             }
-
-            if (result.ElementMultiplier != 1f)
-            {
-                string elementText = result.ElementMultiplier > 1 ? "약점 공격!" : "저항당함...";
-                Debug.Log($"    속성 [{result.AttackElement} → {result.DefenderElement}]: x{result.ElementMultiplier} ({elementText})");
-            }
-
-            if (result.IsDefending)
-            {
-                Debug.Log($"    ■ 방어 태세! 데미지 {result.DefenseMultiplier * 100}%로 감소");
-            }
-
-            Debug.Log($"    ▶ 최종 데미지: {result.Damage}");
-
-            defender.TakeDamage(result.Damage);
 
             ApplyStatusEffectFromSkill(skill, defender);
 
@@ -140,7 +160,7 @@ namespace GreedDungeon.Combat
 
             string defenderName = defender == _player ? "플레이어" : defender.Name;
             defender.StartDefend();
-            Debug.Log($"[방어] {defenderName}이(가) 방어 태세를 취함");
+            LogBattle($"[방어] {defenderName}이(가) 방어 태세를 취함");
         }
 
         public bool ExecuteItem(InventoryItem item, IBattleEntity target)
@@ -150,14 +170,14 @@ namespace GreedDungeon.Combat
             if (target == null || target.IsDead) return false;
 
             var data = item.Consumable;
-            Debug.Log($"[아이템] {data.Name} 사용 → {target.Name}");
+            LogBattle($"[아이템] {data.Name} 사용 → {target.Name}");
 
             switch (data.EffectType)
             {
                 case ConsumableEffectType.Heal:
                     int healAmount = (int)data.EffectValue;
                     target.Heal(healAmount);
-                    Debug.Log($"  HP 회복: +{healAmount} → {target.CurrentHP}/{target.TotalStats.MaxHP}");
+                    LogBattle($"  HP 회복: +{healAmount} → {target.CurrentHP}/{target.TotalStats.MaxHP}");
                     break;
 
                 case ConsumableEffectType.Cleanse:
@@ -177,14 +197,14 @@ namespace GreedDungeon.Combat
                     if (effect != null)
                     {
                         target.ApplyStatusEffect(effect, data.Duration);
-                        Debug.Log($"  ★ {target.Name}이(가) [{effect.Name}] 상태이상에 걸림!");
+                        LogBattle($"  ★ {target.Name}이(가) [{effect.Name}] 상태이상에 걸림!");
                     }
                     break;
 
                 case ConsumableEffectType.Attack:
                     int damage = (int)data.EffectValue;
                     target.TakeDamage(damage);
-                    Debug.Log($"  데미지: {damage} → HP: {target.CurrentHP}/{target.TotalStats.MaxHP}");
+                    LogBattle($"  데미지: {damage} → HP: {target.CurrentHP}/{target.TotalStats.MaxHP}");
                     if (target.IsDead)
                     {
                         CheckBattleEnd();
@@ -202,11 +222,11 @@ namespace GreedDungeon.Combat
             if (skill == null || string.IsNullOrEmpty(skill.StatusEffectID)) return;
 
             float roll = UnityEngine.Random.value * 100;
-            Debug.Log($"  [상태이상 시도] {skill.StatusEffectID} (확률: {skill.StatusEffectChance}%, 주사위: {roll:F1}%)");
+            LogBattle($"  [상태이상 시도] {skill.StatusEffectID} (확률: {skill.StatusEffectChance}%, 주사위: {roll:F1}%)");
 
             if (roll > skill.StatusEffectChance)
             {
-                Debug.Log($"  상태이상 저항 성공!");
+                LogBattle($"  상태이상 저항 성공!");
                 return;
             }
 
@@ -215,17 +235,17 @@ namespace GreedDungeon.Combat
             {
                 int duration = skill.Duration > 0 ? skill.Duration : effect.Duration;
                 target.ApplyStatusEffect(effect, duration);
-                Debug.Log($"  ★ {target.Name}이(가) [{effect.Name}] 상태이상에 걸림! (지속: {duration}턴)");
+                LogBattle($"  ★ {target.Name}이(가) [{effect.Name}] 상태이상에 걸림! (지속: {duration}턴)");
                 if (effect.SkipTurn)
-                    Debug.Log($"    효과: 턴 스킵");
+                    LogBattle($"    효과: 턴 스킵");
                 if (effect.DamagePerTurn > 0)
-                    Debug.Log($"    효과: 턴당 {effect.DamagePerTurn} 고정 데미지");
+                    LogBattle($"    효과: 턴당 {effect.DamagePerTurn} 고정 데미지");
                 if (effect.DamageCurrentPercent > 0)
-                    Debug.Log($"    효과: 현재 HP의 {effect.DamageCurrentPercent * 100}% 데미지");
+                    LogBattle($"    효과: 현재 HP의 {effect.DamageCurrentPercent * 100}% 데미지");
             }
             else
             {
-                Debug.Log($"  [경고] StatusEffect '{skill.StatusEffectID}'을(를) 찾을 수 없음");
+                LogBattle($"  [경고] StatusEffect '{skill.StatusEffectID}'을(를) 찾을 수 없음");
             }
         }
 
@@ -267,26 +287,26 @@ namespace GreedDungeon.Combat
         {
             if (!IsBattleOver) return;
 
-            Debug.Log("═══════════════════════════════════════════════════════════");
-            Debug.Log("                    전투 종료                              ");
-            Debug.Log("═══════════════════════════════════════════════════════════");
+            LogBattle("═══════════════════════════════════════════════════════════");
+            LogBattle("                    전투 종료                              ");
+            LogBattle("═══════════════════════════════════════════════════════════");
 
             if (PlayerWon)
             {
                 _player.AddKill();
                 int goldReward = _monster.GoldDrop;
                 _player.AddGold(goldReward);
-                Debug.Log($"  결과: 승리!");
-                Debug.Log($"  레벨: {_player.Level} (처치: {_player.KillCount}/{_player.GetExpRequiredForNextLevel()})");
-                Debug.Log($"  획득 골드: {goldReward}G");
-                Debug.Log($"  총 골드: {_player.Gold}G");
+                LogBattle($"  결과: 승리!");
+                LogBattle($"  레벨: {_player.Level} (처치: {_player.KillCount}/{_player.GetExpRequiredForNextLevel()})");
+                LogBattle($"  획득 골드: {goldReward}G");
+                LogBattle($"  총 골드: {_player.Gold}G");
             }
             else
             {
-                Debug.Log($"  결과: 패배...");
-                Debug.Log($"  레벨: {_player.Level}");
+                LogBattle($"  결과: 패배...");
+                LogBattle($"  레벨: {_player.Level}");
             }
-            Debug.Log("═══════════════════════════════════════════════════════════");
+            LogBattle("═══════════════════════════════════════════════════════════");
         }
     }
 }
