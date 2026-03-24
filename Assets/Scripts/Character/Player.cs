@@ -364,35 +364,15 @@ namespace GreedDungeon.Character
             return rarities[0];
         }
 
-        private SkillDataSO GetRandomSkillFromPool(SkillPoolType poolType)
-        {
-            if (!Services.IsInitialized) return null;
-            var skillManager = Services.Get<ISkillManager>();
-            return skillManager?.GetRandomSkill(poolType);
-        }
-
         private SkillDataSO RollSkillForEquipment(SkillPoolType poolType, RarityDataSO rarity)
         {
             if (rarity == null || !rarity.HasSkill) return null;
             if (!Services.IsInitialized) return null;
             
-            var gameDataManager = Services.Get<IGameDataManager>();
-            var allSkills = gameDataManager?.GetAllSkillData();
-            if (allSkills == null || allSkills.Count == 0) return null;
+            var skillManager = Services.Get<ISkillManager>();
+            if (skillManager == null) return null;
             
-            var validSkills = new System.Collections.Generic.List<SkillDataSO>();
-            foreach (var skill in allSkills)
-            {
-                if (skill.Tier >= rarity.SkillTierMin && skill.Tier <= rarity.SkillTierMax)
-                {
-                    validSkills.Add(skill);
-                }
-            }
-            
-            if (validSkills.Count == 0) return null;
-            
-            int randomIndex = UnityEngine.Random.Range(0, validSkills.Count);
-            return validSkills[randomIndex];
+            return skillManager.GetRandomSkill(poolType, rarity.SkillTierMin, rarity.SkillTierMax);
         }
     }
 }

@@ -186,21 +186,88 @@ namespace GreedDungeon.UI.Inventory
             if (_tooltip == null || slotRect == null) return;
 
             var tooltipRect = _tooltip.GetComponent<RectTransform>();
-            var parentRect = _tooltip.transform.parent as RectTransform;
-            var canvas = GetComponentInParent<Canvas>();
+            if (tooltipRect == null) return;
 
-            if (parentRect == null || canvas == null) return;
+            var canvas = GetComponentInParent<Canvas>();
+            if (canvas == null) return;
+
+            Bounds tooltipBounds = CalculateTooltipBounds(tooltipRect);
+            float tooltipWidth = tooltipBounds.size.x;
+            float tooltipHeight = tooltipBounds.size.y;
+            Vector2 tooltipCenter = tooltipBounds.center;
 
             Vector3[] slotCorners = new Vector3[4];
             slotRect.GetWorldCorners(slotCorners);
+            
+            Vector2 rightPos = (Vector2)(slotCorners[2] + slotCorners[3]) / 2f + _tooltipOffset;
+            Vector2 leftPos = (Vector2)(slotCorners[0] + slotCorners[1]) / 2f + new Vector2(-tooltipWidth - _tooltipOffset.x, _tooltipOffset.y);
 
-            Vector2 slotRightEdge = (slotCorners[2] + slotCorners[3]) / 2f;
+            RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+            Vector3[] canvasCorners = new Vector3[4];
+            canvasRect.GetWorldCorners(canvasCorners);
+            
+            float minX = canvasCorners[0].x;
+            float maxX = canvasCorners[2].x;
+            float minY = canvasCorners[0].y;
+            float maxY = canvasCorners[2].y;
 
-            Vector2 localPos;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                parentRect, slotRightEdge, canvas.worldCamera, out localPos);
+            Vector2 targetPos = rightPos;
+            
+            if (targetPos.x + tooltipWidth > maxX)
+            {
+                targetPos = leftPos;
+            }
+            
+            if (targetPos.x < minX)
+            {
+                targetPos.x = minX;
+            }
+            
+            if (targetPos.y - tooltipHeight < minY)
+            {
+                targetPos.y = minY + tooltipHeight;
+            }
+            
+            if (targetPos.y > maxY)
+            {
+                targetPos.y = maxY;
+            }
 
-            tooltipRect.anchoredPosition = localPos + _tooltipOffset;
+            tooltipRect.position = new Vector3(targetPos.x, targetPos.y, tooltipRect.position.z);
+        }
+
+        private Bounds CalculateTooltipBounds(RectTransform root)
+        {
+            var bounds = new Bounds(root.position, Vector3.zero);
+            
+            var renderers = root.GetComponentsInChildren<UnityEngine.UI.Graphic>();
+            bool hasContent = false;
+            
+            foreach (var renderer in renderers)
+            {
+                if (!renderer.gameObject.activeInHierarchy) continue;
+                
+                var rect = renderer.rectTransform;
+                if (rect == null) continue;
+                
+                Vector3[] corners = new Vector3[4];
+                rect.GetWorldCorners(corners);
+                
+                foreach (var corner in corners)
+                {
+                    if (!hasContent)
+                    {
+                        bounds = new Bounds(corner, Vector3.zero);
+                        hasContent = true;
+                    }
+                    else
+                    {
+                        bounds.Encapsulate(corner);
+                    }
+                }
+            }
+            
+            return bounds;
         }
 
         private void RefreshAll()

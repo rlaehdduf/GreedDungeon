@@ -168,10 +168,26 @@ namespace GreedDungeon.UI.Inventory
 
         private void SetSkillSection(InventoryItem item, bool itemChanged)
         {
-            if (item.Type != ItemType.Equipment || item.Equipment == null || item.Rarity == null || !item.Rarity.HasSkill)
+            if (_skillIcon != null) _skillIcon.gameObject.SetActive(false);
+            if (_skillTooltipPanel != null) _skillTooltipPanel.SetActive(false);
+
+            if (item.Type != ItemType.Equipment)
             {
-                if (_skillIcon != null) _skillIcon.gameObject.SetActive(false);
-                if (_skillTooltipPanel != null) _skillTooltipPanel.SetActive(false);
+                return;
+            }
+
+            if (item.Equipment == null)
+            {
+                return;
+            }
+
+            if (item.Rarity == null)
+            {
+                return;
+            }
+
+            if (!item.Rarity.HasSkill)
+            {
                 return;
             }
 
@@ -188,13 +204,19 @@ namespace GreedDungeon.UI.Inventory
 
             if (_skillTooltipPanel != null)
             {
+                Debug.Log($"[ItemTooltipUI] SkillTooltipPanel 활성화, activeSelf: {_skillTooltipPanel.activeSelf}");
                 _skillTooltipPanel.SetActive(true);
+                Debug.Log($"[ItemTooltipUI] SkillTooltipPanel 활성화 후 activeSelf: {_skillTooltipPanel.activeSelf}");
 
                 if (_skillTooltipName != null)
                     _skillTooltipName.text = skill.Name;
 
                 if (_skillTooltipDesc != null)
                     _skillTooltipDesc.text = skill.Description ?? "";
+            }
+            else
+            {
+                Debug.LogWarning("[ItemTooltipUI] _skillTooltipPanel이 null입니다! Inspector에서 연결해주세요.");
             }
         }
 

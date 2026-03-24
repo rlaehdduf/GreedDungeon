@@ -86,6 +86,32 @@ namespace GreedDungeon.Skill
             return pool[UnityEngine.Random.Range(0, pool.Count)];
         }
 
+        public SkillDataSO GetRandomSkill(SkillPoolType poolType, int minTier, int maxTier)
+        {
+            EnsureInitialized();
+            
+            if (!_skillPools.TryGetValue(poolType, out var pool) || pool.Count == 0)
+            {
+                Debug.Log($"[SkillManager] {poolType} 풀이 비어있음");
+                return null;
+            }
+
+            var filteredSkills = new List<SkillDataSO>();
+            foreach (var skill in pool)
+            {
+                if (skill.Tier >= minTier && skill.Tier <= maxTier)
+                    filteredSkills.Add(skill);
+            }
+
+            if (filteredSkills.Count == 0)
+            {
+                Debug.Log($"[SkillManager] {poolType} 풀에 tier {minTier}-{maxTier} 스킬 없음, 풀 전체 사용");
+                return pool[UnityEngine.Random.Range(0, pool.Count)];
+            }
+
+            return filteredSkills[UnityEngine.Random.Range(0, filteredSkills.Count)];
+        }
+
         public bool IsOnCooldown(int skillId)
         {
             return _cooldowns.TryGetValue(skillId, out var remaining) && remaining > 0;

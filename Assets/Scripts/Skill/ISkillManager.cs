@@ -6,6 +6,7 @@ namespace GreedDungeon.Skill
     public interface ISkillManager
     {
         SkillDataSO GetRandomSkill(SkillPoolType poolType);
+        SkillDataSO GetRandomSkill(SkillPoolType poolType, int minTier, int maxTier);
 
         bool IsOnCooldown(int skillId);
         int GetRemainingCooldown(int skillId);
