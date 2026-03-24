@@ -73,6 +73,7 @@ namespace GreedDungeon.Combat
         {
             if (UseSkill(skillId))
             {
+                _battleManager.EndTurn();
                 _battleUI?.UpdatePlayerStatus(_testPlayer);
                 _battleUI?.UpdateMonsterStatus(_currentMonster);
                 _skillSlotUI?.UpdateCooldownDisplay();
@@ -82,6 +83,7 @@ namespace GreedDungeon.Combat
         private void HandleAttackClicked()
         {
             _battleManager.ExecuteAttack(_testPlayer, _currentMonster, null);
+            _battleManager.EndTurn();
             _battleUI?.UpdatePlayerStatus(_testPlayer);
             _battleUI?.UpdateMonsterStatus(_currentMonster);
         }
@@ -89,6 +91,7 @@ namespace GreedDungeon.Combat
         private void HandleDefendClicked()
         {
             _battleManager.ExecuteDefend(_testPlayer);
+            _battleManager.EndTurn();
             _battleUI?.UpdatePlayerStatus(_testPlayer);
         }
 
@@ -103,6 +106,7 @@ namespace GreedDungeon.Combat
             
             var target = GetConsumableTarget(item);
             _battleManager.ExecuteItem(item, target);
+            _battleManager.EndTurn();
             
             _battleUI?.UpdatePlayerStatus(_testPlayer);
             _battleUI?.UpdateMonsterStatus(_currentMonster);
