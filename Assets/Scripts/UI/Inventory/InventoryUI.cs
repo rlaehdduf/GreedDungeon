@@ -41,11 +41,18 @@ namespace GreedDungeon.UI.Inventory
         private int _pendingDropIndex = -1;
 
         public event System.Action<InventoryItem> OnItemUsed;
+        public event System.Action OnClosed;
 
         public override void Show()
         {
             base.Show();
             RefreshAll();
+        }
+
+        public override void Hide()
+        {
+            base.Hide();
+            OnClosed?.Invoke();
         }
 
         public void Setup(Player player)
@@ -275,13 +282,11 @@ namespace GreedDungeon.UI.Inventory
 
         private void UseConsumable(int index, InventoryItem item)
         {
-            Debug.Log($"[InventoryUI] 아이템 사용 요청: {item.Name}");
             OnItemUsed?.Invoke(item);
         }
 
         private void EquipItem(int index)
         {
-            Debug.Log($"[InventoryUI] 장비 장착: {_player.GetItemAt(index)?.Name}");
             _player.EquipItem(index);
         }
 
@@ -307,7 +312,6 @@ namespace GreedDungeon.UI.Inventory
             var item = _player.GetItemAt(_pendingDropIndex);
             if (item != null)
             {
-                Debug.Log($"[InventoryUI] 아이템 버림: {item.Name}");
                 _player.RemoveItemAt(_pendingDropIndex);
             }
 
@@ -317,15 +321,7 @@ namespace GreedDungeon.UI.Inventory
         private void OnUnequipClicked(EquipmentType type)
         {
             if (_player == null) return;
-
-            if (_player.Unequip(type))
-            {
-                Debug.Log($"[InventoryUI] 장비 해제: {type}");
-            }
-            else
-            {
-                Debug.Log($"[InventoryUI] 장비 해제 실패 (인벤토리 꽉 참)");
-            }
+            _player.Unequip(type);
         }
     }
 
