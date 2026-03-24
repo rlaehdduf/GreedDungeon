@@ -22,6 +22,8 @@ namespace GreedDungeon.UI.Inventory
 
         private IAssetLoader _assetLoader;
         private IGameDataManager _gameDataManager;
+        private InventoryItem _currentItem;
+        private SkillDataSO _cachedSkill;
 
         private void Start()
         {
@@ -43,10 +45,13 @@ namespace GreedDungeon.UI.Inventory
                 return;
             }
 
+            bool itemChanged = _currentItem != item;
+            _currentItem = item;
+
             SetName(item);
             SetDescription(item);
             SetStats(item);
-            SetSkillSection(item);
+            SetSkillSection(item, itemChanged);
 
             gameObject.SetActive(true);
         }
@@ -153,34 +158,39 @@ namespace GreedDungeon.UI.Inventory
                 sb.AppendLine($"{statName} +{baseValue}");
         }
 
-        private void SetSkillSection(InventoryItem item)
+        private void SetSkillSection(InventoryItem item, bool itemChanged)
         {
             if (item.Type != ItemType.Equipment || item.Equipment == null || item.Rarity == null || !item.Rarity.HasSkill)
             {
                 if (_skillIcon != null) _skillIcon.gameObject.SetActive(false);
                 if (_skillTooltipPanel != null) _skillTooltipPanel.SetActive(false);
+                _cachedSkill = null;
                 return;
             }
 
-            var skill = GetRandomSkillForDisplay(item);
-            if (skill == null)
+            if (itemChanged || _cachedSkill == null)
+            {
+                _cachedSkill = GetRandomSkillForDisplay(item);
+            }
+
+            if (_cachedSkill == null)
             {
                 if (_skillIcon != null) _skillIcon.gameObject.SetActive(false);
                 if (_skillTooltipPanel != null) _skillTooltipPanel.SetActive(false);
                 return;
             }
 
-            LoadSkillIcon(skill.IconAddress);
+            LoadSkillIcon(_cachedSkill.IconAddress);
 
             if (_skillTooltipPanel != null)
             {
                 _skillTooltipPanel.SetActive(true);
 
                 if (_skillTooltipName != null)
-                    _skillTooltipName.text = skill.Name;
+                    _skillTooltipName.text = _cachedSkill.Name;
 
                 if (_skillTooltipDesc != null)
-                    _skillTooltipDesc.text = skill.Description ?? "";
+                    _skillTooltipDesc.text = _cachedSkill.Description ?? "";
             }
         }
 

@@ -280,7 +280,7 @@ public class CSVConverter : EditorWindow
         for (int i = 1; i < lines.Count; i++)
         {
             var values = lines[i];
-            if (values.Count < 13 || !int.TryParse(values[0], out int id)) continue;
+            if (values.Count < 14 || !int.TryParse(values[0], out int id)) continue;
 
             var data = FindExistingAsset<EquipmentDataSO>(id, outputPath);
             bool isNew = data == null;
@@ -297,16 +297,17 @@ public class CSVConverter : EditorWindow
             data.ID = id;
             data.Name = values[1];
             data.Type = ParseEquipmentType(values[2]);
-            data.HP = int.TryParse(values[3], out int hp) ? hp : 0;
-            data.MP = int.TryParse(values[4], out int mp) ? mp : 0;
-            data.Attack = int.TryParse(values[5], out int atk) ? atk : 0;
-            data.Defense = int.TryParse(values[6], out int def) ? def : 0;
-            data.Speed = int.TryParse(values[7], out int spd) ? spd : 0;
-            data.CriticalRate = float.TryParse(values[8], NumberStyles.Float, CultureInfo.InvariantCulture, out float cr) ? cr : 0;
-            data.SkillPoolType = ParseSkillPoolType(values[9]);
-            data.BuyPrice = int.TryParse(values[10], out int bp) ? bp : 0;
-            data.SellPrice = int.TryParse(values[11], out int sp) ? sp : 0;
-            data.IconAddress = values[12];
+            data.Description = values[3];
+            data.HP = int.TryParse(values[4], out int hp) ? hp : 0;
+            data.MP = int.TryParse(values[5], out int mp) ? mp : 0;
+            data.Attack = int.TryParse(values[6], out int atk) ? atk : 0;
+            data.Defense = int.TryParse(values[7], out int def) ? def : 0;
+            data.Speed = int.TryParse(values[8], out int spd) ? spd : 0;
+            data.CriticalRate = float.TryParse(values[9], NumberStyles.Float, CultureInfo.InvariantCulture, out float cr) ? cr : 0;
+            data.SkillPoolType = ParseSkillPoolType(values[10]);
+            data.BuyPrice = int.TryParse(values[11], out int bp) ? bp : 0;
+            data.SellPrice = int.TryParse(values[12], out int sp) ? sp : 0;
+            data.IconAddress = values[13];
 
             if (isNew)
             {
