@@ -192,15 +192,7 @@ namespace GreedDungeon.Combat
                     break;
             }
 
-            item.RemoveQuantity(1);
-            if (item.Quantity <= 0)
-            {
-                int index = _player.FindItemIndex(data.ID);
-                if (index >= 0)
-                {
-                    _player.RemoveItemAt(index);
-                }
-            }
+            _player.DecrementItemQuantity(item);
             
             return true;
         }

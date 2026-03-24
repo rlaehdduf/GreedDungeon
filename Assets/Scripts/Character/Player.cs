@@ -153,6 +153,24 @@ namespace GreedDungeon.Character
             OnInventoryChanged?.Invoke();
         }
 
+        public void DecrementItemQuantity(InventoryItem item)
+        {
+            if (item == null) return;
+            
+            item.RemoveQuantity(1);
+            
+            if (item.Quantity <= 0)
+            {
+                int index = _inventory.IndexOf(item);
+                if (index >= 0)
+                {
+                    _inventory[index] = null;
+                }
+            }
+            
+            OnInventoryChanged?.Invoke();
+        }
+
         public bool UseItemAt(int index)
         {
             var item = GetItemAt(index);
