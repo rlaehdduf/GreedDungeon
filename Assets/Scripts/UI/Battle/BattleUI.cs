@@ -129,5 +129,11 @@ namespace GreedDungeon.UI.Battle
                 : "패배...";
             AddBattleLog($"═══ {message} ═══");
         }
+
+        public void ShowGameOver()
+        {
+            AddBattleLog("게임 오버!");
+            EnableActions(false);
+        }
     }
 }

@@ -14,6 +14,8 @@ namespace GreedDungeon.Combat
         event Action<Monster> OnBattleStarted;
         event Action<Monster, int> OnMonsterDamaged;
         event Action<string> OnBattleLog;
+        event Action OnPlayerDeath;
+        event Action OnMonsterDeath;
         
         void StartBattle(Player player, Monster monster);
         void ExecuteAttack(IBattleEntity attacker, IBattleEntity defender, SkillDataSO skill);
@@ -42,6 +44,8 @@ namespace GreedDungeon.Combat
         public event Action<Monster> OnBattleStarted;
         public event Action<Monster, int> OnMonsterDamaged;
         public event Action<string> OnBattleLog;
+        public event Action OnPlayerDeath;
+        public event Action OnMonsterDeath;
 
         public BattleManager(IDamageCalculator damageCalculator, ITurnManager turnManager, IGameDataManager gameDataManager)
         {
@@ -342,26 +346,27 @@ namespace GreedDungeon.Combat
         {
             if (!IsBattleOver) return;
 
-            LogBattle("═══════════════════════════════════════════════════════════");
-            LogBattle("                    전투 종료                              ");
-            LogBattle("═══════════════════════════════════════════════════════════");
-
             if (PlayerWon)
             {
+                LogBattle("═══════════════════════════════════");
+                LogBattle("           전투 승리!              ");
+                LogBattle("═══════════════════════════════════");
+                
                 _player.AddKill();
                 int goldReward = _monster.GoldDrop;
                 _player.AddGold(goldReward);
-                LogBattle($"  결과: 승리!");
-                LogBattle($"  레벨: {_player.Level} (처치: {_player.KillCount}/{_player.GetExpRequiredForNextLevel()})");
                 LogBattle($"  획득 골드: {goldReward}G");
-                LogBattle($"  총 골드: {_player.Gold}G");
+                
+                OnMonsterDeath?.Invoke();
             }
             else
             {
-                LogBattle($"  결과: 패배...");
-                LogBattle($"  레벨: {_player.Level}");
+                LogBattle("═══════════════════════════════════");
+                LogBattle("           전투 패배...            ");
+                LogBattle("═══════════════════════════════════");
+                
+                OnPlayerDeath?.Invoke();
             }
-            LogBattle("═══════════════════════════════════════════════════════════");
         }
     }
 }

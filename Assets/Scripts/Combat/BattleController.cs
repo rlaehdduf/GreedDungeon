@@ -51,6 +51,8 @@ namespace GreedDungeon.Combat
             
             _battleManager.OnBattleStarted += HandleBattleStarted;
             _battleManager.OnMonsterDamaged += HandleMonsterDamaged;
+            _battleManager.OnPlayerDeath += HandlePlayerDeath;
+            _battleManager.OnMonsterDeath += HandleMonsterDeath;
 
             SetupUIEvents();
         }
@@ -244,6 +246,15 @@ namespace GreedDungeon.Combat
             }
         }
 
+        private void HandlePlayerDeath()
+        {
+            _battleUI?.ShowGameOver();
+        }
+
+        private void HandleMonsterDeath()
+        {
+        }
+
         private void OnDestroy()
         {
             if (_battleManager != null)
@@ -251,6 +262,8 @@ namespace GreedDungeon.Combat
                 _battleManager.OnBattleStarted -= HandleBattleStarted;
                 _battleManager.OnMonsterDamaged -= HandleMonsterDamaged;
                 _battleManager.OnBattleLog -= HandleBattleLog;
+                _battleManager.OnPlayerDeath -= HandlePlayerDeath;
+                _battleManager.OnMonsterDeath -= HandleMonsterDeath;
             }
 
             if (_battleUI != null)
