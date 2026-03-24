@@ -15,10 +15,15 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private BattleLogUI _battleLog;
         [SerializeField] private SkillSlotUI _skillSlotUI;
 
+        [Header("Inventory")]
+        [SerializeField] private Inventory.InventoryUI _inventoryUI;
+
         public event Action<int> OnSkillSelected;
         public event Action OnAttackClicked;
         public event Action OnDefendClicked;
         public event Action OnItemClicked;
+
+        private Player _cachedPlayer;
 
         private void Start()
         {
@@ -53,6 +58,8 @@ namespace GreedDungeon.UI.Battle
 
         public void SetupBattle(Player player, Monster monster)
         {
+            _cachedPlayer = player;
+
             if (_playerStatus != null)
                 _playerStatus.Setup(player);
 
@@ -64,6 +71,28 @@ namespace GreedDungeon.UI.Battle
 
             if (_skillSlotUI != null)
                 _skillSlotUI.SetPlayer(player);
+
+            if (_inventoryUI != null)
+            {
+                _inventoryUI.Setup(player);
+                _inventoryUI.Hide();
+            }
+        }
+
+        public void ToggleInventory()
+        {
+            if (_inventoryUI == null) return;
+
+            if (_inventoryUI.IsOpen)
+            {
+                _inventoryUI.Hide();
+                EnableActions(true);
+            }
+            else
+            {
+                _inventoryUI.Show();
+                EnableActions(false);
+            }
         }
 
         public void UpdatePlayerStatus(Player player)

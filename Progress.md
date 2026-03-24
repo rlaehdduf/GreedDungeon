@@ -72,12 +72,21 @@
 - MonsterSpriteView: 숨쉬기/데미지 애니메이션 구현
 - BattleEntity: OnDamaged 이벤트 추가
 
+### 인벤토리 UI 시스템 ✅
+- InventoryUI: 장비 슬롯 3개 + 인벤토리 20칸 + 골드 표시
+- InventorySlotUI: 아이콘 + 수량 + 등급 색상 + 툴팁
+- EquipSlotUI: 장착 장비 표시 + 해제 기능
+- ItemTooltipUI: 아이템 상세 정보 표시
+- ConfirmDropPopup: 아이템 버리기 확인 팝업
+- BattleUI: 인벤토리 토글 기능 추가
+
 ## 진행 중인 작업 (In Progress)
 - Unity에서 UI 프리팹 구성
-  - StatusEffectSlotUI 프리팹 생성 (Image + Text "Count")
-  - PlayerInfomation, EnemyInfomation에 슬롯 할당
+  - InventoryPanel 프리팹 생성
+  - InventorySlotUI, EquipSlotUI, ItemTooltipUI 프리팹 생성
 
 ## 대기 중인 작업 (Pending)
+- 장비 생성 시스템 (EquipmentGenerator)
 - 던전 시스템 구현
 
 ## 폴더 구조

@@ -65,6 +65,7 @@ namespace GreedDungeon.Combat
                 _battleUI.OnSkillSelected += HandleSkillSelected;
                 _battleUI.OnAttackClicked += HandleAttackClicked;
                 _battleUI.OnDefendClicked += HandleDefendClicked;
+                _battleUI.OnItemClicked += HandleItemClicked;
                 Debug.Log("[BattleController] UI 이벤트 구독 완료");
             }
             else
@@ -100,6 +101,12 @@ namespace GreedDungeon.Combat
             Debug.Log("[BattleController] 방어 버튼 클릭");
             _battleManager.ExecuteDefend(_testPlayer);
             _battleUI?.UpdatePlayerStatus(_testPlayer);
+        }
+
+        private void HandleItemClicked()
+        {
+            Debug.Log("[BattleController] 아이템 버튼 클릭 - 인벤토리 토글");
+            _battleUI?.ToggleInventory();
         }
 
         private UI.Battle.SkillSlotUI _skillSlotUI;
@@ -240,6 +247,7 @@ namespace GreedDungeon.Combat
                 _battleUI.OnSkillSelected -= HandleSkillSelected;
                 _battleUI.OnAttackClicked -= HandleAttackClicked;
                 _battleUI.OnDefendClicked -= HandleDefendClicked;
+                _battleUI.OnItemClicked -= HandleItemClicked;
             }
         }
     }

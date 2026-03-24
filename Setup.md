@@ -172,7 +172,105 @@ Battle.unity
 | `_itemButton` | ItemBtn |
 
 > 스킬 슬롯 3개는 SkillSlotUI 사용 (무기/갑옷/악세서리 스킬)
-> 인벤토리 UI는 미구현
+
+### InventoryUI (InventoryPanel에 추가)
+| 필드 | 연결 대상 |
+|------|-----------|
+| `_weaponSlot` | WeaponSlot (EquipSlotUI 컴포넌트) |
+| `_armorSlot` | ArmorSlot (EquipSlotUI 컴포넌트) |
+| `_accessorySlot` | AccessorySlot (EquipSlotUI 컴포넌트) |
+| `_inventoryGrid` | 인벤토리 슬롯 부모 Transform |
+| `_slotPrefab` | InventorySlotUI 프리팹 |
+| `_goldText` | 골드 Text |
+| `_dropPopup` | ConfirmDropPopup 컴포넌트 |
+
+> **인벤토리 패널 구조:**
+> ```
+> InventoryPanel (GameObject, 초기 비활성화)
+> ├── EquipSlots
+> │   ├── WeaponSlot (EquipSlotUI)
+> │   ├── ArmorSlot (EquipSlotUI)
+> │   └── AccessorySlot (EquipSlotUI)
+> ├── InventoryGrid (Grid Layout Group)
+> │   └── (InventorySlotUI 프리팹으로 20개 생성)
+> ├── GoldText
+> └── ConfirmDropPopup
+> ```
+
+### InventorySlotUI 프리팹 구조
+| 필드 | 연결 대상 |
+|------|-----------|
+| `_iconImage` | 아이콘 Image |
+| `_quantityText` | 수량 Text |
+| `_backgroundImage` | 배경 Image (등급 색상) |
+| `_tooltip` | ItemTooltipUI 컴포넌트 |
+
+> **슬롯 프리팹 구조:**
+> ```
+> InventorySlotUI (GameObject)
+> ├── Background (Image) ← 등급 색상 표시
+> ├── Icon (Image) ← 아이템 아이콘
+> └── Quantity (Text) ← 소모품 수량
+> ```
+
+### EquipSlotUI 구조
+| 필드 | 연결 대상 |
+|------|-----------|
+| `_iconImage` | 아이콘 Image |
+| `_nameText` | 장비 이름 Text |
+| `_typeText` | 장비 타입 Text |
+| `_backgroundImage` | 배경 Image |
+| `_tooltip` | ItemTooltipUI 컴포넌트 |
+
+### ItemTooltipUI 구조
+| 필드 | 연결 대상 |
+|------|-----------|
+| `_nameText` | 아이템 이름 Text |
+| `_descriptionText` | 설명 Text |
+| `_statsText` | 스탯 Text |
+| `_skillSection` | 스킬 정보 GameObject |
+| `_skillIcon` | 스킬 아이콘 Image |
+| `_skillNameText` | 스킬 이름 Text |
+| `_skillDescText` | 스킬 설명 Text |
+
+> **툴팁 구조:**
+> ```
+> ItemTooltipUI (GameObject, 초기 비활성화)
+> ├── Background (Image)
+> └── Content (Vertical Layout Group)
+>     ├── NameText
+>     ├── DescriptionText
+>     ├── StatsText
+>     └── SkillSection
+>         ├── SkillIcon
+>         ├── SkillNameText
+>         └── SkillDescText
+> ```
+
+### ConfirmDropPopup 구조
+| 필드 | 연결 대상 |
+|------|-----------|
+| `_messageText` | 메시지 Text |
+| `_cancelButton` | 취소 Button |
+| `_confirmButton` | 확인 Button |
+
+> **팝업 구조:**
+> ```
+> ConfirmDropPopup (GameObject, 초기 비활성화)
+> ├── Background (Image)
+> └── Content
+>     ├── MessageText
+>     └── Buttons
+>         ├── CancelButton
+>         └── ConfirmButton
+> ```
+
+### BattleUI 인벤토리 설정
+| 필드 | 연결 대상 |
+|------|-----------|
+| `_inventoryUI` | InventoryPanel (InventoryUI 컴포넌트) |
+
+> ItemBtn 클릭 시 `ToggleInventory()` 호출로 인벤토리 열기/닫기
 
 ---
 
