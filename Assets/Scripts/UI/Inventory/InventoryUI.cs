@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using GreedDungeon.Character;
-using GreedDungeon.Core;
 using GreedDungeon.Items;
 using GreedDungeon.ScriptableObjects;
 using GreedDungeon.UI;
@@ -30,12 +29,6 @@ namespace GreedDungeon.UI.Inventory
         [Header("Tooltip")]
         [SerializeField] private ItemTooltipUI _tooltip;
         [SerializeField] private Vector2 _tooltipOffset = new Vector2(10f, -10f);
-
-        [Header("Skill Tooltip")]
-        [SerializeField] private GameObject _skillTooltipPanel;
-        [SerializeField] private UnityEngine.UI.Text _skillTooltipName;
-        [SerializeField] private UnityEngine.UI.Text _skillTooltipDesc;
-        [SerializeField] private UnityEngine.UI.Image _skillIcon;
 
         [Header("Popups")]
         [SerializeField] private ConfirmDropPopup _dropPopup;
@@ -178,7 +171,6 @@ namespace GreedDungeon.UI.Inventory
 
             _tooltip.Show(item);
             UpdateTooltipPosition(slotRect);
-            UpdateSkillTooltip(item);
         }
 
         private void OnSlotHoverExit()
@@ -186,11 +178,6 @@ namespace GreedDungeon.UI.Inventory
             if (_tooltip != null)
             {
                 _tooltip.Hide();
-            }
-            
-            if (_skillTooltipPanel != null)
-            {
-                _skillTooltipPanel.SetActive(false);
             }
         }
 
@@ -214,52 +201,6 @@ namespace GreedDungeon.UI.Inventory
                 parentRect, slotRightEdge, canvas.worldCamera, out localPos);
 
             tooltipRect.anchoredPosition = localPos + _tooltipOffset;
-        }
-
-        private void UpdateSkillTooltip(InventoryItem item)
-        {
-            if (_skillTooltipPanel == null) return;
-
-            if (item == null || item.Type != ItemType.Equipment || item.Skill == null)
-            {
-                _skillTooltipPanel.SetActive(false);
-                return;
-            }
-
-            var skill = item.Skill;
-            
-            if (_skillTooltipName != null)
-                _skillTooltipName.text = skill.Name;
-            
-            if (_skillTooltipDesc != null)
-                _skillTooltipDesc.text = skill.Description ?? "";
-
-            if (_skillIcon != null && !string.IsNullOrEmpty(skill.IconAddress))
-            {
-                LoadSkillIcon(skill.IconAddress);
-            }
-
-            _skillTooltipPanel.SetActive(true);
-        }
-
-        private async void LoadSkillIcon(string iconAddress)
-        {
-            if (_skillIcon == null || !Services.IsInitialized) return;
-            
-            var assetLoader = Services.Get<IAssetLoader>();
-            if (assetLoader == null) return;
-
-            try
-            {
-                var sprite = await assetLoader.LoadAssetAsync<Sprite>(iconAddress);
-                if (sprite != null)
-                {
-                    _skillIcon.sprite = sprite;
-                }
-            }
-            catch
-            {
-            }
         }
 
         private void RefreshAll()
