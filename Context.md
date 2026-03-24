@@ -35,6 +35,8 @@
 - 인벤토리 소모품 사용 이벤트 연결 ✅
 - 테스트 코드 정리 (AddTestItemsToInventory만 유지) ✅
 - 인벤토리 닫기 시 ActionMenuUI 재활성화 ✅
+- 던전 시스템 설계 문서 작성 ✅
+- 장비 시스템 개선 (레벨 시스템, 스탯 표시) ✅
 
 ## In Progress
 

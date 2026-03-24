@@ -268,17 +268,18 @@ namespace GreedDungeon.Combat
 
             if (PlayerWon)
             {
+                _player.AddKill();
                 int goldReward = _monster.GoldDrop;
                 _player.AddGold(goldReward);
                 Debug.Log($"  결과: 승리!");
+                Debug.Log($"  레벨: {_player.Level} (처치: {_player.KillCount}/{_player.GetExpRequiredForNextLevel()})");
                 Debug.Log($"  획득 골드: {goldReward}G");
                 Debug.Log($"  총 골드: {_player.Gold}G");
-                Debug.Log($"  던전 레벨: {_player.DungeonLevel}");
             }
             else
             {
                 Debug.Log($"  결과: 패배...");
-                Debug.Log($"  던전 레벨: {_player.DungeonLevel}");
+                Debug.Log($"  레벨: {_player.Level}");
             }
             Debug.Log("═══════════════════════════════════════════════════════════");
         }
