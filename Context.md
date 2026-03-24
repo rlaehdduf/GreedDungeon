@@ -34,6 +34,7 @@
 - Addressables 자동화 메뉴 (`Tools → Addressables → 🔄 Setup & Build`) ✅
 - 인벤토리 소모품 사용 이벤트 연결 ✅
 - 테스트 코드 정리 (AddTestItemsToInventory만 유지) ✅
+- 인벤토리 닫기 시 ActionMenuUI 재활성화 ✅
 
 ## In Progress
 
