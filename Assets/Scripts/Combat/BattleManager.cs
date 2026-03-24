@@ -13,7 +13,7 @@ namespace GreedDungeon.Combat
     {
         event Action<Monster> OnBattleStarted;
         event Action<Monster, int> OnMonsterDamaged;
-        event Action<string> OnBattleLog;
+event Action<string, UI.Battle.LogType> OnBattleLog;
         event Action OnPlayerDeath;
         event Action OnMonsterDeath;
         
@@ -43,7 +43,7 @@ namespace GreedDungeon.Combat
 
         public event Action<Monster> OnBattleStarted;
         public event Action<Monster, int> OnMonsterDamaged;
-        public event Action<string> OnBattleLog;
+        public event Action<string, UI.Battle.LogType> OnBattleLog;
         public event Action OnPlayerDeath;
         public event Action OnMonsterDeath;
 
@@ -54,10 +54,10 @@ namespace GreedDungeon.Combat
             _gameDataManager = gameDataManager;
         }
 
-        private void LogBattle(string message)
+        private void LogBattle(string message, UI.Battle.LogType logType = UI.Battle.LogType.System)
         {
             Debug.Log(message);
-            OnBattleLog?.Invoke(message);
+            OnBattleLog?.Invoke(message, logType);
         }
 
         public void StartBattle(Player player, Monster monster)
@@ -120,7 +120,8 @@ namespace GreedDungeon.Combat
             }
 
             string resultText = hitCount > 1 ? $"{hitCount}연타 {totalDamage}" : $"{totalDamage}";
-            LogBattle($"{attackerName} {actionText} → {defender.Name} {resultText} 데미지");
+            var logType = attacker == _player ? UI.Battle.LogType.Player : UI.Battle.LogType.Monster;
+            LogBattle($"{attackerName} {actionText} → {defender.Name} {resultText} 데미지", logType);
 
             ApplyStatusEffectFromSkill(skill, defender);
 
@@ -135,7 +136,8 @@ namespace GreedDungeon.Combat
             if (defender.IsDead) return;
 
             defender.StartDefend();
-            LogBattle($"방어 태세");
+            var logType = defender == _player ? UI.Battle.LogType.Player : UI.Battle.LogType.Monster;
+            LogBattle($"방어 태세", logType);
         }
 
         public bool ExecuteItem(InventoryItem item, IBattleEntity target)
@@ -151,19 +153,19 @@ namespace GreedDungeon.Combat
                 case ConsumableEffectType.Heal:
                     int healAmount = (int)data.EffectValue;
                     target.Heal(healAmount);
-                    LogBattle($"아이템 [{data.Name}] → HP +{healAmount}");
+                    LogBattle($"아이템 [{data.Name}] → HP +{healAmount}", UI.Battle.LogType.Player);
                     break;
 
                 case ConsumableEffectType.Cleanse:
                     target.ClearDebuffs();
-                    LogBattle($"아이템 [{data.Name}] → 디버프 해제");
+                    LogBattle($"아이템 [{data.Name}] → 디버프 해제", UI.Battle.LogType.Player);
                     break;
 
                 case ConsumableEffectType.Buff:
                     if (data.BuffType != BuffType.None)
                     {
                         target.ApplyBuff(data.BuffType, data.EffectValue, data.Duration);
-                        LogBattle($"아이템 [{data.Name}] → {data.BuffType} +{data.EffectValue}% ({data.Duration}턴)");
+                        LogBattle($"아이템 [{data.Name}] → {data.BuffType} +{data.EffectValue}% ({data.Duration}턴)", UI.Battle.LogType.Player);
                     }
                     break;
 
@@ -173,14 +175,14 @@ namespace GreedDungeon.Combat
                     if (effect != null)
                     {
                         target.ApplyStatusEffect(effect, data.Duration);
-                        LogBattle($"아이템 [{data.Name}] → {target.Name} {effect.Name}");
+                        LogBattle($"아이템 [{data.Name}] → {target.Name} {effect.Name}", UI.Battle.LogType.Player);
                     }
                     break;
 
                 case ConsumableEffectType.Attack:
                     int damage = (int)data.EffectValue;
                     target.TakeDamage(damage);
-                    LogBattle($"아이템 [{data.Name}] → {target.Name} {damage} 데미지");
+                    LogBattle($"아이템 [{data.Name}] → {target.Name} {damage} 데미지", UI.Battle.LogType.Player);
                     if (target.IsDead)
                     {
                         CheckBattleEnd();
@@ -249,11 +251,9 @@ namespace GreedDungeon.Combat
             }
         }
 
-        public void ExecuteMonsterTurn()
+public void ExecuteMonsterTurn()
         {
             if (_monster == null || _monster.IsDead || _player == null || _player.IsDead) return;
-
-            LogBattle($"[{_monster.Name}의 턴]");
             
             ExecuteMonsterAttack();
             
@@ -276,7 +276,7 @@ namespace GreedDungeon.Combat
             damage = Mathf.Max(1, damage - defense / 2);
             
             _player.TakeDamage(damage);
-            LogBattle($"{_monster.Name} 공격 → 플레이어 {damage} 데미지");
+            LogBattle($"{_monster.Name} 공격 → 플레이어 {damage} 데미지", UI.Battle.LogType.Monster);
             
             TryApplyMonsterStatusEffect();
         }
@@ -292,8 +292,8 @@ namespace GreedDungeon.Combat
             if (roll < _monster.GetStatusEffectChance())
             {
                 _player.ApplyStatusEffect(effect, effect.Duration);
-                LogBattle($"→ 플레이어 {effect.Name}");
-            }
+                LogBattle($"→ 플레이어 {effect.Name}", UI.Battle.LogType.Monster);
+}
         }
 
         private void CheckBattleEnd()

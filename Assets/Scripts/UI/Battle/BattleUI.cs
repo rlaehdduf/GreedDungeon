@@ -107,10 +107,10 @@ namespace GreedDungeon.UI.Battle
             }
         }
 
-        public void AddBattleLog(string message)
+        public void AddBattleLog(string message, LogType logType = LogType.System)
         {
             if (_battleLog != null)
-                _battleLog.AddLog(message);
+                _battleLog.AddLog(message, logType);
         }
 
         public void EnableActions(bool enabled)

@@ -230,11 +230,11 @@ namespace GreedDungeon.Combat
             }
         }
 
-        private void HandleBattleLog(string message)
+        private void HandleBattleLog(string message, UI.Battle.LogType logType)
         {
             if (_battleUI != null)
             {
-                _battleUI.AddBattleLog(message);
+                _battleUI.AddBattleLog(message, logType);
             }
         }
 
