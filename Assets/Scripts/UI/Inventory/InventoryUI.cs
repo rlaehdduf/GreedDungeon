@@ -18,6 +18,9 @@ namespace GreedDungeon.UI.Inventory
         [SerializeField] private Transform _inventoryGrid;
         [SerializeField] private GameObject _slotPrefab;
 
+        [Header("Stats")]
+        [SerializeField] private UnityEngine.UI.Text _statsText;
+
         [Header("Gold")]
         [SerializeField] private UnityEngine.UI.Text _goldText;
 
@@ -115,7 +118,24 @@ namespace GreedDungeon.UI.Inventory
         {
             RefreshEquipSlots();
             RefreshInventorySlots();
+            RefreshStats();
             RefreshGold();
+        }
+
+        private void RefreshStats()
+        {
+            if (_statsText == null || _player == null) return;
+
+            var stats = _player.TotalStats;
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine($"HP: {stats.MaxHP}");
+            sb.AppendLine($"MP: {stats.MaxMP}");
+            sb.AppendLine($"ATK: {stats.Attack}");
+            sb.AppendLine($"DEF: {stats.Defense}");
+            sb.AppendLine($"SPD: {stats.Speed}");
+            sb.Append($"CRIT: {stats.CriticalRate:F0}%");
+
+            _statsText.text = sb.ToString();
         }
 
         private void RefreshEquipSlots()
@@ -234,6 +254,6 @@ namespace GreedDungeon.UI.Inventory
 
     public static class PlayerInventoryUI
     {
-        public const int INVENTORY_SIZE = 20;
+        public const int INVENTORY_SIZE = 21;
     }
 }

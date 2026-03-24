@@ -9,7 +9,7 @@ namespace GreedDungeon.Character
 {
     public class Player : BattleEntity
     {
-        private const int INVENTORY_SIZE = 20;
+        private const int INVENTORY_SIZE = 21;
         
         private readonly List<InventoryItem> _inventory = new List<InventoryItem>(INVENTORY_SIZE);
         private readonly Dictionary<EquipmentType, InventoryItem> _equippedItems = new();

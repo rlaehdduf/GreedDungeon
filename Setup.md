@@ -176,6 +176,7 @@ Battle.unity
 ### InventoryUI (InventoryPanel에 추가)
 | 필드 | 연결 대상 |
 |------|-----------|
+| `_statsText` | 스탯 Text (HP/MP/ATK/DEF/SPD/CRIT) |
 | `_weaponSlot` | WeaponSlot (EquipSlotUI 컴포넌트) |
 | `_armorSlot` | ArmorSlot (EquipSlotUI 컴포넌트) |
 | `_accessorySlot` | AccessorySlot (EquipSlotUI 컴포넌트) |
@@ -187,15 +188,22 @@ Battle.unity
 > **인벤토리 패널 구조:**
 > ```
 > InventoryPanel (GameObject, 초기 비활성화)
+> ├── StatsText (우상단, 왼쪽 정렬)
 > ├── EquipSlots
 > │   ├── WeaponSlot (EquipSlotUI)
 > │   ├── ArmorSlot (EquipSlotUI)
 > │   └── AccessorySlot (EquipSlotUI)
 > ├── InventoryGrid (Grid Layout Group)
-> │   └── (InventorySlotUI 프리팹으로 20개 생성)
+> │   └── (InventorySlotUI 프리팹으로 21개 생성)
 > ├── GoldText
 > └── ConfirmDropPopup
 > ```
+
+> **Grid Layout Group 설정:**
+> - Cell Size: X=150, Y=150
+> - Spacing: X=20, Y=20
+> - Constraint: Fixed Column Count = 7
+> - Constraint Count: 7
 
 ### InventorySlotUI 프리팹 구조
 | 필드 | 연결 대상 |
