@@ -185,6 +185,10 @@ namespace GreedDungeon.Combat
                     int damage = (int)data.EffectValue;
                     target.TakeDamage(damage);
                     Debug.Log($"  데미지: {damage} → HP: {target.CurrentHP}/{target.TotalStats.MaxHP}");
+                    if (target.IsDead)
+                    {
+                        CheckBattleEnd();
+                    }
                     break;
             }
 
