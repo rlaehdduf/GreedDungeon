@@ -208,6 +208,8 @@ namespace GreedDungeon.Combat
 
         private void HandleBattleStarted(Monster monster)
         {
+            _battleManager.OnBattleLog += HandleBattleLog;
+            
             OnBattleStarted?.Invoke(monster);
             
             if (_monsterDisplay != null)
@@ -226,12 +228,21 @@ namespace GreedDungeon.Combat
             }
         }
 
+        private void HandleBattleLog(string message)
+        {
+            if (_battleUI != null)
+            {
+                _battleUI.AddBattleLog(message);
+            }
+        }
+
         private void OnDestroy()
         {
             if (_battleManager != null)
             {
                 _battleManager.OnBattleStarted -= HandleBattleStarted;
                 _battleManager.OnMonsterDamaged -= HandleMonsterDamaged;
+                _battleManager.OnBattleLog -= HandleBattleLog;
             }
 
             if (_battleUI != null)
