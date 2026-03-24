@@ -21,9 +21,7 @@ namespace GreedDungeon.UI.Inventory
         [SerializeField] private Text _skillTooltipDesc;
 
         private IAssetLoader _assetLoader;
-        private IGameDataManager _gameDataManager;
         private InventoryItem _currentItem;
-        private SkillDataSO _cachedSkill;
         private CanvasGroup _canvasGroup;
 
         private void Awake()
@@ -41,7 +39,6 @@ namespace GreedDungeon.UI.Inventory
             if (Services.IsInitialized)
             {
                 _assetLoader = Services.Get<IAssetLoader>();
-                _gameDataManager = Services.Get<IGameDataManager>();
             }
 
             if (_skillTooltipPanel != null)
@@ -175,59 +172,30 @@ namespace GreedDungeon.UI.Inventory
             {
                 if (_skillIcon != null) _skillIcon.gameObject.SetActive(false);
                 if (_skillTooltipPanel != null) _skillTooltipPanel.SetActive(false);
-                _cachedSkill = null;
                 return;
             }
 
-            if (itemChanged || _cachedSkill == null)
-            {
-                _cachedSkill = GetRandomSkillForDisplay(item);
-            }
-
-            if (_cachedSkill == null)
+            var skill = item.Skill;
+            
+            if (skill == null)
             {
                 if (_skillIcon != null) _skillIcon.gameObject.SetActive(false);
                 if (_skillTooltipPanel != null) _skillTooltipPanel.SetActive(false);
                 return;
             }
 
-            LoadSkillIcon(_cachedSkill.IconAddress);
+            LoadSkillIcon(skill.IconAddress);
 
             if (_skillTooltipPanel != null)
             {
                 _skillTooltipPanel.SetActive(true);
 
                 if (_skillTooltipName != null)
-                    _skillTooltipName.text = _cachedSkill.Name;
+                    _skillTooltipName.text = skill.Name;
 
                 if (_skillTooltipDesc != null)
-                    _skillTooltipDesc.text = _cachedSkill.Description ?? "";
+                    _skillTooltipDesc.text = skill.Description ?? "";
             }
-        }
-
-        private SkillDataSO GetRandomSkillForDisplay(InventoryItem item)
-        {
-            if (_gameDataManager == null) return null;
-
-            var allSkills = _gameDataManager.GetAllSkillData();
-            if (allSkills == null || allSkills.Count == 0) return null;
-
-            int minTier = item.Rarity.SkillTierMin;
-            int maxTier = item.Rarity.SkillTierMax;
-
-            var validSkills = new System.Collections.Generic.List<SkillDataSO>();
-            foreach (var skill in allSkills)
-            {
-                if (skill.Tier >= minTier && skill.Tier <= maxTier)
-                {
-                    validSkills.Add(skill);
-                }
-            }
-
-            if (validSkills.Count == 0) return null;
-
-            int randomIndex = Random.Range(0, validSkills.Count);
-            return validSkills[randomIndex];
         }
 
         private async void LoadSkillIcon(string iconAddress)

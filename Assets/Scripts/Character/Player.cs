@@ -128,7 +128,8 @@ namespace GreedDungeon.Character
             if (IsInventoryFull()) return false;
             
             var rarity = RollRarity();
-            var item = new InventoryItem(equipment, rarity);
+            var skill = RollSkillForEquipment(equipment.SkillPoolType, rarity);
+            var item = new InventoryItem(equipment, rarity, skill);
             return TryAddItem(item);
         }
 
@@ -205,8 +206,7 @@ namespace GreedDungeon.Character
             }
             
             _equippedItems[item.Equipment.Type] = item;
-            var skill = GetRandomSkillFromPool(item.Equipment.SkillPoolType);
-            if (skill != null) AddSkill(skill);
+            if (item.Skill != null) AddSkill(item.Skill);
             
             OnInventoryChanged?.Invoke();
             return true;
@@ -369,6 +369,30 @@ namespace GreedDungeon.Character
             if (!Services.IsInitialized) return null;
             var skillManager = Services.Get<ISkillManager>();
             return skillManager?.GetRandomSkill(poolType);
+        }
+
+        private SkillDataSO RollSkillForEquipment(SkillPoolType poolType, RarityDataSO rarity)
+        {
+            if (rarity == null || !rarity.HasSkill) return null;
+            if (!Services.IsInitialized) return null;
+            
+            var gameDataManager = Services.Get<IGameDataManager>();
+            var allSkills = gameDataManager?.GetAllSkillData();
+            if (allSkills == null || allSkills.Count == 0) return null;
+            
+            var validSkills = new System.Collections.Generic.List<SkillDataSO>();
+            foreach (var skill in allSkills)
+            {
+                if (skill.Tier >= rarity.SkillTierMin && skill.Tier <= rarity.SkillTierMax)
+                {
+                    validSkills.Add(skill);
+                }
+            }
+            
+            if (validSkills.Count == 0) return null;
+            
+            int randomIndex = UnityEngine.Random.Range(0, validSkills.Count);
+            return validSkills[randomIndex];
         }
     }
 }

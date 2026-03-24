@@ -14,6 +14,7 @@ namespace GreedDungeon.Items
         public EquipmentDataSO Equipment { get; }
         public ConsumableDataSO Consumable { get; }
         public RarityDataSO Rarity { get; }
+        public SkillDataSO Skill { get; }
         public int Quantity { get; private set; }
         
         public int ID => Type == ItemType.Equipment ? Equipment.ID : Consumable.ID;
@@ -22,12 +23,13 @@ namespace GreedDungeon.Items
         public string IconAddress => Type == ItemType.Equipment ? Equipment.IconAddress : Consumable.IconAddress;
         public bool IsEmpty => Type == ItemType.Equipment ? Equipment == null : Consumable == null;
 
-        public InventoryItem(EquipmentDataSO equipment, RarityDataSO rarity)
+        public InventoryItem(EquipmentDataSO equipment, RarityDataSO rarity, SkillDataSO skill = null)
         {
             Type = ItemType.Equipment;
             Equipment = equipment;
             Consumable = null;
             Rarity = rarity;
+            Skill = skill;
             Quantity = 1;
         }
 
