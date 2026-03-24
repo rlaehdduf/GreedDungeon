@@ -20,6 +20,7 @@ namespace GreedDungeon.Combat
         void ExecuteDefend(IBattleEntity defender);
         bool ExecuteItem(InventoryItem item, IBattleEntity target);
         void EndTurn();
+        void ExecuteMonsterTurn();
         bool IsBattleOver { get; }
         bool PlayerWon { get; }
     }
@@ -279,7 +280,61 @@ namespace GreedDungeon.Combat
                 if (nextEntity.IsDead)
                 {
                     CheckBattleEnd();
+                    return;
                 }
+                
+                if (nextEntity == _monster)
+                {
+                    ExecuteMonsterTurn();
+                }
+            }
+        }
+
+        public void ExecuteMonsterTurn()
+        {
+            if (_monster == null || _monster.IsDead || _player == null || _player.IsDead) return;
+
+            LogBattle($"[{_monster.Name}의 턴]");
+            
+            ExecuteMonsterAttack();
+            
+            if (_player.IsDead)
+            {
+                CheckBattleEnd();
+            }
+        }
+
+        private void ExecuteMonsterAttack()
+        {
+            int damage = _monster.BaseStats.Attack;
+            
+            if (_player.IsDefending)
+            {
+                damage = damage / 2;
+                LogBattle($"  플레이어 방어! 데미지 반감");
+            }
+            
+            int defense = _player.TotalStats.Defense;
+            damage = Mathf.Max(1, damage - defense / 2);
+            
+            _player.TakeDamage(damage);
+            LogBattle($"  {_monster.Name} 공격 → 플레이어 {damage} 데미지");
+            
+            TryApplyMonsterStatusEffect();
+        }
+
+        private void TryApplyMonsterStatusEffect()
+        {
+            if (!_monster.HasStatusEffectAttack) return;
+            
+            var effect = _monster.GetStatusEffectForAttack();
+            if (effect == null) return;
+            
+            float roll = UnityEngine.Random.value * 100;
+            if (roll < _monster.GetStatusEffectChance())
+            {
+                _player.ApplyStatusEffect(effect, effect.Duration);
+                LogBattle($"  플레이어 [{effect.Name}] 상태이상 적용!");
             }
         }
 
