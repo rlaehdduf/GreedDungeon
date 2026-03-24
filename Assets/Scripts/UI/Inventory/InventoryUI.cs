@@ -24,6 +24,10 @@ namespace GreedDungeon.UI.Inventory
         [Header("Gold")]
         [SerializeField] private UnityEngine.UI.Text _goldText;
 
+        [Header("Tooltip")]
+        [SerializeField] private ItemTooltipUI _tooltip;
+        [SerializeField] private Vector2 _tooltipOffset = new Vector2(10f, -10f);
+
         [Header("Popups")]
         [SerializeField] private ConfirmDropPopup _dropPopup;
 
@@ -49,6 +53,7 @@ namespace GreedDungeon.UI.Inventory
             SetupEquipSlots();
             CreateInventorySlots();
             SetupDropPopup();
+            SetupTooltip();
             RefreshAll();
         }
 
@@ -101,6 +106,8 @@ namespace GreedDungeon.UI.Inventory
                     slot.SetSlotIndex(i);
                     slot.OnLeftClick += OnSlotLeftClick;
                     slot.OnRightClick += OnSlotRightClick;
+                    slot.OnHoverEnter += OnSlotHoverEnter;
+                    slot.OnHoverExit += OnSlotHoverExit;
                     _inventorySlots.Add(slot);
                 }
             }
@@ -112,6 +119,47 @@ namespace GreedDungeon.UI.Inventory
             {
                 _dropPopup.OnConfirmed += OnDropConfirmed;
             }
+        }
+
+        private void SetupTooltip()
+        {
+            if (_tooltip != null)
+            {
+                _tooltip.Hide();
+            }
+        }
+
+        private void OnSlotHoverEnter(InventoryItem item, Vector2 screenPosition)
+        {
+            if (_tooltip == null || item == null) return;
+
+            _tooltip.Show(item);
+            UpdateTooltipPosition(screenPosition);
+        }
+
+        private void OnSlotHoverExit()
+        {
+            if (_tooltip != null)
+            {
+                _tooltip.Hide();
+            }
+        }
+
+        private void UpdateTooltipPosition(Vector2 screenPosition)
+        {
+            if (_tooltip == null) return;
+
+            var tooltipRect = _tooltip.GetComponent<RectTransform>();
+            var parentRect = _tooltip.transform.parent as RectTransform;
+            var canvas = GetComponentInParent<Canvas>();
+
+            if (parentRect == null || canvas == null) return;
+
+            Vector2 localPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                parentRect, screenPosition, canvas.worldCamera, out localPos);
+
+            tooltipRect.anchoredPosition = localPos + _tooltipOffset;
         }
 
         private void RefreshAll()

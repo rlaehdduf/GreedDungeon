@@ -16,16 +16,14 @@ namespace GreedDungeon.UI.Inventory
         [SerializeField] private Image _backgroundImage;
         [SerializeField] private Sprite _defaultIcon;
 
-        [Header("Tooltip")]
-        [SerializeField] private ItemTooltipUI _tooltip;
-        [SerializeField] private Vector2 _tooltipOffset = new Vector2(10f, -10f);
-
         private IAssetLoader _assetLoader;
         private InventoryItem _item;
         private int _slotIndex;
 
         public event Action<int> OnLeftClick;
         public event Action<int> OnRightClick;
+        public event Action<InventoryItem, Vector2> OnHoverEnter;
+        public event Action OnHoverExit;
 
         public int SlotIndex => _slotIndex;
         public InventoryItem Item => _item;
@@ -36,9 +34,6 @@ namespace GreedDungeon.UI.Inventory
             {
                 _assetLoader = Services.Get<IAssetLoader>();
             }
-
-            if (_tooltip != null)
-                _tooltip.Hide();
         }
 
         public void SetSlotIndex(int index)
@@ -164,33 +159,12 @@ namespace GreedDungeon.UI.Inventory
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (_item == null) return;
-            if (_tooltip == null) return;
-
-            _tooltip.Show(_item);
-            UpdateTooltipPosition(eventData.position);
+            OnHoverEnter?.Invoke(_item, eventData.position);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (_tooltip != null)
-                _tooltip.Hide();
-        }
-
-        private void UpdateTooltipPosition(Vector2 screenPosition)
-        {
-            if (_tooltip == null) return;
-
-            var tooltipRect = _tooltip.GetComponent<RectTransform>();
-            var parentRect = _tooltip.transform.parent as RectTransform;
-            var canvas = GetComponentInParent<Canvas>();
-
-            if (parentRect == null || canvas == null) return;
-
-            Vector2 localPos;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                parentRect, screenPosition, canvas.worldCamera, out localPos);
-
-            tooltipRect.anchoredPosition = localPos + _tooltipOffset;
+            OnHoverExit?.Invoke();
         }
     }
 }
