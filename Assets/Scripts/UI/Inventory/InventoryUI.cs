@@ -210,16 +210,33 @@ namespace GreedDungeon.UI.Inventory
         {
             if (_statsText == null || _player == null) return;
 
-            var stats = _player.TotalStats;
+            var baseStats = _player.GetBaseStatsWithLevel();
+            var bonusStats = _player.GetEquipmentBonusStats();
             var sb = new System.Text.StringBuilder();
-            sb.AppendLine($"HP: {stats.MaxHP}");
-            sb.AppendLine($"MP: {stats.MaxMP}");
-            sb.AppendLine($"ATK: {stats.Attack}");
-            sb.AppendLine($"DEF: {stats.Defense}");
-            sb.AppendLine($"SPD: {stats.Speed}");
-            sb.Append($"CRIT: {stats.CriticalRate:F0}%");
+            
+            sb.AppendLine($"LV: {_player.Level}");
+            sb.AppendLine(FormatStat("HP", baseStats.MaxHP, bonusStats.MaxHP));
+            sb.AppendLine(FormatStat("MP", baseStats.MaxMP, bonusStats.MaxMP));
+            sb.AppendLine(FormatStat("ATK", baseStats.Attack, bonusStats.Attack));
+            sb.AppendLine(FormatStat("DEF", baseStats.Defense, bonusStats.Defense));
+            sb.AppendLine(FormatStat("SPD", baseStats.Speed, bonusStats.Speed));
+            sb.Append(FormatStat("CRIT", baseStats.CriticalRate, bonusStats.CriticalRate, "%"));
 
             _statsText.text = sb.ToString();
+        }
+
+        private string FormatStat(string label, int baseValue, int bonusValue, string suffix = "")
+        {
+            if (bonusValue > 0)
+                return $"{label}: {baseValue} (+{bonusValue}){suffix}";
+            return $"{label}: {baseValue}{suffix}";
+        }
+
+        private string FormatStat(string label, float baseValue, float bonusValue, string suffix = "")
+        {
+            if (bonusValue > 0)
+                return $"{label}: {baseValue:F0}% (+{bonusValue:F0}%){suffix}";
+            return $"{label}: {baseValue:F0}%{suffix}";
         }
 
         private void RefreshEquipSlots()

@@ -14,25 +14,71 @@ namespace GreedDungeon.Character
         private readonly List<InventoryItem> _inventory = new List<InventoryItem>(INVENTORY_SIZE);
         private readonly Dictionary<EquipmentType, InventoryItem> _equippedItems = new();
         private int _gold;
+        private int _killCount;
+        private Stats _originalBaseStats;
 
         public override string Name => "Player";
         public int Gold => _gold;
+        public int Level { get; private set; }
+        public int KillCount => _killCount;
         public int DungeonLevel { get; private set; }
         public IReadOnlyList<InventoryItem> Inventory => _inventory;
         public int InventorySize => INVENTORY_SIZE;
         
         public event System.Action OnInventoryChanged;
+        public event System.Action OnLevelUp;
 
         public Player()
         {
-            InitializeStats(new Stats(maxHP: 100, maxMP: 50, attack: 10, defense: 5, speed: 10, criticalRate: 5f));
+            _originalBaseStats = new Stats(maxHP: 100, maxMP: 50, attack: 10, defense: 5, speed: 10, criticalRate: 5f);
+            InitializeStats(CalculateLevelStats(1));
             _gold = 0;
+            Level = 1;
+            _killCount = 0;
             DungeonLevel = 1;
             
             for (int i = 0; i < INVENTORY_SIZE; i++)
             {
                 _inventory.Add(null);
             }
+        }
+
+        private Stats CalculateLevelStats(int level)
+        {
+            var stats = _originalBaseStats.Clone();
+            float bonusPerLevel = 0.1f * (level - 1);
+            stats.MaxHP += (int)(_originalBaseStats.MaxHP * bonusPerLevel);
+            stats.MaxMP += (int)(_originalBaseStats.MaxMP * bonusPerLevel);
+            stats.Attack += (int)(_originalBaseStats.Attack * bonusPerLevel);
+            stats.Defense += (int)(_originalBaseStats.Defense * bonusPerLevel);
+            stats.Speed += (int)(_originalBaseStats.Speed * bonusPerLevel);
+            stats.CriticalRate += _originalBaseStats.CriticalRate * bonusPerLevel;
+            return stats;
+        }
+
+        public int GetExpRequiredForNextLevel()
+        {
+            return Level;
+        }
+
+        public void AddKill()
+        {
+            _killCount++;
+            int required = GetExpRequiredForNextLevel();
+            if (_killCount >= required)
+            {
+                LevelUp();
+            }
+        }
+
+        private void LevelUp()
+        {
+            Level++;
+            _killCount = 0;
+            var newStats = CalculateLevelStats(Level);
+            InitializeStats(newStats);
+            OnLevelUp?.Invoke();
+            OnInventoryChanged?.Invoke();
         }
 
         public bool IsInventoryFull()
@@ -225,6 +271,16 @@ namespace GreedDungeon.Character
             }
 
             return equipmentStats;
+        }
+
+        public Stats GetEquipmentBonusStats()
+        {
+            return GetEquipmentStats();
+        }
+
+        public Stats GetBaseStatsWithLevel()
+        {
+            return BaseStats.Clone();
         }
 
         public SkillDataSO GetSkill(int skillId)
