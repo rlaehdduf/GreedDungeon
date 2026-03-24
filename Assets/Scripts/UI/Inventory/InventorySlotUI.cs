@@ -22,7 +22,7 @@ namespace GreedDungeon.UI.Inventory
 
         public event Action<int> OnLeftClick;
         public event Action<int> OnRightClick;
-        public event Action<InventoryItem, Vector2> OnHoverEnter;
+        public event Action<InventoryItem, RectTransform> OnHoverEnter;
         public event Action OnHoverExit;
 
         public int SlotIndex => _slotIndex;
@@ -151,7 +151,7 @@ namespace GreedDungeon.UI.Inventory
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (_item == null) return;
-            OnHoverEnter?.Invoke(_item, eventData.position);
+            OnHoverEnter?.Invoke(_item, GetComponent<RectTransform>());
         }
 
         public void OnPointerExit(PointerEventData eventData)
