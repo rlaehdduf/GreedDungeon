@@ -127,6 +127,11 @@ namespace GreedDungeon.Combat
             defender.TakeDamage(result.Damage);
 
             ApplyStatusEffectFromSkill(skill, defender);
+
+            if (defender.IsDead)
+            {
+                CheckBattleEnd();
+            }
         }
 
         public void ExecuteDefend(IBattleEntity defender)
@@ -184,9 +189,13 @@ namespace GreedDungeon.Combat
             }
 
             item.RemoveQuantity(1);
-            if (item.Quantity <= 0 && target == _player)
+            if (item.Quantity <= 0)
             {
-                _player.UseItemById(data.ID);
+                int index = _player.FindItemIndex(data.ID);
+                if (index >= 0)
+                {
+                    _player.RemoveItemAt(index);
+                }
             }
             
             return true;
