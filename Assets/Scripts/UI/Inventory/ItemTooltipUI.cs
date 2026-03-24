@@ -13,10 +13,12 @@ namespace GreedDungeon.UI.Inventory
         [SerializeField] private Text _nameText;
         [SerializeField] private Text _descriptionText;
         [SerializeField] private Text _statsText;
-        [SerializeField] private GameObject _skillSection;
+
+        [Header("Skill")]
         [SerializeField] private Image _skillIcon;
-        [SerializeField] private Text _skillNameText;
-        [SerializeField] private Text _skillDescText;
+        [SerializeField] private GameObject _skillTooltipPanel;
+        [SerializeField] private Text _skillTooltipName;
+        [SerializeField] private Text _skillTooltipDesc;
 
         private IAssetLoader _assetLoader;
         private IGameDataManager _gameDataManager;
@@ -28,6 +30,9 @@ namespace GreedDungeon.UI.Inventory
                 _assetLoader = Services.Get<IAssetLoader>();
                 _gameDataManager = Services.Get<IGameDataManager>();
             }
+
+            if (_skillTooltipPanel != null)
+                _skillTooltipPanel.SetActive(false);
         }
 
         public void Show(InventoryItem item)
@@ -150,30 +155,33 @@ namespace GreedDungeon.UI.Inventory
 
         private void SetSkillSection(InventoryItem item)
         {
-            if (_skillSection == null) return;
-
             if (item.Type != ItemType.Equipment || item.Equipment == null || item.Rarity == null || !item.Rarity.HasSkill)
             {
-                _skillSection.SetActive(false);
+                if (_skillIcon != null) _skillIcon.gameObject.SetActive(false);
+                if (_skillTooltipPanel != null) _skillTooltipPanel.SetActive(false);
                 return;
             }
 
             var skill = GetRandomSkillForDisplay(item);
             if (skill == null)
             {
-                _skillSection.SetActive(false);
+                if (_skillIcon != null) _skillIcon.gameObject.SetActive(false);
+                if (_skillTooltipPanel != null) _skillTooltipPanel.SetActive(false);
                 return;
             }
 
-            _skillSection.SetActive(true);
-
-            if (_skillNameText != null)
-                _skillNameText.text = skill.Name;
-
-            if (_skillDescText != null)
-                _skillDescText.text = skill.Description ?? "";
-
             LoadSkillIcon(skill.IconAddress);
+
+            if (_skillTooltipPanel != null)
+            {
+                _skillTooltipPanel.SetActive(true);
+
+                if (_skillTooltipName != null)
+                    _skillTooltipName.text = skill.Name;
+
+                if (_skillTooltipDesc != null)
+                    _skillTooltipDesc.text = skill.Description ?? "";
+            }
         }
 
         private SkillDataSO GetRandomSkillForDisplay(InventoryItem item)

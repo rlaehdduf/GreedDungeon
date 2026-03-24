@@ -13,8 +13,6 @@ namespace GreedDungeon.UI.Inventory
     {
         [Header("UI Elements")]
         [SerializeField] private Image _iconImage;
-        [SerializeField] private Text _nameText;
-        [SerializeField] private Text _typeText;
         [SerializeField] private Image _backgroundImage;
         [SerializeField] private GameObject _equippedLabel;
         [SerializeField] private Sprite _defaultIcon;
@@ -48,17 +46,6 @@ namespace GreedDungeon.UI.Inventory
         public void SetSlotType(EquipmentType type)
         {
             _slotType = type;
-
-            if (_typeText != null)
-            {
-                _typeText.text = type switch
-                {
-                    EquipmentType.Weapon => "무기",
-                    EquipmentType.Armor => "갑옷",
-                    EquipmentType.Accessory => "악세서리",
-                    _ => type.ToString()
-                };
-            }
         }
 
         public void SetEquippedItem(InventoryItem item)
@@ -86,9 +73,6 @@ namespace GreedDungeon.UI.Inventory
                 _iconImage.color = new Color(1f, 1f, 1f, 0.3f);
             }
 
-            if (_nameText != null)
-                _nameText.text = "(비어있음)";
-
             if (_backgroundImage != null)
                 _backgroundImage.color = new Color(0.15f, 0.15f, 0.15f, 1f);
 
@@ -99,20 +83,6 @@ namespace GreedDungeon.UI.Inventory
         private async void SetItemDisplay()
         {
             var equipment = _equippedItem.Equipment;
-
-            if (_nameText != null)
-            {
-                _nameText.text = equipment.Name;
-
-                if (_equippedItem.Rarity != null)
-                {
-                    _nameText.color = _equippedItem.Rarity.Color;
-                }
-                else
-                {
-                    _nameText.color = Color.white;
-                }
-            }
 
             if (_backgroundImage != null)
             {

@@ -225,10 +225,17 @@ Battle.unity
 | 필드 | 연결 대상 |
 |------|-----------|
 | `_iconImage` | 아이콘 Image |
-| `_nameText` | 장비 이름 Text |
-| `_typeText` | 장비 타입 Text |
 | `_backgroundImage` | 배경 Image |
+| `_equippedLabel` | 장착 표시 GameObject |
 | `_tooltip` | ItemTooltipUI 컴포넌트 |
+
+> **장비 슬롯 구조:**
+> ```
+> EquipSlotUI (GameObject)
+> ├── Background (Image) ← 등급 색상 표시
+> ├── Icon (Image) ← 장비 아이콘
+> └── EquippedLabel (GameObject) ← 장착 중 표시
+> ```
 
 ### ItemTooltipUI 구조
 | 필드 | 연결 대상 |
@@ -236,10 +243,10 @@ Battle.unity
 | `_nameText` | 아이템 이름 Text |
 | `_descriptionText` | 설명 Text |
 | `_statsText` | 스탯 Text |
-| `_skillSection` | 스킬 정보 GameObject |
 | `_skillIcon` | 스킬 아이콘 Image |
-| `_skillNameText` | 스킬 이름 Text |
-| `_skillDescText` | 스킬 설명 Text |
+| `_skillTooltipPanel` | 스킬 툴팁 패널 GameObject |
+| `_skillTooltipName` | 스킬 이름 Text |
+| `_skillTooltipDesc` | 스킬 설명 Text |
 
 > **툴팁 구조:**
 > ```
@@ -249,10 +256,10 @@ Battle.unity
 >     ├── NameText
 >     ├── DescriptionText
 >     ├── StatsText
->     └── SkillSection
->         ├── SkillIcon
->         ├── SkillNameText
->         └── SkillDescText
+>     ├── SkillIcon (Image)
+>     └── SkillTooltipPanel (초기 비활성화)
+>         ├── SkillTooltipName
+>         └── SkillTooltipDesc
 > ```
 
 ### ConfirmDropPopup 구조
