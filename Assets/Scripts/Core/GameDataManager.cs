@@ -72,6 +72,20 @@ namespace GreedDungeon.Core
 
         public IReadOnlyList<MonsterDataSO> GetAllMonsterData() => _monsterList;
         public IReadOnlyList<SkillDataSO> GetAllSkillData() => _skillList;
+        
+        public MonsterDataSO GetRandomMonsterData()
+        {
+            if (_monsterList == null || _monsterList.Count == 0) return null;
+            return _monsterList[UnityEngine.Random.Range(0, _monsterList.Count)];
+        }
+        
+        public MonsterDataSO GetBossMonsterData()
+        {
+            if (_monsterList == null) return null;
+            var bosses = _monsterList.FindAll(m => m.IsBoss);
+            if (bosses == null || bosses.Count == 0) return null;
+            return bosses[UnityEngine.Random.Range(0, bosses.Count)];
+        }
         public IReadOnlyList<EquipmentDataSO> GetAllEquipmentData() => _equipmentList;
         public IReadOnlyList<ConsumableDataSO> GetAllConsumableData() => _consumableList;
         public IReadOnlyList<RarityDataSO> GetAllRarityData() => _rarityList;

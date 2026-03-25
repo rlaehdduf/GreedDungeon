@@ -187,27 +187,31 @@ namespace GreedDungeon.Combat
 
         private void HandleMonsterTurnStarted()
         {
-            if (_isActionInProgress) return;
             StartCoroutine(HandleMonsterTurnCoroutine());
         }
 
         private IEnumerator HandleMonsterTurnCoroutine()
         {
+            while (_isActionInProgress)
+            {
+                yield return null;
+            }
+            
             _isActionInProgress = true;
             _battleUI?.EnableActions(false);
 
-            yield return new WaitForSeconds(_attackStartDelay);
+            yield return new WaitForSeconds(0.15f);
 
-            if (_monsterDisplay != null)
-            {
-                yield return _monsterDisplay.PlayAttackAnimation();
-            }
+            var attackAnim = _monsterDisplay?.PlayAttackAnimation();
 
-            yield return new WaitForSeconds(_effectDisplayDelay);
+            yield return new WaitForSeconds(0.2f);
 
             _battleManager.ExecuteMonsterAttack();
 
-            yield return new WaitForSeconds(_afterDamageDelay);
+            if (attackAnim != null)
+                yield return attackAnim;
+
+            yield return new WaitForSeconds(0.15f);
 
             if (_testPlayer.IsDead)
             {
@@ -220,7 +224,6 @@ namespace GreedDungeon.Combat
                 _battleUI?.UpdateMonsterStatus(_currentMonster);
             }
 
-            yield return new WaitForSeconds(_turnTransitionDelay);
             _isActionInProgress = false;
             _battleUI?.EnableActions(true);
         }
@@ -304,6 +307,20 @@ namespace GreedDungeon.Combat
             _testPlayer = new Player();
 
             AddTestItemsToInventory();
+            
+            if (_battleUI != null)
+            {
+                _battleUI.SetupBattle(_testPlayer, _currentMonster);
+            }
+            
+            _battleManager.StartBattle(_testPlayer, _currentMonster);
+        }
+        
+        public void StartNewBattle(Monster monster)
+        {
+            if (_battleManager == null || _testPlayer == null || monster == null) return;
+            
+            _currentMonster = monster;
             
             if (_battleUI != null)
             {
@@ -411,9 +428,9 @@ namespace GreedDungeon.Combat
             _battleUI?.ShowPlayerHeal(healAmount);
         }
 
-        private void HandleAttackEffect(ScriptableObjects.SkillType skillType)
+        private void HandleAttackEffect(ScriptableObjects.SkillType skillType, int hitCount)
         {
-            _battleUI?.ShowAttackEffect(skillType);
+            _battleUI?.ShowAttackEffect(skillType, hitCount);
         }
 
         private void HandleBattleLog(string message, UI.Battle.LogType logType)

@@ -20,6 +20,9 @@ namespace GreedDungeon.Core
         
         IReadOnlyList<MonsterDataSO> GetAllMonsterData();
         IReadOnlyList<SkillDataSO> GetAllSkillData();
+        
+        MonsterDataSO GetRandomMonsterData();
+        MonsterDataSO GetBossMonsterData();
         IReadOnlyList<EquipmentDataSO> GetAllEquipmentData();
         IReadOnlyList<ConsumableDataSO> GetAllConsumableData();
         IReadOnlyList<RarityDataSO> GetAllRarityData();
