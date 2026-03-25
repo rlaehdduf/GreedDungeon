@@ -146,8 +146,8 @@ namespace GreedDungeon.Character
                 
                 if (effect.RemainingDuration <= 0)
                 {
-                    OnStatusEffectEnded?.Invoke(this, effect);
                     _statusEffects.RemoveAt(i);
+                    OnStatusEffectEnded?.Invoke(this, effect);
                 }
                 else
                 {
@@ -185,9 +185,9 @@ namespace GreedDungeon.Character
                 
                 if (buff.RemainingDuration <= 0)
                 {
-                    OnBuffEnded?.Invoke(this, buff);
                     _buffs.RemoveAt(i);
                     _statsCacheDirty = true;
+                    OnBuffEnded?.Invoke(this, buff);
                 }
                 else
                 {
