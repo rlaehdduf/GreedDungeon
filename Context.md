@@ -21,6 +21,8 @@
 4. **툴팁 Raycast 차단** - CanvasGroup `blocksRaycasts = false`
 5. **Addressables 타입** - Sprite 폴더에 아이콘 배치 후 Addressables 등록
 6. **Input System** - 새 Input System 사용 (`UnityEngine.InputSystem`)
+7. **스킬 MP 차감** - SkillManager에서만 담당 (BattleManager 중복 차감 방지)
+8. **스킬 쿨타임** - `Cooldown + 1`로 설정 (1턴 쿨타임 = 1턴 대기)
 
 ## Accomplished
 
@@ -42,6 +44,10 @@
 - 장비 스킬 풀 시스템 (장비 타입별 스킬 풀 매칭) ✅
 - 툴팁 위치 개선 (화면 경계 내 고정, 자식 요소 bounds 계산) ✅
 - 전투 시스템 완성 (몬스터 턴, 전투 로그, 사망 이벤트) ✅
+- Rarity Color 적용 (툴팁 이름 색상) ✅
+- 전투 로그 간략화 ✅
+- 스킬 MP 중복 차감 버그 수정 ✅
+- 스킬 쿨타임 매커니즘 수정 (+1) ✅
 
 ## In Progress
 
