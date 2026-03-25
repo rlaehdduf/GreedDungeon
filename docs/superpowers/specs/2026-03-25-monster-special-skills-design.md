@@ -18,7 +18,7 @@
 파일: Assets/Scripts/ScriptableObjects/MonsterSkillDataSO.cs
 
 필드:
-- ID: int                       # 스킬 식별자 (기존 패턴 준수)
+- ID: int                       # 스킬 식별자
 - Name: string                  # 스킬 이름
 - Description: string           # 설명
 - SkillType: MonsterSkillType   # Attack, Buff, Debuff, Heal
@@ -56,6 +56,9 @@ enum MonsterSkillType
 ### MonsterDataSO (수정)
 
 ```
+제거 필드:
+- SpecialSkill: string   # 기존 필드 제거
+
 추가 필드:
 - UniqueSkillID: int       # 전용 스킬 ID (0 = 없음)
 - SharedSkillID: int       # 공용 스킬 ID (0 = 없음)  
@@ -64,9 +67,10 @@ enum MonsterSkillType
 
 ### CSV 수정
 
-**Monster.csv 추가 컬럼:**
+**MonsterData.csv 수정:**
 ```
-UniqueSkillID, SharedSkillID, SkillChance
+기존 SpecialSkill 컬럼 제거
+추가 컬럼: UniqueSkillID, SharedSkillID, SkillChance
 ```
 
 **신규 MonsterSkill.csv:**
@@ -109,13 +113,23 @@ public class MonsterSkillDataSO : ScriptableObject, IData
 }
 ```
 
+### IGameDataManager (수정)
+
+```csharp
+public interface IGameDataManager
+{
+    // 기존 메서드...
+    
+    MonsterSkillDataSO GetMonsterSkillData(int id);
+    List<MonsterSkillDataSO> GetAllMonsterSkillData();
+}
+```
+
 ### GameDataManager (수정)
 
 ```csharp
-// 추가 필드
 private Dictionary<int, MonsterSkillDataSO> _monsterSkillData;
 
-// 추가 메서드
 public MonsterSkillDataSO GetMonsterSkillData(int id)
 {
     if (_monsterSkillData == null || !_monsterSkillData.TryGetValue(id, out var data))
@@ -128,11 +142,20 @@ public List<MonsterSkillDataSO> GetAllMonsterSkillData()
     return _monsterSkillData?.Values.ToList();
 }
 
-// InitializeAsync()에서 로드
-private async Task LoadMonsterSkillData()
+// InitializeAsync() 내부
+private void LoadMonsterSkillData()
 {
-    var skills = await CSVConverter.ConvertMonsterSkillData();
-    _monsterSkillData = skills?.ToDictionary(s => s.ID);
+    var folder = "Assets/ScriptableObjects/Data/MonsterSkills";
+    var guids = AssetDatabase.FindAssets("t:MonsterSkillDataSO", new[] { folder });
+    _monsterSkillData = new Dictionary<int, MonsterSkillDataSO>();
+    
+    foreach (var guid in guids)
+    {
+        var path = AssetDatabase.GUIDToAssetPath(guid);
+        var data = AssetDatabase.LoadAssetAtPath<MonsterSkillDataSO>(path);
+        if (data != null)
+            _monsterSkillData[data.ID] = data;
+    }
 }
 ```
 
@@ -184,8 +207,8 @@ public class Monster : BattleEntity
 public interface IBattleManager
 {
     // 기존 이벤트...
-    event Action<int, int> OnMonsterHealed;      // 몬스터 회복 (amount, newHP)
-    event Action<BuffType, float, int> OnMonsterBuffApplied;  // 몬스터 버프
+    event Action<int, int> OnMonsterHealed;
+    event Action<BuffType, float, int> OnMonsterBuffApplied;
 }
 ```
 
@@ -275,6 +298,34 @@ private void ExecuteMonsterHealSkill(MonsterSkillDataSO skill)
 ### BattleController (수정)
 
 ```csharp
+public void StartTestBattle()
+{
+    if (_gameDataManager == null) return;
+    
+    var monsterData = _gameDataManager.GetMonsterData(1);
+    if (monsterData == null) return;
+    
+    _currentMonster = new Monster(monsterData);
+    
+    // 스킬 주입
+    if (monsterData.UniqueSkillID > 0)
+    {
+        var uniqueSkill = _gameDataManager.GetMonsterSkillData(monsterData.UniqueSkillID);
+        var sharedSkill = monsterData.SharedSkillID > 0 
+            ? _gameDataManager.GetMonsterSkillData(monsterData.SharedSkillID) 
+            : null;
+        _currentMonster.SetSkills(uniqueSkill, sharedSkill);
+    }
+    
+    _testPlayer = new Player();
+    AddTestItemsToInventory();
+    
+    if (_battleUI != null)
+        _battleUI.SetupBattle(_testPlayer, _currentMonster);
+    
+    _battleManager.StartBattle(_testPlayer, _currentMonster);
+}
+
 private IEnumerator HandleMonsterTurnCoroutine()
 {
     // ... 기존 대기 로직 ...
@@ -297,60 +348,164 @@ private IEnumerator HandleMonsterTurnCoroutine()
 ### CSVConverter (수정)
 
 ```csharp
-public static async Task<List<MonsterSkillDataSO>> ConvertMonsterSkillData()
+// GetAssetID에 추가
+private static int GetAssetID(UnityEngine.Object asset)
 {
-    var csvPath = Path.Combine(Application.dataPath, "EditorData/Data/csv/MonsterSkill.csv");
-    var lines = await File.ReadAllLinesAsync(csvPath);
-    
-    var skills = new List<MonsterSkillDataSO>();
-    
-    for (int i = 1; i < lines.Length; i++)
+    return asset switch
     {
-        var values = ParseCSVLine(lines[i]);
-        if (values.Length < 13) continue;
-        
-        var skill = ScriptableObject.CreateInstance<MonsterSkillDataSO>();
-        skill.ID = int.Parse(values[0]);
-        skill.Name = values[1];
-        skill.Description = values[2];
-        skill.SkillType = Enum.Parse<MonsterSkillType>(values[3]);
-        skill.IsShared = bool.Parse(values[4]);
-        skill.DamageMultiplier = float.Parse(values[5]);
-        skill.HitCount = int.Parse(values[6]);
-        skill.StatusEffectID = values[7];
-        skill.StatusEffectChance = float.Parse(values[8]);
-        skill.BuffType = Enum.Parse<BuffType>(values[9]);
-        skill.BuffValue = float.Parse(values[10]);
-        skill.BuffDuration = int.Parse(values[11]);
-        skill.HealPercent = float.Parse(values[12]);
-        
-        skills.Add(skill);
-        
-        AssetDatabase.CreateAsset(skill, $"Assets/EditorData/Data/ScriptableObjects/MonsterSkill/MonsterSkill_{skill.ID}.asset");
-    }
+        StatusEffectDataSO s => s.ID,
+        RarityDataSO r => r.ID,
+        SkillDataSO sk => sk.ID,
+        EquipmentDataSO e => e.ID,
+        MonsterDataSO m => m.ID,
+        ConsumableDataSO c => c.ID,
+        MonsterSkillDataSO ms => ms.ID,  // 추가
+        _ => -1
+    };
+}
+
+// ConvertAll에 추가
+public static void ConvertAll()
+{
+    int total = 0;
+    total += ConvertStatusEffects();
+    total += ConvertRarities();
+    total += ConvertSkills();
+    total += ConvertEquipments();
+    total += ConvertMonsters();
+    total += ConvertConsumables();
+    total += ConvertMonsterSkills();  // 추가
     
     AssetDatabase.SaveAssets();
-    return skills;
+    AssetDatabase.Refresh();
+    
+    Debug.Log($"═══ CSV 변환 완료! 총 {total}개 ═══");
+}
+
+// 신규 메서드
+[MenuItem("Tools/CSV/Convert MonsterSkills")]
+public static int ConvertMonsterSkills()
+{
+    string csvFile = Path.Combine(CSV_PATH, "MonsterSkill.csv");
+    if (!File.Exists(csvFile))
+    {
+        Debug.LogWarning($"파일 없음: {csvFile}");
+        return 0;
+    }
+
+    string outputPath = Path.Combine(OUTPUT_PATH, "MonsterSkills");
+    if (!Directory.Exists(outputPath))
+        Directory.CreateDirectory(outputPath);
+
+    var lines = ReadCSV(csvFile);
+    int count = 0;
+    for (int i = 1; i < lines.Count; i++)
+    {
+        var values = lines[i];
+        if (values.Count < 13 || !int.TryParse(values[0], out int id)) continue;
+
+        var data = FindExistingAsset<MonsterSkillDataSO>(id, outputPath);
+        bool isNew = data == null;
+        
+        if (isNew)
+        {
+            data = ScriptableObject.CreateInstance<MonsterSkillDataSO>();
+        }
+        else
+        {
+            RenameAssetIfNeeded(data, id, values[1], outputPath);
+        }
+
+        data.ID = id;
+        data.Name = values[1];
+        data.Description = values[2];
+        data.SkillType = ParseMonsterSkillType(values[3]);
+        data.IsShared = values[4].ToLower() == "true";
+        data.DamageMultiplier = float.TryParse(values[5], NumberStyles.Float, CultureInfo.InvariantCulture, out float dm) ? dm : 1f;
+        data.HitCount = int.TryParse(values[6], out int hc) ? hc : 1;
+        data.StatusEffectID = values[7] == "None" ? "" : values[7];
+        data.StatusEffectChance = float.TryParse(values[8], NumberStyles.Float, CultureInfo.InvariantCulture, out float sec) ? sec : 0;
+        data.BuffType = ParseBuffTypeForMonsterSkill(values[9]);
+        data.BuffValue = float.TryParse(values[10], NumberStyles.Float, CultureInfo.InvariantCulture, out float bv) ? bv : 0;
+        data.BuffDuration = int.TryParse(values[11], out int bd) ? bd : 0;
+        data.HealPercent = float.TryParse(values[12], NumberStyles.Float, CultureInfo.InvariantCulture, out float hp) ? hp : 0;
+
+        if (isNew)
+        {
+            string assetPath = Path.Combine(outputPath, GetAssetFileName<MonsterSkillDataSO>(id, data.Name));
+            AssetDatabase.CreateAsset(data, assetPath);
+        }
+        
+        EditorUtility.SetDirty(data);
+        count++;
+    }
+    
+    Debug.Log($"MonsterSkill 변환 완료: {count}개");
+    return count;
+}
+
+private static MonsterSkillType ParseMonsterSkillType(string value)
+{
+    return value switch
+    {
+        "Attack" => MonsterSkillType.Attack,
+        "Buff" => MonsterSkillType.Buff,
+        "Debuff" => MonsterSkillType.Debuff,
+        "Heal" => MonsterSkillType.Heal,
+        _ => MonsterSkillType.Attack
+    };
+}
+
+private static BuffType ParseBuffTypeForMonsterSkill(string value)
+{
+    return value switch
+    {
+        "Attack" => BuffType.Attack,
+        "Defense" => BuffType.Defense,
+        "Speed" => BuffType.Speed,
+        _ => BuffType.None
+    };
+}
+
+// ConvertMonsters 수정
+public static int ConvertMonsters()
+{
+    // ... 기존 코드 ...
+    
+    // 기존 SpecialSkill 대신 새 필드 사용
+    // data.SpecialSkill = values[12];  // 제거
+    data.UniqueSkillID = int.TryParse(values[12], out int usid) ? usid : 0;
+    data.SharedSkillID = int.TryParse(values[13], out int ssid) ? ssid : 0;
+    data.SkillChance = float.TryParse(values[14], NumberStyles.Float, CultureInfo.InvariantCulture, out float sc) ? sc : 0;
+    
+    // 인덱스 조정
+    data.IsBoss = values[15].ToLower().Replace("fasle", "false") == "true";
+    data.PrefabAddress = values[16];
+    data.ScaleX = float.TryParse(values[17], NumberStyles.Float, CultureInfo.InvariantCulture, out float sx) ? sx : 1f;
+    data.ScaleY = float.TryParse(values[18], NumberStyles.Float, CultureInfo.InvariantCulture, out float sy) ? sy : 1f;
+    
+    // ...
 }
 ```
 
 ## 실행 흐름
 
 ```
+CSVConverter.ConvertAll()
+    ↓ ConvertMonsterSkills()
+MonsterSkillDataSO 에셋 생성
+    ↓
 GameDataManager.InitializeAsync()
     ↓ LoadMonsterSkillData()
-MonsterSkillDataSO 로드 완료
+_monsterSkillData Dictionary 구축
     ↓
 BattleController.StartTestBattle()
-    ↓
-new Monster(data)
-    ↓
-monster.SetSkills(gameDataManager.GetMonsterSkillData(uniqueID),
-                  gameDataManager.GetMonsterSkillData(sharedID))
+    ↓ new Monster(monsterData)
+    ↓ monster.SetSkills(GetMonsterSkillData(uniqueID), GetMonsterSkillData(sharedID))
+Monster에 스킬 주입 완료
     ↓
 HandleMonsterTurnCoroutine()
-    ↓
-monster.GetRandomSkill()
+    ↓ monster.GetRandomSkill()
     ↓ SkillChance 체크
 skill != null → BattleManager.ExecuteMonsterSkill(skill)
 skill == null → BattleManager.ExecuteMonsterAttack()
@@ -358,37 +513,38 @@ skill == null → BattleManager.ExecuteMonsterAttack()
 
 ## 공용 스킬 예시
 
-| ID | 이름 | 타입 | 효과 |
-|----|------|------|------|
-| 1 | 강타 | Attack | 150% 데미지 |
-| 2 | 연속공격 | Attack | 2회 타격 |
-| 3 | 독가스 | Debuff | 중독 30% 확률 |
-| 4 | 분노 | Buff | 공격력 +30% 3턴 |
-| 5 | 재생 | Heal | HP 20% 회복 |
+| ID | 이름 | 타입 | IsShared | 효과 |
+|----|------|------|----------|------|
+| 1 | 강타 | Attack | true | 150% 데미지 |
+| 2 | 연속공격 | Attack | true | 2회 타격 |
+| 3 | 독가스 | Debuff | true | 중독 30% 확률 |
+| 4 | 분노 | Buff | true | 공격력 +30% 3턴 |
+| 5 | 재생 | Heal | true | HP 20% 회복 |
 
 ## 전용 스킬 예시
 
-| ID | 몬스터 | 스킬 | 효과 |
-|----|--------|------|------|
-| 101 | 슬라임 | 분열 | HP 30% 회복 |
-| 102 | 고블린 | 약점공격 | 200% 데미지 |
-| 103 | 오크 | 전투함성 | 공격력 +50% 2턴 |
-| 104 | 드래곤 | 화염숨 | 2회 타격 + 화상 |
+| ID | 이름 | 타입 | IsShared | 대상 몬스터 | 효과 |
+|----|------|------|----------|------------|------|
+| 101 | 분열 | Heal | false | 슬라임 | HP 30% 회복 |
+| 102 | 약점공격 | Attack | false | 고블린 | 200% 데미지 |
+| 103 | 전투함성 | Buff | false | 오크 | 공격력 +50% 2턴 |
+| 104 | 화염숨 | Debuff | false | 드래곤 | 2회 타격 + 화상 |
 
 ## 구현 순서
 
-1. MonsterSkillDataSO.cs 생성
-2. MonsterSkillType enum 정의
-3. MonsterDataSO 수정 (UniqueSkillID, SharedSkillID, SkillChance 추가)
-4. CSVConverter.ConvertMonsterSkillData() 추가
-5. GameDataManager 수정 (LoadMonsterSkillData, GetMonsterSkillData)
-6. Monster.cs 수정 (SetSkills, GetRandomSkill)
-7. IBattleManager 이벤트 추가 (OnMonsterHealed, OnMonsterBuffApplied)
-8. BattleManager 수정 (ExecuteMonsterSkill 및 서브 메서드)
-9. BattleController 수정 (스킬 사용 분기)
-10. MonsterSkill.csv 생성
-11. Monster.csv 수정
-12. 테스트 데이터 생성 및 검증
+1. MonsterSkillType enum 정의 (MonsterSkillDataSO.cs 내부)
+2. MonsterSkillDataSO.cs 생성
+3. MonsterDataSO 수정 (SpecialSkill 제거, UniqueSkillID/SharedSkillID/SkillChance 추가)
+4. CSVConverter 수정 (ConvertMonsterSkills, ParseMonsterSkillType, ParseBuffTypeForMonsterSkill, GetAssetID, ConvertMonsters)
+5. IGameDataManager 인터페이스 수정 (GetMonsterSkillData, GetAllMonsterSkillData)
+6. GameDataManager 수정 (LoadMonsterSkillData, _monsterSkillData)
+7. Monster.cs 수정 (SetSkills, GetRandomSkill)
+8. IBattleManager 이벤트 추가 (OnMonsterHealed, OnMonsterBuffApplied)
+9. BattleManager 수정 (ExecuteMonsterSkill 및 서브 메서드, 이벤트)
+10. BattleController 수정 (StartTestBattle 스킬 주입, HandleMonsterTurnCoroutine 분기)
+11. MonsterSkill.csv 생성
+12. MonsterData.csv 수정
+13. 테스트 데이터 생성 및 검증
 
 ## UI 고려사항
 
