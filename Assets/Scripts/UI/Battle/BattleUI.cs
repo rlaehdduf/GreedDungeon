@@ -18,6 +18,7 @@ namespace GreedDungeon.UI.Battle
 
         [Header("Effects")]
         [SerializeField] private DamageTextUI _damageTextUI;
+        [SerializeField] private AttackEffectUI _attackEffectUI;
 
         [Header("Inventory")]
         [SerializeField] private Inventory.InventoryUI _inventoryUI;
@@ -174,6 +175,12 @@ namespace GreedDungeon.UI.Battle
                 UnityEngine.Random.Range(100, 200)
             );
             _damageTextUI.ShowDamage(damage, randomPos, isCritical, false);
+        }
+
+        public void ShowAttackEffect(ScriptableObjects.SkillType skillType)
+        {
+            if (_attackEffectUI == null) return;
+            _attackEffectUI.ShowEffect(skillType);
         }
     }
 }

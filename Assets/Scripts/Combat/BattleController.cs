@@ -64,6 +64,7 @@ namespace GreedDungeon.Combat
             _battleManager.OnMonsterTurnStarted += HandleMonsterTurnStarted;
             _battleManager.OnPlayerDamaged += HandlePlayerDamaged;
             _battleManager.OnPlayerHealed += HandlePlayerHealed;
+            _battleManager.OnAttackEffect += HandleAttackEffect;
 
             SetupUIEvents();
         }
@@ -363,6 +364,11 @@ namespace GreedDungeon.Combat
             _battleUI?.ShowPlayerHeal(healAmount);
         }
 
+        private void HandleAttackEffect(ScriptableObjects.SkillType skillType)
+        {
+            _battleUI?.ShowAttackEffect(skillType);
+        }
+
         private void HandleBattleLog(string message, UI.Battle.LogType logType)
         {
             if (_battleUI != null)
@@ -392,6 +398,7 @@ namespace GreedDungeon.Combat
                 _battleManager.OnMonsterTurnStarted -= HandleMonsterTurnStarted;
                 _battleManager.OnPlayerDamaged -= HandlePlayerDamaged;
                 _battleManager.OnPlayerHealed -= HandlePlayerHealed;
+                _battleManager.OnAttackEffect -= HandleAttackEffect;
             }
 
             if (_battleUI != null)

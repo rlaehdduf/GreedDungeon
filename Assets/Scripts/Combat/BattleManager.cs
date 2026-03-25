@@ -15,6 +15,7 @@ public interface IBattleManager
         event Action<Monster, int> OnMonsterDamaged;
         event Action<int, bool> OnPlayerDamaged;
         event Action<int> OnPlayerHealed;
+        event Action<SkillType> OnAttackEffect;
         event Action<string, UI.Battle.LogType> OnBattleLog;
         event Action OnPlayerDeath;
         event Action OnMonsterDeath;
@@ -48,6 +49,7 @@ public interface IBattleManager
         public event Action<Monster, int> OnMonsterDamaged;
         public event Action<int, bool> OnPlayerDamaged;
         public event Action<int> OnPlayerHealed;
+        public event Action<SkillType> OnAttackEffect;
         public event Action<string, UI.Battle.LogType> OnBattleLog;
         public event Action OnPlayerDeath;
         public event Action OnMonsterDeath;
@@ -161,6 +163,9 @@ public interface IBattleManager
             bool isPlayer = attacker == _player;
             bool isPlayerDefender = defender == _player;
             string actionText = skill != null ? skill.Name : "공격";
+
+            SkillType skillType = skill != null ? skill.Type : SkillType.Neutral;
+            OnAttackEffect?.Invoke(skillType);
 
             int hitCount = skill?.HitCount ?? 1;
             int totalDamage = 0;
