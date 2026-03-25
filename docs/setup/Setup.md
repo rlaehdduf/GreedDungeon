@@ -436,6 +436,48 @@ Container 프리팹 설정 변경:
 
 ---
 
+## 2026-03-25: 전투 비주얼 시스템
+
+### Unity 설정
+
+**1. 데미지 텍스트 컨테이너**
+- Canvas 하위에 `DamageTextContainer` (GameObject) 생성
+- `DamageTextUI` 컴포넌트 추가
+- BattleUI의 `_damageTextUI`에 연결
+
+**2. 공격 이펙트 컨테이너**
+- Canvas 하위에 `AttackEffect` (Image) 생성
+- `AttackEffectUI` 컴포넌트 추가
+- BattleUI의 `_attackEffectUI`에 연결
+
+**3. 디버프 비네트 (화면 테두리 그라데이션)**
+- Canvas 하위에 `DebuffVignette` (Image) 생성
+- 화면 전체 크기 (Stretch/Stretch)
+- 원형 그라데이션 스프라이트 사용 (가장자리 불투명, 중앙 투명)
+- `DebuffVignetteUI` 컴포넌트 추가
+- BattleUI의 `_debuffVignetteUI`에 연결
+
+**4. 이펙트 스프라이트 Addressables 등록**
+- `Assets/Sprites/Effects/Neutral.png` → Address: `Effects/Neutral`
+- `Assets/Sprites/Effects/Melee.png` → Address: `Effects/Melee`
+- `Assets/Sprites/Effects/Magic.png` → Address: `Effects/Magic`
+
+### 색상 매핑
+| 디버프 | 화면 테두리 | 몬스터 오버레이 |
+|-------|-----------|---------------|
+| Burn | 빨간색 (#FF4444) | 빨간색 틴트 |
+| Poison | 녹색 (#44FF44) | 녹색 틴트 |
+| Stun | 노란색 (#FFFF44) | 노란색 틴트 |
+
+### 턴 딜레이 설정
+BattleController Inspector에서 조절:
+- `_attackStartDelay`: 0.3초
+- `_effectDisplayDelay`: 0.5초
+- `_afterDamageDelay`: 0.5초
+- `_turnTransitionDelay`: 0.3초
+
+---
+
 ## 2026-03-25: Rarity Color 적용
 
 ### 해야 할 일
