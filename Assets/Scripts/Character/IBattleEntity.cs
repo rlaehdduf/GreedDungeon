@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GreedDungeon.ScriptableObjects;
 
@@ -14,6 +15,12 @@ namespace GreedDungeon.Character
         IReadOnlyList<ActiveStatusEffect> StatusEffects { get; }
         IReadOnlyList<SkillDataSO> Skills { get; }
         IReadOnlyList<ActiveBuff> Buffs { get; }
+
+        event Action<IBattleEntity, ActiveStatusEffect, int> OnStatusEffectDamage;
+        event Action<IBattleEntity, ActiveStatusEffect> OnStatusEffectApplied;
+        event Action<IBattleEntity, ActiveStatusEffect> OnStatusEffectEnded;
+        event Action<IBattleEntity, ActiveBuff> OnBuffApplied;
+        event Action<IBattleEntity, ActiveBuff> OnBuffEnded;
 
         void TakeDamage(int damage);
         void Heal(int amount);

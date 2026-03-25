@@ -27,6 +27,11 @@ namespace GreedDungeon.Character
         public IReadOnlyList<ActiveBuff> Buffs => _buffs;
 
         public event Action<int> OnDamaged;
+        public event Action<IBattleEntity, ActiveStatusEffect, int> OnStatusEffectDamage;
+        public event Action<IBattleEntity, ActiveStatusEffect> OnStatusEffectApplied;
+        public event Action<IBattleEntity, ActiveStatusEffect> OnStatusEffectEnded;
+        public event Action<IBattleEntity, ActiveBuff> OnBuffApplied;
+        public event Action<IBattleEntity, ActiveBuff> OnBuffEnded;
 
         public Stats TotalStats
         {
@@ -119,7 +124,9 @@ namespace GreedDungeon.Character
                 existing.RemainingDuration = remainingDuration;
                 return;
             }
-            _statusEffects.Add(new ActiveStatusEffect(effect, remainingDuration));
+            var newEffect = new ActiveStatusEffect(effect, remainingDuration);
+            _statusEffects.Add(newEffect);
+            OnStatusEffectApplied?.Invoke(this, newEffect);
         }
 
         public void RemoveStatusEffect(ActiveStatusEffect effect)
@@ -129,11 +136,6 @@ namespace GreedDungeon.Character
 
         public void ProcessTurnStart()
         {
-            if (_statusEffects.Count > 0)
-            {
-                Debug.Log($"  [{Name}] 상태이상 처리 시작");
-            }
-
             for (int i = _statusEffects.Count - 1; i >= 0; i--)
             {
                 var effect = _statusEffects[i];
@@ -142,23 +144,14 @@ namespace GreedDungeon.Character
                 
                 if (effect.RemainingDuration <= 0)
                 {
-                    Debug.Log($"    [{effect.Data.Name}] 효과 종료");
+                    OnStatusEffectEnded?.Invoke(this, effect);
                     _statusEffects.RemoveAt(i);
-                }
-                else
-                {
-                    Debug.Log($"    [{effect.Data.Name}] 남은 지속: {effect.RemainingDuration}턴");
                 }
             }
         }
 
         private void ProcessStatusEffectDamage(ActiveStatusEffect effect)
         {
-            if (effect.Data.SkipTurn)
-            {
-                Debug.Log($"    [{effect.Data.Name}] 턴 스킵!");
-            }
-
             int baseDamage = effect.Data.DamagePerTurn;
             int currentHpDamage = (int)(CurrentHP * effect.Data.DamageCurrentPercent);
             int maxHpDamage = (int)(TotalStats.MaxHP * effect.Data.DamageMaxPercent);
@@ -166,13 +159,8 @@ namespace GreedDungeon.Character
 
             if (totalDamage > 0)
             {
-                string damageBreakdown = "";
-                if (baseDamage > 0) damageBreakdown += $"고정:{baseDamage}";
-                if (currentHpDamage > 0) damageBreakdown += $" 현재HP%:{currentHpDamage}";
-                if (maxHpDamage > 0) damageBreakdown += $" 최대HP%:{maxHpDamage}";
-
                 TakeDamage(totalDamage);
-                Debug.Log($"    [{effect.Data.Name}] 데미지: {totalDamage} ({damageBreakdown.Trim()}) → HP: {CurrentHP}/{TotalStats.MaxHP}");
+                OnStatusEffectDamage?.Invoke(this, effect, totalDamage);
             }
         }
 
@@ -184,12 +172,6 @@ namespace GreedDungeon.Character
 
         private void ProcessBuffDurations()
         {
-            if (_buffs.Count > 0)
-            {
-                Debug.Log($"  [{Name}] 버프 지속시간 처리");
-            }
-
-            bool anyBuffRemoved = false;
             for (int i = _buffs.Count - 1; i >= 0; i--)
             {
                 var buff = _buffs[i];
@@ -197,19 +179,10 @@ namespace GreedDungeon.Character
                 
                 if (buff.RemainingDuration <= 0)
                 {
-                    Debug.Log($"    [{buff.Type}] 버프 종료");
+                    OnBuffEnded?.Invoke(this, buff);
                     _buffs.RemoveAt(i);
-                    anyBuffRemoved = true;
+                    _statsCacheDirty = true;
                 }
-                else
-                {
-                    Debug.Log($"    [{buff.Type}] 남은 지속: {buff.RemainingDuration}턴");
-                }
-            }
-            
-            if (anyBuffRemoved)
-            {
-                InvalidateStatsCache();
             }
         }
 
@@ -225,12 +198,13 @@ namespace GreedDungeon.Character
             if (existing != null)
             {
                 existing.RemainingDuration = duration;
-                Debug.Log($"  [{Name}] {type} 버프 갱신: {value}% (지속: {duration}턴)");
+                OnBuffApplied?.Invoke(this, existing);
                 return;
             }
-            _buffs.Add(new ActiveBuff(type, value, duration));
-            InvalidateStatsCache();
-            Debug.Log($"  [{Name}] {type} 버프 적용: +{value}% (지속: {duration}턴)");
+            var newBuff = new ActiveBuff(type, value, duration);
+            _buffs.Add(newBuff);
+            _statsCacheDirty = true;
+            OnBuffApplied?.Invoke(this, newBuff);
         }
 
         public void RemoveBuff(ActiveBuff buff)

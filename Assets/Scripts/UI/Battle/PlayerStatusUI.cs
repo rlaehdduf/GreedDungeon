@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private List<StatusEffectSlotUI> _buffSlots = new();
 
         private IAssetLoader _assetLoader;
+        private Player _player;
 
         private void Start()
         {
@@ -32,11 +34,60 @@ namespace GreedDungeon.UI.Battle
             ClearAllSlots();
         }
 
+        private void OnDestroy()
+        {
+            UnsubscribePlayerEvents();
+        }
+
         public void Setup(Player player)
         {
+            UnsubscribePlayerEvents();
+            _player = player;
+            SubscribePlayerEvents();
             UpdateStatus(player);
             UpdateDebuffs(player);
             UpdateBuffs(player);
+        }
+
+        private void SubscribePlayerEvents()
+        {
+            if (_player == null) return;
+            _player.OnDamaged += OnPlayerDamaged;
+            _player.OnStatusEffectApplied += OnStatusEffectChanged;
+            _player.OnStatusEffectEnded += OnStatusEffectChanged;
+            _player.OnBuffApplied += OnBuffChanged;
+            _player.OnBuffEnded += OnBuffChanged;
+        }
+
+        private void UnsubscribePlayerEvents()
+        {
+            if (_player == null) return;
+            _player.OnDamaged -= OnPlayerDamaged;
+            _player.OnStatusEffectApplied -= OnStatusEffectChanged;
+            _player.OnStatusEffectEnded -= OnStatusEffectChanged;
+            _player.OnBuffApplied -= OnBuffChanged;
+            _player.OnBuffEnded -= OnBuffChanged;
+        }
+
+        private void OnPlayerDamaged(int damage)
+        {
+            if (_player != null)
+                UpdateStatus(_player);
+        }
+
+        private void OnStatusEffectChanged(IBattleEntity entity, ActiveStatusEffect effect)
+        {
+            if (_player != null)
+                UpdateDebuffs(_player);
+        }
+
+        private void OnBuffChanged(IBattleEntity entity, ActiveBuff buff)
+        {
+            if (_player != null)
+            {
+                UpdateBuffs(_player);
+                UpdateStatus(_player);
+            }
         }
 
         public void UpdateStatus(Player player)

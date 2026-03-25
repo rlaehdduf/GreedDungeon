@@ -72,9 +72,59 @@ event Action<string, UI.Battle.LogType> OnBattleLog;
             _turnManager.Initialize(_battleEntities);
 
             _monster.OnDamaged += HandleMonsterDamaged;
+            
+            SubscribeEntityEvents(_player);
+            SubscribeEntityEvents(_monster);
+            
             OnBattleStarted?.Invoke(_monster);
 
             LogBattle($"전투: {_monster.Name}");
+        }
+
+        private void SubscribeEntityEvents(IBattleEntity entity)
+        {
+            entity.OnStatusEffectDamage += HandleStatusEffectDamage;
+            entity.OnStatusEffectApplied += HandleStatusEffectApplied;
+            entity.OnStatusEffectEnded += HandleStatusEffectEnded;
+            entity.OnBuffApplied += HandleBuffApplied;
+            entity.OnBuffEnded += HandleBuffEnded;
+        }
+
+        private void UnsubscribeEntityEvents(IBattleEntity entity)
+        {
+            entity.OnStatusEffectDamage -= HandleStatusEffectDamage;
+            entity.OnStatusEffectApplied -= HandleStatusEffectApplied;
+            entity.OnStatusEffectEnded -= HandleStatusEffectEnded;
+            entity.OnBuffApplied -= HandleBuffApplied;
+            entity.OnBuffEnded -= HandleBuffEnded;
+        }
+
+        private void HandleStatusEffectDamage(IBattleEntity entity, ActiveStatusEffect effect, int damage)
+        {
+            var logType = entity == _player ? UI.Battle.LogType.Player : UI.Battle.LogType.Monster;
+            LogBattle($"{effect.Data.Name} → {damage} Dmg", logType);
+        }
+
+        private void HandleStatusEffectApplied(IBattleEntity entity, ActiveStatusEffect effect)
+        {
+            var logType = entity == _player ? UI.Battle.LogType.Player : UI.Battle.LogType.Monster;
+            LogBattle($"→ {effect.Data.Name} ({effect.RemainingDuration}턴)", logType);
+        }
+
+        private void HandleStatusEffectEnded(IBattleEntity entity, ActiveStatusEffect effect)
+        {
+            var logType = entity == _player ? UI.Battle.LogType.Player : UI.Battle.LogType.Monster;
+            LogBattle($"{effect.Data.Name} 종료", logType);
+        }
+
+        private void HandleBuffApplied(IBattleEntity entity, ActiveBuff buff)
+        {
+            LogBattle($"{buff.Type} +{buff.Value}% ({buff.RemainingDuration}턴)", UI.Battle.LogType.Player);
+        }
+
+        private void HandleBuffEnded(IBattleEntity entity, ActiveBuff buff)
+        {
+            LogBattle($"{buff.Type} 버프 종료", UI.Battle.LogType.Player);
         }
 
         private void HandleMonsterDamaged(int damage)
@@ -84,9 +134,14 @@ event Action<string, UI.Battle.LogType> OnBattleLog;
 
         private void CleanupPreviousBattle()
         {
+            if (_player != null)
+            {
+                UnsubscribeEntityEvents(_player);
+            }
             if (_monster != null)
             {
                 _monster.OnDamaged -= HandleMonsterDamaged;
+                UnsubscribeEntityEvents(_monster);
             }
         }
 
