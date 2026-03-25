@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using GreedDungeon.Character;
 using GreedDungeon.Core;
 using GreedDungeon.ScriptableObjects;
@@ -13,11 +14,18 @@ namespace GreedDungeon.Combat
         [SerializeField] private UI.Battle.MonsterDisplay _monsterDisplay;
         [SerializeField] private UI.Battle.BattleUI _battleUI;
 
+        [Header("Delay Settings")]
+        [SerializeField] private float _attackStartDelay = 0.3f;
+        [SerializeField] private float _effectDisplayDelay = 0.5f;
+        [SerializeField] private float _afterDamageDelay = 0.5f;
+        [SerializeField] private float _turnTransitionDelay = 0.3f;
+
         private IBattleManager _battleManager;
         private IGameDataManager _gameDataManager;
         private ISkillManager _skillManager;
         private Player _testPlayer;
         private Monster _currentMonster;
+        private bool _isActionInProgress;
 
         public event Action<Monster> OnBattleStarted;
         public event Action<Monster, int> OnMonsterDamaged;
@@ -53,6 +61,7 @@ namespace GreedDungeon.Combat
             _battleManager.OnMonsterDamaged += HandleMonsterDamaged;
             _battleManager.OnPlayerDeath += HandlePlayerDeath;
             _battleManager.OnMonsterDeath += HandleMonsterDeath;
+            _battleManager.OnMonsterTurnStarted += HandleMonsterTurnStarted;
 
             SetupUIEvents();
         }
@@ -73,28 +82,113 @@ namespace GreedDungeon.Combat
 
         private void HandleSkillSelected(int skillId)
         {
+            if (_isActionInProgress) return;
+            StartCoroutine(HandleSkillSelectedCoroutine(skillId));
+        }
+
+        private IEnumerator HandleSkillSelectedCoroutine(int skillId)
+        {
+            _isActionInProgress = true;
+            _battleUI?.EnableActions(false);
+
+            yield return new WaitForSeconds(_attackStartDelay);
+
             if (UseSkill(skillId))
             {
+                yield return new WaitForSeconds(_effectDisplayDelay);
                 _battleManager.EndTurn();
                 _battleUI?.UpdatePlayerStatus(_testPlayer);
                 _battleUI?.UpdateMonsterStatus(_currentMonster);
                 _skillSlotUI?.UpdateCooldownDisplay();
             }
+
+            yield return new WaitForSeconds(_turnTransitionDelay);
+            _isActionInProgress = false;
+            _battleUI?.EnableActions(true);
         }
 
         private void HandleAttackClicked()
         {
+            if (_isActionInProgress) return;
+            StartCoroutine(HandleAttackCoroutine());
+        }
+
+        private IEnumerator HandleAttackCoroutine()
+        {
+            _isActionInProgress = true;
+            _battleUI?.EnableActions(false);
+
+            yield return new WaitForSeconds(_attackStartDelay);
+
             _battleManager.ExecuteAttack(_testPlayer, _currentMonster, null);
+
+            yield return new WaitForSeconds(_afterDamageDelay);
             _battleManager.EndTurn();
             _battleUI?.UpdatePlayerStatus(_testPlayer);
             _battleUI?.UpdateMonsterStatus(_currentMonster);
+
+            yield return new WaitForSeconds(_turnTransitionDelay);
+            _isActionInProgress = false;
+            _battleUI?.EnableActions(true);
         }
 
         private void HandleDefendClicked()
         {
+            if (_isActionInProgress) return;
+            StartCoroutine(HandleDefendCoroutine());
+        }
+
+        private IEnumerator HandleDefendCoroutine()
+        {
+            _isActionInProgress = true;
+            _battleUI?.EnableActions(false);
+
+            yield return new WaitForSeconds(_attackStartDelay);
+
             _battleManager.ExecuteDefend(_testPlayer);
+
+            yield return new WaitForSeconds(_afterDamageDelay);
             _battleManager.EndTurn();
             _battleUI?.UpdatePlayerStatus(_testPlayer);
+
+            yield return new WaitForSeconds(_turnTransitionDelay);
+            _isActionInProgress = false;
+            _battleUI?.EnableActions(true);
+        }
+
+        private void HandleMonsterTurnStarted()
+        {
+            if (_isActionInProgress) return;
+            StartCoroutine(HandleMonsterTurnCoroutine());
+        }
+
+        private IEnumerator HandleMonsterTurnCoroutine()
+        {
+            _isActionInProgress = true;
+            _battleUI?.EnableActions(false);
+
+            yield return new WaitForSeconds(_attackStartDelay);
+
+            yield return new WaitForSeconds(_effectDisplayDelay);
+
+            _battleManager.ExecuteMonsterAttack();
+
+            yield return new WaitForSeconds(_afterDamageDelay);
+
+            if (_testPlayer.IsDead)
+            {
+                _battleUI?.ShowGameOver();
+            }
+            else
+            {
+                _battleManager.EndTurn();
+                _battleUI?.UpdatePlayerStatus(_testPlayer);
+                _battleUI?.UpdateMonsterStatus(_currentMonster);
+            }
+
+            yield return new WaitForSeconds(_turnTransitionDelay);
+            _isActionInProgress = false;
+            _battleUI?.EnableActions(true);
         }
 
         private void HandleItemClicked()
@@ -104,15 +198,37 @@ namespace GreedDungeon.Combat
 
         private void HandleItemUsed(Items.InventoryItem item)
         {
-            if (item == null || item.Type != Items.ItemType.Consumable) return;
-            
+            if (_isActionInProgress) return;
+            StartCoroutine(HandleItemUsedCoroutine(item));
+        }
+
+        private IEnumerator HandleItemUsedCoroutine(Items.InventoryItem item)
+        {
+            _isActionInProgress = true;
+            _battleUI?.EnableActions(false);
+
+            yield return new WaitForSeconds(_attackStartDelay);
+
+            if (item == null || item.Type != Items.ItemType.Consumable)
+            {
+                _isActionInProgress = false;
+                _battleUI?.EnableActions(true);
+                yield break;
+            }
+
             var target = GetConsumableTarget(item);
             _battleManager.ExecuteItem(item, target);
+
+            yield return new WaitForSeconds(_afterDamageDelay);
             _battleManager.EndTurn();
-            
+
             _battleUI?.CloseInventory();
             _battleUI?.UpdatePlayerStatus(_testPlayer);
             _battleUI?.UpdateMonsterStatus(_currentMonster);
+
+            yield return new WaitForSeconds(_turnTransitionDelay);
+            _isActionInProgress = false;
+            _battleUI?.EnableActions(true);
         }
 
         private Character.IBattleEntity GetConsumableTarget(Items.InventoryItem item)
@@ -254,6 +370,7 @@ namespace GreedDungeon.Combat
                 _battleManager.OnBattleLog -= HandleBattleLog;
                 _battleManager.OnPlayerDeath -= HandlePlayerDeath;
                 _battleManager.OnMonsterDeath -= HandleMonsterDeath;
+                _battleManager.OnMonsterTurnStarted -= HandleMonsterTurnStarted;
             }
 
             if (_battleUI != null)

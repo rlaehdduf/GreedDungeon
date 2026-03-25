@@ -9,20 +9,21 @@ using UnityEngine;
 
 namespace GreedDungeon.Combat
 {
-    public interface IBattleManager
+public interface IBattleManager
     {
         event Action<Monster> OnBattleStarted;
         event Action<Monster, int> OnMonsterDamaged;
-event Action<string, UI.Battle.LogType> OnBattleLog;
+        event Action<string, UI.Battle.LogType> OnBattleLog;
         event Action OnPlayerDeath;
         event Action OnMonsterDeath;
-        
+        event Action OnMonsterTurnStarted;
+
         void StartBattle(Player player, Monster monster);
         void ExecuteAttack(IBattleEntity attacker, IBattleEntity defender, SkillDataSO skill);
         void ExecuteDefend(IBattleEntity defender);
         bool ExecuteItem(InventoryItem item, IBattleEntity target);
         void EndTurn();
-        void ExecuteMonsterTurn();
+        void ExecuteMonsterAttack();
         bool IsBattleOver { get; }
         bool PlayerWon { get; }
     }
@@ -46,6 +47,7 @@ event Action<string, UI.Battle.LogType> OnBattleLog;
         public event Action<string, UI.Battle.LogType> OnBattleLog;
         public event Action OnPlayerDeath;
         public event Action OnMonsterDeath;
+        public event Action OnMonsterTurnStarted;
 
         public BattleManager(IDamageCalculator damageCalculator, ITurnManager turnManager, IGameDataManager gameDataManager)
         {
@@ -298,27 +300,12 @@ event Action<string, UI.Battle.LogType> OnBattleLog;
                 
                 if (nextEntity == _monster)
                 {
-                    ExecuteMonsterTurn();
+                    OnMonsterTurnStarted?.Invoke();
                 }
             }
-        }
+}
 
-public void ExecuteMonsterTurn()
-        {
-            if (_monster == null || _monster.IsDead || _player == null || _player.IsDead) return;
-            
-            ExecuteMonsterAttack();
-            
-            if (_player.IsDead)
-            {
-                CheckBattleEnd();
-                return;
-            }
-            
-            EndTurn();
-        }
-
-        private void ExecuteMonsterAttack()
+        public void ExecuteMonsterAttack()
         {
             int damage = _monster.BaseStats.Attack;
             
