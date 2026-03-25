@@ -496,6 +496,196 @@ BattleController Inspector에서 조절:
 
 ---
 
+## 2026-03-25: 던전 방 전환 시스템
+
+### 개요
+몬스터 처치 후 조우 시스템(전투/보물/상점)을 통해 다음 방으로 전환합니다.
+
+### 생성된 파일
+```
+Assets/Scripts/Dungeon/
+├── DungeonState.cs          # 던전 상태 enum
+├── EncounterType.cs         # 조우 타입 enum
+├── DungeonProgress.cs       # 진행도/보스 확률
+├── EncounterSystem.cs       # 조우 확률 계산
+├── BackgroundScroller.cs    # 배경 스크롤 애니메이션
+├── DungeonController.cs     # 전체 흐름 제어
+└── UI/
+    ├── TreasurePopupUI.cs   # 보물 획득 팝업
+    └── ShopUI.cs            # 상점 UI
+```
+
+### Unity Editor 설정
+
+#### 1. TreasurePopupUI 프리팹 생성
+
+**위치:** `Assets/Prefabs/UI/TreasurePopup.prefab`
+
+```
+TreasurePopup (GameObject, 초기 비활성화)
+├── CanvasGroup (컴포넌트)
+├── Image (배경, Color: R=0, G=0, B=0, A=200)
+└── Content (Vertical Layout Group)
+    ├── TitleText (Text) ← "보물 획득!"
+    ├── GoldText (Text) ← "+50G"
+    ├── ItemContainer (Horizontal Layout Group)
+    │   └── (InventorySlotUI 프리팹으로 아이템 표시)
+    └── ConfirmButton (Button) ← "확인"
+```
+
+**TreasurePopupUI 컴포넌트 설정:**
+| 필드 | 연결 대상 |
+|------|-----------|
+| `_goldText` | GoldText |
+| `_itemContainer` | ItemContainer Transform |
+| `_itemSlotPrefab` | `Assets/Prefabs/UI/InventorySlot.prefab` |
+| `_confirmButton` | ConfirmButton |
+
+**CanvasGroup 설정:**
+| 속성 | 값 |
+|------|---|
+| Alpha | 1 |
+| Interactable | true |
+| Blocks Raycasts | true |
+
+---
+
+#### 2. ShopUI 프리팹 생성
+
+**위치:** `Assets/Prefabs/UI/Shop.prefab`
+
+```
+Shop (GameObject, 초기 비활성화)
+├── CanvasGroup (컴포넌트)
+├── Image (배경)
+└── Content (Horizontal Layout Group)
+    ├── LeftPanel (Shop Items)
+    │   ├── TitleText (Text) ← "상점"
+    │   ├── ShopSlotsContainer (Vertical Layout Group)
+    │   │   └── (3개 슬롯 동적 생성)
+    │   └── PlayerGoldText (Text) ← "1000G"
+    ├── RightPanel (Player Inventory for Selling)
+    │   ├── TitleText (Text) ← "판매"
+    │   └── PlayerInventoryContainer (Grid Layout Group)
+    │       └── (플레이어 아이템 동적 생성)
+    └── LeaveButton (Button) ← "나가기"
+```
+
+**ShopUI 컴포넌트 설정:**
+| 필드 | 연결 대상 |
+|------|-----------|
+| `_shopSlotsContainer` | ShopSlotsContainer Transform |
+| `_slotPrefab` | `Assets/Prefabs/UI/InventorySlot.prefab` |
+| `_playerInventoryContainer` | PlayerInventoryContainer Transform |
+| `_playerSlotPrefab` | `Assets/Prefabs/UI/InventorySlot.prefab` |
+| `_playerGoldText` | PlayerGoldText |
+| `_leaveButton` | LeaveButton |
+
+**Grid Layout Group (PlayerInventoryContainer):**
+| 속성 | 값 |
+|------|---|
+| Cell Size | X=80, Y=80 |
+| Spacing | X=10, Y=10 |
+| Constraint | Fixed Column Count |
+| Constraint Count | 4 |
+
+---
+
+#### 3. BackgroundScroller 설정
+
+**위치:** Battle 씬의 Background GameObject
+
+1. Background GameObject 선택
+2. `BackgroundScroller` 컴포넌트 추가
+3. Inspector 설정:
+   | 필드 | 값 |
+   |------|---|
+   | `_scrollDuration` | 0.5 |
+   | `_scaleAmount` | 0.1 |
+
+> 배경이 위아래로 살짝 움직이며 방 전환을 시각적으로 표현
+
+---
+
+#### 4. DungeonController 설정
+
+**위치:** Battle 씬의 Managers GameObject
+
+1. Managers GameObject 선택 또는 새로 생성
+2. `DungeonController` 컴포넌트 추가
+3. Inspector 설정:
+   | 필드 | 연결 대상 |
+   |------|-----------|
+   | `_treasurePopupUI` | TreasurePopup GameObject |
+   | `_shopUI` | Shop GameObject |
+   | `_backgroundScroller` | Background (BackgroundScroller) |
+   | `_battleController` | BattleController 컴포넌트 |
+   | `_minGoldReward` | 10 |
+   | `_maxGoldReward` | 50 |
+
+---
+
+#### 5. BattleController에 DungeonController 연결
+
+**BattleController 컴포넌트 Inspector:**
+| 필드 | 연결 대상 |
+|------|-----------|
+| `_dungeonController` | DungeonController 컴포넌트 |
+
+> 이미 추가된 필드. 연결만 하면 됩니다.
+
+---
+
+#### 6. UI 계층 구조 (Battle 씬 Canvas)
+
+```
+Canvas
+├── (기존 UI들...)
+├── TreasurePopup (TreasurePopupUI) ← 새로 추가
+└── Shop (ShopUI) ← 새로 추가
+```
+
+> TreasurePopup과 Shop은 Canvas 최상위에 배치 (다른 UI 위에 표시)
+
+---
+
+### 데이터 흐름
+
+```
+몬스터 처치
+    ↓
+[BattleController.HandleMonsterDeath]
+    ↓
+[DungeonController.OnMonsterDeath]
+    ↓
+[EncounterSystem.GetNextEncounter]
+    ├─ Battle (60%) → [BackgroundScroller] → 다음 몬스터
+    ├─ Treasure (25%) → [TreasurePopupUI] → 확인 → 다음 몬스터
+    └─ Shop (15%) → [ShopUI] → 나가기 → 다음 몬스터
+```
+
+### 보스 확률 계산
+
+| 처치 수 | 보스 확률 |
+|--------|----------|
+| 1~9 | 0% |
+| 10 | 10% |
+| 11 | 20% |
+| 12 | 30% |
+| ... | ... |
+| 19+ | 100% |
+
+### 확인 체크리스트
+
+- [ ] TreasurePopup 프리팹 생성 및 컴포넌트 연결
+- [ ] Shop 프리팹 생성 및 컴포넌트 연결
+- [ ] Background에 BackgroundScroller 컴포넌트 추가
+- [ ] DungeonController 컴포넌트 추가 및 참조 연결
+- [ ] BattleController에 _dungeonController 연결
+- [ ] 테스트: 몬스터 처치 후 다음 방으로 전환 확인
+
+---
+
 ## 파일 구조
 
 ```
