@@ -34,6 +34,8 @@ namespace GreedDungeon.UI.Battle
 
         public async void ShowEffect(SkillType skillType)
         {
+            Debug.Log($"[AttackEffectUI] ShowEffect called with SkillType: {skillType}");
+
             if (_effectImage == null)
             {
                 _effectImage = GetComponent<Image>();
@@ -46,6 +48,8 @@ namespace GreedDungeon.UI.Battle
             }
 
             string address = GetEffectAddress(skillType);
+            Debug.Log($"[AttackEffectUI] Loading effect from: {address}");
+            
             if (string.IsNullOrEmpty(address)) return;
 
             if (_assetLoader == null && Services.IsInitialized)
