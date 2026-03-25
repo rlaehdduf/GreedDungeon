@@ -16,6 +16,9 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private BattleLogUI _battleLog;
         [SerializeField] private SkillSlotUI _skillSlotUI;
 
+        [Header("Effects")]
+        [SerializeField] private DamageTextUI _damageTextUI;
+
         [Header("Inventory")]
         [SerializeField] private Inventory.InventoryUI _inventoryUI;
 
@@ -141,6 +144,36 @@ namespace GreedDungeon.UI.Battle
         {
             AddBattleLog("게임 오버!");
             EnableActions(false);
+        }
+
+        public void ShowPlayerDamage(int damage, bool isCritical)
+        {
+            if (_damageTextUI == null) return;
+            Vector2 randomPos = new Vector2(
+                UnityEngine.Random.Range(-100, 100),
+                UnityEngine.Random.Range(-50, 50)
+            );
+            _damageTextUI.ShowDamage(damage, randomPos, isCritical, false);
+        }
+
+        public void ShowPlayerHeal(int healAmount)
+        {
+            if (_damageTextUI == null) return;
+            Vector2 randomPos = new Vector2(
+                UnityEngine.Random.Range(-100, 100),
+                UnityEngine.Random.Range(-50, 50)
+            );
+            _damageTextUI.ShowDamage(healAmount, randomPos, false, true);
+        }
+
+        public void ShowMonsterDamage(int damage, bool isCritical)
+        {
+            if (_damageTextUI == null) return;
+            Vector2 randomPos = new Vector2(
+                UnityEngine.Random.Range(-50, 50),
+                UnityEngine.Random.Range(100, 200)
+            );
+            _damageTextUI.ShowDamage(damage, randomPos, isCritical, false);
         }
     }
 }

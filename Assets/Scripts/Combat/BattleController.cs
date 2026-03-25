@@ -62,6 +62,8 @@ namespace GreedDungeon.Combat
             _battleManager.OnPlayerDeath += HandlePlayerDeath;
             _battleManager.OnMonsterDeath += HandleMonsterDeath;
             _battleManager.OnMonsterTurnStarted += HandleMonsterTurnStarted;
+            _battleManager.OnPlayerDamaged += HandlePlayerDamaged;
+            _battleManager.OnPlayerHealed += HandlePlayerHealed;
 
             SetupUIEvents();
         }
@@ -347,6 +349,18 @@ namespace GreedDungeon.Combat
             {
                 _monsterDisplay.PlayDamageAnimation();
             }
+
+            _battleUI?.ShowMonsterDamage(damage, false);
+        }
+
+        private void HandlePlayerDamaged(int damage, bool isCritical)
+        {
+            _battleUI?.ShowPlayerDamage(damage, isCritical);
+        }
+
+        private void HandlePlayerHealed(int healAmount)
+        {
+            _battleUI?.ShowPlayerHeal(healAmount);
         }
 
         private void HandleBattleLog(string message, UI.Battle.LogType logType)
@@ -376,6 +390,8 @@ namespace GreedDungeon.Combat
                 _battleManager.OnPlayerDeath -= HandlePlayerDeath;
                 _battleManager.OnMonsterDeath -= HandleMonsterDeath;
                 _battleManager.OnMonsterTurnStarted -= HandleMonsterTurnStarted;
+                _battleManager.OnPlayerDamaged -= HandlePlayerDamaged;
+                _battleManager.OnPlayerHealed -= HandlePlayerHealed;
             }
 
             if (_battleUI != null)

@@ -13,6 +13,8 @@ public interface IBattleManager
     {
         event Action<Monster> OnBattleStarted;
         event Action<Monster, int> OnMonsterDamaged;
+        event Action<int, bool> OnPlayerDamaged;
+        event Action<int> OnPlayerHealed;
         event Action<string, UI.Battle.LogType> OnBattleLog;
         event Action OnPlayerDeath;
         event Action OnMonsterDeath;
@@ -44,6 +46,8 @@ public interface IBattleManager
 
         public event Action<Monster> OnBattleStarted;
         public event Action<Monster, int> OnMonsterDamaged;
+        public event Action<int, bool> OnPlayerDamaged;
+        public event Action<int> OnPlayerHealed;
         public event Action<string, UI.Battle.LogType> OnBattleLog;
         public event Action OnPlayerDeath;
         public event Action OnMonsterDeath;
@@ -155,10 +159,12 @@ public interface IBattleManager
             if (attacker.IsDead || defender.IsDead) return;
 
             bool isPlayer = attacker == _player;
+            bool isPlayerDefender = defender == _player;
             string actionText = skill != null ? skill.Name : "공격";
 
             int hitCount = skill?.HitCount ?? 1;
             int totalDamage = 0;
+            bool isCritical = false;
 
             for (int hit = 0; hit < hitCount; hit++)
             {
@@ -167,6 +173,12 @@ public interface IBattleManager
                 var result = _damageCalculator.CalculateDamage(attacker, defender, skill);
                 defender.TakeDamage(result.Damage);
                 totalDamage += result.Damage;
+                if (result.IsCritical) isCritical = true;
+            }
+
+            if (isPlayerDefender)
+            {
+                OnPlayerDamaged?.Invoke(totalDamage, isCritical);
             }
 
             string dmgText = hitCount > 1 ? $"{totalDamage} ({hitCount}회)" : $"{totalDamage}";
@@ -207,6 +219,8 @@ public interface IBattleManager
                 case ConsumableEffectType.Heal:
                     int healAmount = (int)data.EffectValue;
                     target.Heal(healAmount);
+                    if (target == _player)
+                        OnPlayerHealed?.Invoke(healAmount);
                     LogBattle($"[{data.Name}] HP +{healAmount}", UI.Battle.LogType.Player);
                     break;
 
@@ -318,6 +332,7 @@ public interface IBattleManager
             damage = Mathf.Max(1, damage - defense / 2);
             
             _player.TakeDamage(damage);
+            OnPlayerDamaged?.Invoke(damage, false);
             LogBattle($"{_monster.Name} → {damage} Dmg", UI.Battle.LogType.Monster);
             
             TryApplyMonsterStatusEffect();
