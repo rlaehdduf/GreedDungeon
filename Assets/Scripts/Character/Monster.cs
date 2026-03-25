@@ -7,8 +7,13 @@ namespace GreedDungeon.Character
     {
         private readonly MonsterDataSO _data;
         private readonly StatusEffectDataSO _statusEffectData;
+        private MonsterSkillDataSO _uniqueSkill;
+        private MonsterSkillDataSO _sharedSkill;
 
         public override string Name => _data.Name;
+        public MonsterSkillDataSO UniqueSkill => _uniqueSkill;
+        public MonsterSkillDataSO SharedSkill => _sharedSkill;
+        public float SkillChance => _data.SkillChance;
         public MonsterDataSO Data => _data;
         public Element Element => _data.Element;
         public bool IsBoss => _data.IsBoss;
@@ -32,6 +37,26 @@ namespace GreedDungeon.Character
         }
 
         protected override Stats GetEquipmentStats() => new Stats();
+
+        public void SetSkills(MonsterSkillDataSO unique, MonsterSkillDataSO shared)
+        {
+            _uniqueSkill = unique;
+            _sharedSkill = shared;
+        }
+
+        public MonsterSkillDataSO GetRandomSkill()
+        {
+            if (UnityEngine.Random.value * 100 >= _data.SkillChance)
+                return null;
+            
+            var skills = new System.Collections.Generic.List<MonsterSkillDataSO>();
+            if (_uniqueSkill != null) skills.Add(_uniqueSkill);
+            if (_sharedSkill != null) skills.Add(_sharedSkill);
+            
+            return skills.Count > 0 
+                ? skills[UnityEngine.Random.Range(0, skills.Count)] 
+                : null;
+        }
 
         public bool HasStatusEffectAttack => !string.IsNullOrEmpty(_data.StatusEffectID) && _data.StatusEffectChance > 0;
 
