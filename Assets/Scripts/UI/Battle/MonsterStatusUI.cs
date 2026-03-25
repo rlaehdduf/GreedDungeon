@@ -56,6 +56,7 @@ namespace GreedDungeon.UI.Battle
             _monster.OnDamaged += OnMonsterDamaged;
             _monster.OnStatusEffectApplied += OnStatusEffectChanged;
             _monster.OnStatusEffectEnded += OnStatusEffectChanged;
+            _monster.OnStatusEffectDurationChanged += OnStatusEffectChanged;
         }
 
         private void UnsubscribeMonsterEvents()
@@ -64,6 +65,7 @@ namespace GreedDungeon.UI.Battle
             _monster.OnDamaged -= OnMonsterDamaged;
             _monster.OnStatusEffectApplied -= OnStatusEffectChanged;
             _monster.OnStatusEffectEnded -= OnStatusEffectChanged;
+            _monster.OnStatusEffectDurationChanged -= OnStatusEffectChanged;
         }
 
         private void OnMonsterDamaged(int damage)
@@ -146,7 +148,7 @@ namespace GreedDungeon.UI.Battle
             if (monster.StatusEffects.Count > 0)
             {
                 var effect = monster.StatusEffects[0];
-                _debuffSlot.Show();
+                _debuffSlot.PrepareShow();
 
                 if (effect.Data != null && !string.IsNullOrEmpty(effect.Data.IconAddress))
                 {

@@ -19,8 +19,10 @@ namespace GreedDungeon.Character
         event Action<IBattleEntity, ActiveStatusEffect, int> OnStatusEffectDamage;
         event Action<IBattleEntity, ActiveStatusEffect> OnStatusEffectApplied;
         event Action<IBattleEntity, ActiveStatusEffect> OnStatusEffectEnded;
+        event Action<IBattleEntity, ActiveStatusEffect> OnStatusEffectDurationChanged;
         event Action<IBattleEntity, ActiveBuff> OnBuffApplied;
         event Action<IBattleEntity, ActiveBuff> OnBuffEnded;
+        event Action<IBattleEntity, ActiveBuff> OnBuffDurationChanged;
 
         void TakeDamage(int damage);
         void Heal(int amount);

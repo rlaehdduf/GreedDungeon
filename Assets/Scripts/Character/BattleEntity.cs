@@ -30,8 +30,10 @@ namespace GreedDungeon.Character
         public event Action<IBattleEntity, ActiveStatusEffect, int> OnStatusEffectDamage;
         public event Action<IBattleEntity, ActiveStatusEffect> OnStatusEffectApplied;
         public event Action<IBattleEntity, ActiveStatusEffect> OnStatusEffectEnded;
+        public event Action<IBattleEntity, ActiveStatusEffect> OnStatusEffectDurationChanged;
         public event Action<IBattleEntity, ActiveBuff> OnBuffApplied;
         public event Action<IBattleEntity, ActiveBuff> OnBuffEnded;
+        public event Action<IBattleEntity, ActiveBuff> OnBuffDurationChanged;
 
         public Stats TotalStats
         {
@@ -147,6 +149,10 @@ namespace GreedDungeon.Character
                     OnStatusEffectEnded?.Invoke(this, effect);
                     _statusEffects.RemoveAt(i);
                 }
+                else
+                {
+                    OnStatusEffectDurationChanged?.Invoke(this, effect);
+                }
             }
         }
 
@@ -182,6 +188,10 @@ namespace GreedDungeon.Character
                     OnBuffEnded?.Invoke(this, buff);
                     _buffs.RemoveAt(i);
                     _statsCacheDirty = true;
+                }
+                else
+                {
+                    OnBuffDurationChanged?.Invoke(this, buff);
                 }
             }
         }

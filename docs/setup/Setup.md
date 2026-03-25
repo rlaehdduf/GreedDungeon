@@ -144,12 +144,19 @@ Battle.unity
 | `_buffContainer` | 버프 슬롯 부모 Transform |
 | `_buffSlotPrefab` | `Assets/Prefabs/IconSlot/StatusEffectSlot.prefab` |
 
-**Container 설정 (DebuffContainer, BuffContainer):**
-| 컴포넌트 | 설정 |
-|---------|------|
-| Horizontal Layout Group | Spacing: 5, Child Alignment: Middle Center |
-| Content Size Fitter | Horizontal: Preferred Size, Vertical: Preferred Size |
+**Container 설정 (DebuffContainer, BuffContainer) - 필수:**
+```
+Container GameObject
+├── Horizontal Layout Group
+│   ├── Spacing: 5
+│   ├── Child Alignment: Middle Center
+│   └── Child Force Expand: Width ✗, Height ✗
+└── Content Size Fitter
+    ├── Horizontal: Preferred Size
+    └── Vertical: Preferred Size
+```
 
+> Container 내에 미리 만들어둔 디자인용 슬롯은 모두 삭제 (동적 생성됨)
 > 슬롯이 왼쪽→오른쪽으로 자동 정렬됨
 
 ### MonsterStatusUI (EnemyInfomation에 추가)

@@ -13,6 +13,7 @@ namespace GreedDungeon.UI.Battle
             if (_iconImage != null)
             {
                 _iconImage.sprite = sprite;
+                _iconImage.enabled = sprite != null;
             }
             SetDuration(duration);
         }
@@ -45,7 +46,30 @@ namespace GreedDungeon.UI.Battle
 
         public void Hide()
         {
+            if (_iconImage != null)
+            {
+                _iconImage.sprite = null;
+                _iconImage.enabled = false;
+            }
+            if (_countText != null)
+            {
+                _countText.text = "";
+            }
             gameObject.SetActive(false);
+        }
+
+        public void PrepareShow()
+        {
+            if (_iconImage != null)
+            {
+                _iconImage.sprite = null;
+                _iconImage.enabled = false;
+            }
+            if (_countText != null)
+            {
+                _countText.text = "";
+            }
+            gameObject.SetActive(true);
         }
     }
 }

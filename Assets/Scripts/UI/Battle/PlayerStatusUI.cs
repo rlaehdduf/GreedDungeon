@@ -58,8 +58,10 @@ namespace GreedDungeon.UI.Battle
             _player.OnDamaged += OnPlayerDamaged;
             _player.OnStatusEffectApplied += OnStatusEffectChanged;
             _player.OnStatusEffectEnded += OnStatusEffectChanged;
+            _player.OnStatusEffectDurationChanged += OnStatusEffectChanged;
             _player.OnBuffApplied += OnBuffChanged;
             _player.OnBuffEnded += OnBuffChanged;
+            _player.OnBuffDurationChanged += OnBuffChanged;
         }
 
         private void UnsubscribePlayerEvents()
@@ -68,8 +70,10 @@ namespace GreedDungeon.UI.Battle
             _player.OnDamaged -= OnPlayerDamaged;
             _player.OnStatusEffectApplied -= OnStatusEffectChanged;
             _player.OnStatusEffectEnded -= OnStatusEffectChanged;
+            _player.OnStatusEffectDurationChanged -= OnStatusEffectChanged;
             _player.OnBuffApplied -= OnBuffChanged;
             _player.OnBuffEnded -= OnBuffChanged;
+            _player.OnBuffDurationChanged -= OnBuffChanged;
         }
 
         private void OnPlayerDamaged(int damage)
@@ -126,7 +130,7 @@ namespace GreedDungeon.UI.Battle
                 {
                     var effect = player.StatusEffects[i];
                     var slot = _debuffSlots[i];
-                    slot.Show();
+                    slot.PrepareShow();
 
                     if (effect.Data != null && !string.IsNullOrEmpty(effect.Data.IconAddress))
                     {
@@ -154,7 +158,7 @@ namespace GreedDungeon.UI.Battle
                 {
                     var buff = player.Buffs[i];
                     var slot = _buffSlots[i];
-                    slot.Show();
+                    slot.PrepareShow();
 
                     string iconAddress = buff.GetIconAddress();
                     if (!string.IsNullOrEmpty(iconAddress))
@@ -181,6 +185,7 @@ namespace GreedDungeon.UI.Battle
                 var slot = go.GetComponent<StatusEffectSlotUI>();
                 if (slot != null)
                 {
+                    slot.Hide();
                     slots.Add(slot);
                 }
                 else
