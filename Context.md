@@ -3,7 +3,7 @@
 
 던전 크롤러 턴제 RPG 프로토타입 개발 (Unity 2D)
 
-**현재 작업:** 던전 시스템 개발 대기 중
+**현재 작업:** 전투 시스템 고퀄리티 재설계 계획
 
 ## Instructions
 
@@ -23,6 +23,8 @@
 6. **Input System** - 새 Input System 사용 (`UnityEngine.InputSystem`)
 7. **스킬 MP 차감** - SkillManager에서만 담당 (BattleManager 중복 차감 방지)
 8. **스킬 쿨타임** - `Cooldown + 1`로 설정 (1턴 쿨타임 = 1턴 대기)
+
+9. **턴 전환** - ExecuteMonsterTurn 후 EndTurn 호출 필수
 
 ## Accomplished
 
@@ -48,13 +50,16 @@
 - 전투 로그 간략화 ✅
 - 스킬 MP 중복 차감 버그 수정 ✅
 - 스킬 쿨타임 매커니즘 수정 (+1) ✅
+- 턴 전환 버그 수정 (ExecuteMonsterTurn → EndTurn) ✅
+- MP 부족시 턴 미소모 수정 ✅
 
 ## In Progress
 
-- 없음
+- 전투 시스템 고퀄리티 재설계 (계획 완료)
 
 ## Pending
 
+- 전투 시스템 재구현
 - 던전 시스템
 
 ## Test Code
