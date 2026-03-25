@@ -307,14 +307,15 @@ public void StartTestBattle()
     _currentMonster = new Monster(monsterData);
     
     // 스킬 주입
+    MonsterSkillDataSO uniqueSkill = null;
+    MonsterSkillDataSO sharedSkill = null;
+    
     if (monsterData.UniqueSkillID > 0)
-    {
-        var uniqueSkill = _gameDataManager.GetMonsterSkillData(monsterData.UniqueSkillID);
-        var sharedSkill = monsterData.SharedSkillID > 0 
-            ? _gameDataManager.GetMonsterSkillData(monsterData.SharedSkillID) 
-            : null;
-        _currentMonster.SetSkills(uniqueSkill, sharedSkill);
-    }
+        uniqueSkill = _gameDataManager.GetMonsterSkillData(monsterData.UniqueSkillID);
+    if (monsterData.SharedSkillID > 0)
+        sharedSkill = _gameDataManager.GetMonsterSkillData(monsterData.SharedSkillID);
+    
+    _currentMonster.SetSkills(uniqueSkill, sharedSkill);
     
     _testPlayer = new Player();
     AddTestItemsToInventory();
