@@ -254,7 +254,10 @@ public void ExecuteMonsterTurn()
             if (_player.IsDead)
             {
                 CheckBattleEnd();
+                return;
             }
+            
+            EndTurn();
         }
 
         private void ExecuteMonsterAttack()

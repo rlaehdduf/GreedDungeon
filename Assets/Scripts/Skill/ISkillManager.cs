@@ -14,7 +14,7 @@ namespace GreedDungeon.Skill
         void ReduceAllCooldowns();
         void ResetCooldowns();
 
-        void ExecuteSkill(SkillDataSO skill, IBattleEntity caster, IBattleEntity target);
+        bool ExecuteSkill(SkillDataSO skill, IBattleEntity caster, IBattleEntity target);
 
         void ApplyPassiveStats(SkillDataSO skill, Stats stats);
     }

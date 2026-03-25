@@ -149,9 +149,9 @@ namespace GreedDungeon.Skill
             Debug.Log("[SkillManager] 모든 쿨다운 초기화");
         }
 
-        public void ExecuteSkill(SkillDataSO skill, IBattleEntity caster, IBattleEntity target)
+        public bool ExecuteSkill(SkillDataSO skill, IBattleEntity caster, IBattleEntity target)
         {
-            if (skill == null || caster == null) return;
+            if (skill == null || caster == null) return false;
 
             Debug.Log($"[SkillManager] 스킬 실행: {skill.Name}");
 
@@ -160,7 +160,7 @@ namespace GreedDungeon.Skill
                 if (caster.CurrentMP < skill.MPCost)
                 {
                     Debug.Log($"  MP 부족! (필요: {skill.MPCost}, 현재: {caster.CurrentMP})");
-                    return;
+                    return false;
                 }
                 caster.UseMP(skill.MPCost);
             }
@@ -182,6 +182,8 @@ namespace GreedDungeon.Skill
 
             if (skill.Cooldown > 0)
                 StartCooldown(skill.ID, skill.Cooldown + 1);
+            
+            return true;
         }
 
         private void ExecuteBuff(SkillDataSO skill, IBattleEntity caster)
