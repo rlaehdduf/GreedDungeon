@@ -103,7 +103,7 @@ namespace GreedDungeon.UI.Battle
             if (_monsterStatus != null)
             {
                 _monsterStatus.UpdateStatus(monster);
-                _monsterStatus.UpdateDebuffs(monster);
+                _monsterStatus.UpdateDebuff(monster);
             }
         }
 
