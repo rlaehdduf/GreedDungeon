@@ -18,7 +18,7 @@
 파일: Assets/Scripts/ScriptableObjects/MonsterSkillDataSO.cs
 
 필드:
-- ID: string                    # 스킬 식별자
+- ID: int                       # 스킬 식별자 (기존 패턴 준수)
 - Name: string                  # 스킬 이름
 - Description: string           # 설명
 - SkillType: MonsterSkillType   # Attack, Buff, Debuff, Heal
@@ -57,18 +57,21 @@ enum MonsterSkillType
 
 ```
 추가 필드:
-- UniqueSkillID: string   # 전용 스킬 ID (1개)
-- SharedSkillID: string   # 공용 스킬 ID (1개)  
-- SkillChance: float      # 스킬 발동 확률 (0~100)
+- UniqueSkillID: int       # 전용 스킬 ID (0 = 없음)
+- SharedSkillID: int       # 공용 스킬 ID (0 = 없음)  
+- SkillChance: float       # 스킬 발동 확률 (0~100)
 ```
 
-### CSV 수정 (Monster.csv)
+### CSV 수정
 
+**Monster.csv 추가 컬럼:**
 ```
-추가 컬럼:
-- UniqueSkillID
-- SharedSkillID
-- SkillChance
+UniqueSkillID, SharedSkillID, SkillChance
+```
+
+**신규 MonsterSkill.csv:**
+```
+ID,Name,Description,SkillType,IsShared,DamageMultiplier,HitCount,StatusEffectID,StatusEffectChance,BuffType,BuffValue,BuffDuration,HealPercent
 ```
 
 ## 클래스 구조
@@ -87,29 +90,49 @@ public enum MonsterSkillType
 [CreateAssetMenu(fileName = "MonsterSkillData", menuName = "GreedDungeon/Data/MonsterSkill")]
 public class MonsterSkillDataSO : ScriptableObject, IData
 {
-    public string ID;
+    public int ID;
     public string Name;
     [TextArea] public string Description;
     public MonsterSkillType SkillType;
     public bool IsShared;
     
-    // Attack
     public float DamageMultiplier = 1f;
     public int HitCount = 1;
-    
-    // Debuff
     public string StatusEffectID;
     [Range(0f, 100f)] public float StatusEffectChance;
-    
-    // Buff
     public BuffType BuffType;
     public float BuffValue;
     public int BuffDuration;
-    
-    // Heal
     public float HealPercent;
     
-    int IData.ID => int.TryParse(ID, out int id) ? id : 0;
+    int IData.ID => ID;
+}
+```
+
+### GameDataManager (수정)
+
+```csharp
+// 추가 필드
+private Dictionary<int, MonsterSkillDataSO> _monsterSkillData;
+
+// 추가 메서드
+public MonsterSkillDataSO GetMonsterSkillData(int id)
+{
+    if (_monsterSkillData == null || !_monsterSkillData.TryGetValue(id, out var data))
+        return null;
+    return data;
+}
+
+public List<MonsterSkillDataSO> GetAllMonsterSkillData()
+{
+    return _monsterSkillData?.Values.ToList();
+}
+
+// InitializeAsync()에서 로드
+private async Task LoadMonsterSkillData()
+{
+    var skills = await CSVConverter.ConvertMonsterSkillData();
+    _monsterSkillData = skills?.ToDictionary(s => s.ID);
 }
 ```
 
@@ -118,12 +141,20 @@ public class MonsterSkillDataSO : ScriptableObject, IData
 ```csharp
 public class Monster : BattleEntity
 {
+    private readonly MonsterDataSO _data;
     private MonsterSkillDataSO _uniqueSkill;
     private MonsterSkillDataSO _sharedSkill;
     
     public MonsterSkillDataSO UniqueSkill => _uniqueSkill;
     public MonsterSkillDataSO SharedSkill => _sharedSkill;
     public float SkillChance => _data.SkillChance;
+    
+    public Monster(MonsterDataSO data, StatusEffectDataSO statusEffectData = null)
+    {
+        _data = data ?? throw new ArgumentNullException(nameof(data));
+        _statusEffectData = statusEffectData;
+        InitializeStats(...);
+    }
     
     public void SetSkills(MonsterSkillDataSO unique, MonsterSkillDataSO shared)
     {
@@ -133,7 +164,7 @@ public class Monster : BattleEntity
     
     public MonsterSkillDataSO GetRandomSkill()
     {
-        if (UnityEngine.Random.value * 100 > _data.SkillChance)
+        if (UnityEngine.Random.value * 100 >= _data.SkillChance)
             return null;
         
         var skills = new List<MonsterSkillDataSO>();
@@ -147,31 +178,45 @@ public class Monster : BattleEntity
 }
 ```
 
+### IBattleManager (수정)
+
+```csharp
+public interface IBattleManager
+{
+    // 기존 이벤트...
+    event Action<int, int> OnMonsterHealed;      // 몬스터 회복 (amount, newHP)
+    event Action<BuffType, float, int> OnMonsterBuffApplied;  // 몬스터 버프
+}
+```
+
 ### BattleManager (수정)
 
 ```csharp
+public event Action<int, int> OnMonsterHealed;
+public event Action<BuffType, float, int> OnMonsterBuffApplied;
+
 public void ExecuteMonsterSkill(MonsterSkillDataSO skill)
 {
     switch (skill.SkillType)
     {
         case MonsterSkillType.Attack:
-            ExecuteAttackSkill(skill);
+            ExecuteMonsterAttackSkill(skill);
             break;
         case MonsterSkillType.Buff:
-            ExecuteBuffSkill(skill);
+            ExecuteMonsterBuffSkill(skill);
             break;
         case MonsterSkillType.Debuff:
-            ExecuteDebuffSkill(skill);
+            ExecuteMonsterDebuffSkill(skill);
             break;
         case MonsterSkillType.Heal:
-            ExecuteHealSkill(skill);
+            ExecuteMonsterHealSkill(skill);
             break;
     }
 }
 
-private void ExecuteAttackSkill(MonsterSkillDataSO skill)
+private void ExecuteMonsterAttackSkill(MonsterSkillDataSO skill)
 {
-    int baseDamage = _monster.BaseStats.Attack;
+    int baseDamage = _monster.TotalStats.Attack;
     int totalDamage = 0;
     
     for (int i = 0; i < skill.HitCount; i++)
@@ -186,50 +231,168 @@ private void ExecuteAttackSkill(MonsterSkillDataSO skill)
     OnPlayerDamaged?.Invoke(totalDamage, false);
     LogBattle($"{_monster.Name} {skill.Name}! → {totalDamage} Dmg", LogType.Monster);
 }
+
+private void ExecuteMonsterBuffSkill(MonsterSkillDataSO skill)
+{
+    if (skill.BuffType == BuffType.None) return;
+    
+    _monster.ApplyBuff(skill.BuffType, skill.BuffValue, skill.BuffDuration);
+    OnMonsterBuffApplied?.Invoke(skill.BuffType, skill.BuffValue, skill.BuffDuration);
+    LogBattle($"{_monster.Name} {skill.Name}! {skill.BuffType} +{skill.BuffValue}%", LogType.Monster);
+}
+
+private void ExecuteMonsterDebuffSkill(MonsterSkillDataSO skill)
+{
+    int damage = Mathf.RoundToInt(_monster.TotalStats.Attack * skill.DamageMultiplier);
+    if (_player.IsDefending) damage /= 2;
+    damage = Mathf.Max(1, damage - _player.TotalStats.Defense / 2);
+    
+    _player.TakeDamage(damage);
+    OnPlayerDamaged?.Invoke(damage, false);
+    LogBattle($"{_monster.Name} {skill.Name}! → {damage} Dmg", LogType.Monster);
+    
+    if (!string.IsNullOrEmpty(skill.StatusEffectID) && 
+        UnityEngine.Random.value * 100 < skill.StatusEffectChance)
+    {
+        var effect = FindStatusEffect(skill.StatusEffectID);
+        if (effect != null)
+        {
+            _player.ApplyStatusEffect(effect, effect.Duration);
+            LogBattle($"→ {effect.Name}", LogType.Monster);
+        }
+    }
+}
+
+private void ExecuteMonsterHealSkill(MonsterSkillDataSO skill)
+{
+    int healAmount = Mathf.RoundToInt(_monster.BaseStats.MaxHP * skill.HealPercent / 100f);
+    _monster.Heal(healAmount);
+    OnMonsterHealed?.Invoke(healAmount, _monster.CurrentHP);
+    LogBattle($"{_monster.Name} {skill.Name}! HP +{healAmount}", LogType.Monster);
+}
+```
+
+### BattleController (수정)
+
+```csharp
+private IEnumerator HandleMonsterTurnCoroutine()
+{
+    // ... 기존 대기 로직 ...
+    
+    var skill = _currentMonster.GetRandomSkill();
+    
+    if (skill != null)
+    {
+        _battleManager.ExecuteMonsterSkill(skill);
+    }
+    else
+    {
+        _battleManager.ExecuteMonsterAttack();
+    }
+    
+    // ... 후속 처리 ...
+}
+```
+
+### CSVConverter (수정)
+
+```csharp
+public static async Task<List<MonsterSkillDataSO>> ConvertMonsterSkillData()
+{
+    var csvPath = Path.Combine(Application.dataPath, "EditorData/Data/csv/MonsterSkill.csv");
+    var lines = await File.ReadAllLinesAsync(csvPath);
+    
+    var skills = new List<MonsterSkillDataSO>();
+    
+    for (int i = 1; i < lines.Length; i++)
+    {
+        var values = ParseCSVLine(lines[i]);
+        if (values.Length < 13) continue;
+        
+        var skill = ScriptableObject.CreateInstance<MonsterSkillDataSO>();
+        skill.ID = int.Parse(values[0]);
+        skill.Name = values[1];
+        skill.Description = values[2];
+        skill.SkillType = Enum.Parse<MonsterSkillType>(values[3]);
+        skill.IsShared = bool.Parse(values[4]);
+        skill.DamageMultiplier = float.Parse(values[5]);
+        skill.HitCount = int.Parse(values[6]);
+        skill.StatusEffectID = values[7];
+        skill.StatusEffectChance = float.Parse(values[8]);
+        skill.BuffType = Enum.Parse<BuffType>(values[9]);
+        skill.BuffValue = float.Parse(values[10]);
+        skill.BuffDuration = int.Parse(values[11]);
+        skill.HealPercent = float.Parse(values[12]);
+        
+        skills.Add(skill);
+        
+        AssetDatabase.CreateAsset(skill, $"Assets/EditorData/Data/ScriptableObjects/MonsterSkill/MonsterSkill_{skill.ID}.asset");
+    }
+    
+    AssetDatabase.SaveAssets();
+    return skills;
+}
 ```
 
 ## 실행 흐름
 
 ```
-BattleController.HandleMonsterTurnCoroutine()
+GameDataManager.InitializeAsync()
+    ↓ LoadMonsterSkillData()
+MonsterSkillDataSO 로드 완료
     ↓
-Monster.GetRandomSkill()
+BattleController.StartTestBattle()
+    ↓
+new Monster(data)
+    ↓
+monster.SetSkills(gameDataManager.GetMonsterSkillData(uniqueID),
+                  gameDataManager.GetMonsterSkillData(sharedID))
+    ↓
+HandleMonsterTurnCoroutine()
+    ↓
+monster.GetRandomSkill()
     ↓ SkillChance 체크
-null → BattleManager.ExecuteMonsterAttack() (기본 공격)
-skill → BattleManager.ExecuteMonsterSkill(skill)
+skill != null → BattleManager.ExecuteMonsterSkill(skill)
+skill == null → BattleManager.ExecuteMonsterAttack()
 ```
 
 ## 공용 스킬 예시
 
 | ID | 이름 | 타입 | 효과 |
 |----|------|------|------|
-| MS001 | 강타 | Attack | 150% 데미지 |
-| MS002 | 연속공격 | Attack | 2회 타격 |
-| MS003 | 독가스 | Debuff | 중독 30% 확률 |
-| MS004 | 분노 | Buff | 공격력 +30% 3턴 |
-| MS005 | 재생 | Heal | HP 20% 회복 |
+| 1 | 강타 | Attack | 150% 데미지 |
+| 2 | 연속공격 | Attack | 2회 타격 |
+| 3 | 독가스 | Debuff | 중독 30% 확률 |
+| 4 | 분노 | Buff | 공격력 +30% 3턴 |
+| 5 | 재생 | Heal | HP 20% 회복 |
 
 ## 전용 스킬 예시
 
-| 몬스터 | 스킬 | 효과 |
-|--------|------|------|
-| 슬라임 | 분열 | HP 30% 회복 |
-| 고블린 | 약점공격 | 200% 데미지 |
-| 오크 | 분노 | 공격력 +50% |
-| 드래곤 | 화염숨 | 2회 타격 + 화상 |
+| ID | 몬스터 | 스킬 | 효과 |
+|----|--------|------|------|
+| 101 | 슬라임 | 분열 | HP 30% 회복 |
+| 102 | 고블린 | 약점공격 | 200% 데미지 |
+| 103 | 오크 | 전투함성 | 공격력 +50% 2턴 |
+| 104 | 드래곤 | 화염숨 | 2회 타격 + 화상 |
 
 ## 구현 순서
 
 1. MonsterSkillDataSO.cs 생성
-2. MonsterDataSO 수정 (필드 추가)
-3. Monster.cs 수정 (스킬 로직)
-4. BattleManager 수정 (ExecuteMonsterSkill)
-5. BattleController 수정 (스킬 사용 분기)
-6. CSV 데이터 추가
-7. CSVConverter 수정
-8. 테스트 데이터 생성
+2. MonsterSkillType enum 정의
+3. MonsterDataSO 수정 (UniqueSkillID, SharedSkillID, SkillChance 추가)
+4. CSVConverter.ConvertMonsterSkillData() 추가
+5. GameDataManager 수정 (LoadMonsterSkillData, GetMonsterSkillData)
+6. Monster.cs 수정 (SetSkills, GetRandomSkill)
+7. IBattleManager 이벤트 추가 (OnMonsterHealed, OnMonsterBuffApplied)
+8. BattleManager 수정 (ExecuteMonsterSkill 및 서브 메서드)
+9. BattleController 수정 (스킬 사용 분기)
+10. MonsterSkill.csv 생성
+11. Monster.csv 수정
+12. 테스트 데이터 생성 및 검증
 
 ## UI 고려사항
 
 - 전투 로그에 스킬 이름 표시
 - 몬스터 스킬 사용 시 이펙트 표시 (기존 AttackEffectUI 활용)
+- 몬스터 HP 변화 UI 업데이트 (OnMonsterHealed 이벤트 활용)
+- 몬스터 버프 아이콘 표시 (추후 구현)
