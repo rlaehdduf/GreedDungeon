@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using GreedDungeon.Core;
 using GreedDungeon.ScriptableObjects;
@@ -16,13 +15,11 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private Text _hpText;
         [SerializeField] private Image _elementIcon;
 
-        [Header("Status Effects (Debuffs)")]
-        [SerializeField] private Transform _debuffContainer;
-        [SerializeField] private GameObject _debuffSlotPrefab;
+        [Header("Debuff (Single Slot)")]
+        [SerializeField] private StatusEffectSlotUI _debuffSlot;
 
         private IAssetLoader _assetLoader;
         private Monster _monster;
-        private readonly List<StatusEffectSlotUI> _debuffSlots = new();
 
         private void Start()
         {
@@ -30,6 +27,8 @@ namespace GreedDungeon.UI.Battle
             {
                 _assetLoader = Services.Get<IAssetLoader>();
             }
+            if (_debuffSlot != null)
+                _debuffSlot.Hide();
         }
 
         private void OnDestroy()
@@ -48,7 +47,7 @@ namespace GreedDungeon.UI.Battle
 
             LoadElementIcon(monster.Element);
             UpdateStatus(monster);
-            UpdateDebuffs(monster);
+            UpdateDebuff(monster);
         }
 
         private void SubscribeMonsterEvents()
@@ -76,7 +75,7 @@ namespace GreedDungeon.UI.Battle
         private void OnStatusEffectChanged(IBattleEntity entity, ActiveStatusEffect effect)
         {
             if (_monster != null)
-                UpdateDebuffs(_monster);
+                UpdateDebuff(_monster);
         }
 
         private async void LoadElementIcon(Element element)
@@ -140,49 +139,27 @@ namespace GreedDungeon.UI.Battle
                 _hpText.text = $"{monster.CurrentHP}/{stats.MaxHP}";
         }
 
-        public void UpdateDebuffs(Monster monster)
+        public void UpdateDebuff(Monster monster)
         {
-            EnsureSlotCount(_debuffSlots, _debuffContainer, _debuffSlotPrefab, monster.StatusEffects.Count);
-            
-            for (int i = 0; i < _debuffSlots.Count; i++)
-            {
-                if (i < monster.StatusEffects.Count)
-                {
-                    var effect = monster.StatusEffects[i];
-                    var slot = _debuffSlots[i];
-                    slot.Show();
+            if (_debuffSlot == null) return;
 
-                    if (effect.Data != null && !string.IsNullOrEmpty(effect.Data.IconAddress))
-                    {
-                        LoadIconAsync(slot, effect.Data.IconAddress, effect.RemainingDuration);
-                    }
-                    else
-                    {
-                        slot.SetDuration(effect.RemainingDuration);
-                    }
+            if (monster.StatusEffects.Count > 0)
+            {
+                var effect = monster.StatusEffects[0];
+                _debuffSlot.Show();
+
+                if (effect.Data != null && !string.IsNullOrEmpty(effect.Data.IconAddress))
+                {
+                    LoadIconAsync(_debuffSlot, effect.Data.IconAddress, effect.RemainingDuration);
                 }
                 else
                 {
-                    _debuffSlots[i].Hide();
+                    _debuffSlot.SetDuration(effect.RemainingDuration);
                 }
             }
-        }
-
-        private void EnsureSlotCount(List<StatusEffectSlotUI> slots, Transform container, GameObject prefab, int requiredCount)
-        {
-            while (slots.Count < requiredCount)
+            else
             {
-                var go = Instantiate(prefab, container);
-                var slot = go.GetComponent<StatusEffectSlotUI>();
-                if (slot != null)
-                {
-                    slots.Add(slot);
-                }
-                else
-                {
-                    Destroy(go);
-                    break;
-                }
+                _debuffSlot.Hide();
             }
         }
 

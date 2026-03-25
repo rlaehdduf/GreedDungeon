@@ -116,7 +116,7 @@ namespace GreedDungeon.Character
             if (CurrentMP > TotalStats.MaxMP) CurrentMP = TotalStats.MaxMP;
         }
 
-        public void ApplyStatusEffect(StatusEffectDataSO effect, int remainingDuration)
+        public virtual void ApplyStatusEffect(StatusEffectDataSO effect, int remainingDuration)
         {
             var existing = _statusEffects.Find(e => e.Data.ID == effect.ID);
             if (existing != null)

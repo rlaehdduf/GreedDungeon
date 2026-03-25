@@ -44,5 +44,11 @@ namespace GreedDungeon.Character
             SetInitialHP(BaseStats.MaxHP);
             ClearAllStatusEffects();
         }
+
+        public override void ApplyStatusEffect(StatusEffectDataSO effect, int remainingDuration)
+        {
+            ClearAllStatusEffects();
+            base.ApplyStatusEffect(effect, remainingDuration);
+        }
     }
 }

@@ -131,6 +131,8 @@ Battle.unity
 > 마우스를 슬롯에 올리면 툴팁이 마우스를 따라다님
 
 ### PlayerStatusUI (PlayerInfomation에 추가)
+
+**필드 연결:**
 | 필드 | 연결 대상 |
 |------|-----------|
 | `_hpBar` | HP Slider |
@@ -138,27 +140,31 @@ Battle.unity
 | `_mpBar` | MP Slider |
 | `_mpText` | MP Text |
 | `_debuffContainer` | 디버프 슬롯 부모 Transform |
-| `_debuffSlotPrefab` | StatusEffectSlotUI 프리팹 |
+| `_debuffSlotPrefab` | `Assets/Prefabs/IconSlot/StatusEffectSlot.prefab` |
 | `_buffContainer` | 버프 슬롯 부모 Transform |
-| `_buffSlotPrefab` | StatusEffectSlotUI 프리팹 |
+| `_buffSlotPrefab` | `Assets/Prefabs/IconSlot/StatusEffectSlot.prefab` |
 
-> Player 이름은 고정 "Player", 레벨 없음
-> 슬롯 구조: Image (아이콘) + Text (지속시간 표시)
-> 버프/디버프 동적 생성: 필요한 만큼 자동 생성됨
+**Container 설정 (DebuffContainer, BuffContainer):**
+| 컴포넌트 | 설정 |
+|---------|------|
+| Horizontal Layout Group | Spacing: 5, Child Alignment: Middle Center |
+| Content Size Fitter | Horizontal: Preferred Size, Vertical: Preferred Size |
+
+> 슬롯이 왼쪽→오른쪽으로 자동 정렬됨
 
 ### MonsterStatusUI (EnemyInfomation에 추가)
+
+**필드 연결:**
 | 필드 | 연결 대상 |
 |------|-----------|
 | `_nameText` | 이름 Text |
 | `_hpBar` | HP Slider |
 | `_hpText` | HP Text |
 | `_elementIcon` | 속성 아이콘 Image |
-| `_debuffContainer` | 디버프 슬롯 부모 Transform |
-| `_debuffSlotPrefab` | StatusEffectSlotUI 프리팹 |
+| `_debuffSlot` | StatusEffectSlotUI 컴포넌트 (단일 슬롯) |
 
-> Monster 레벨 없음
-> 디버프 아이콘: Addressables에서 로드 (`StatusEffectDataSO.IconAddress`)
-> 디버프 동적 생성: 필요한 만큼 자동 생성됨
+> Monster는 디버프 1개만 가능 (새 디버프 적용시 기존 디버프 덮어쓰기)
+> 미리 만들어둔 디자인용 슬롯은 삭제하고 `_debuffSlot`에 단일 슬롯만 연결
 
 ### BattleLogUI (LogUI에 추가)
 
