@@ -19,6 +19,7 @@ namespace GreedDungeon.UI.Battle
         [Header("Effects")]
         [SerializeField] private DamageTextUI _damageTextUI;
         [SerializeField] private AttackEffectUI _attackEffectUI;
+        [SerializeField] private DebuffVignetteUI _debuffVignetteUI;
 
         [Header("Inventory")]
         [SerializeField] private Inventory.InventoryUI _inventoryUI;
@@ -73,6 +74,11 @@ namespace GreedDungeon.UI.Battle
                 _inventoryUI.Hide();
                 _inventoryUI.OnItemUsed += (item) => OnItemUsed?.Invoke(item);
                 _inventoryUI.OnClosed += () => EnableActions(true);
+            }
+
+            if (_debuffVignetteUI != null)
+            {
+                _debuffVignetteUI.Setup(player);
             }
         }
 

@@ -340,6 +340,27 @@ namespace GreedDungeon.Combat
             {
                 _monsterDisplay.DisplayMonster(monster);
             }
+
+            if (monster != null)
+            {
+                monster.OnStatusEffectApplied += OnMonsterDebuffChanged;
+                monster.OnStatusEffectEnded += OnMonsterDebuffChanged;
+            }
+        }
+
+        private void OnMonsterDebuffChanged(IBattleEntity entity, ActiveStatusEffect effect)
+        {
+            if (_monsterDisplay == null || _currentMonster == null) return;
+
+            if (_currentMonster.StatusEffects.Count > 0)
+            {
+                var debuff = _currentMonster.StatusEffects[0];
+                _monsterDisplay.UpdateDebuffColor(debuff.Data?.ID ?? 0);
+            }
+            else
+            {
+                _monsterDisplay.ClearDebuffColor();
+            }
         }
 
         private void HandleMonsterDamaged(Monster monster, int damage)

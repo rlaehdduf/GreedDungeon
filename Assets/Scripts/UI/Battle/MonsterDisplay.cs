@@ -77,6 +77,29 @@ namespace GreedDungeon.UI.Battle
             return null;
         }
 
+        public void UpdateDebuffColor(int statusEffectID)
+        {
+            if (_spriteRenderer == null) return;
+
+            Color debuffColor = statusEffectID switch
+            {
+                1 => new Color(1f, 0.5f, 0.5f),
+                2 => new Color(0.5f, 1f, 0.5f),
+                3 => new Color(1f, 1f, 0.5f),
+                _ => Color.white
+            };
+
+            _spriteRenderer.color = debuffColor;
+        }
+
+        public void ClearDebuffColor()
+        {
+            if (_spriteRenderer != null)
+            {
+                _spriteRenderer.color = Color.white;
+            }
+        }
+
         public void Clear()
         {
             _currentMonster = null;
