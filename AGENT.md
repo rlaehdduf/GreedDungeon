@@ -40,3 +40,42 @@
 4. **툴팁 Raycast** - `CanvasGroup.blocksRaycasts = false`
 5. **Addressables** - Sprite 폴더에 아이콘 배치 후 등록
 6. **Input System** - `UnityEngine.InputSystem` 사용
+
+---
+
+## Setup 문서 관리 규칙
+
+Setup.md에 새 내용 추가 시 다음 규칙을 따른다:
+
+### 1. 기존 내용 아카이브
+```bash
+# 기존 Setup.md 내용을 Setup_archive.md로 이동
+# 새 내용만 Setup.md에 작성
+```
+
+### 2. 아카이브 분리 (500줄 초과 시)
+```
+docs/setup/
+├── Setup.md           # 현재 작업 (최신)
+├── Setup_archive.md   # 아카이브 1 (500줄 이하)
+├── Setup_archive_1.md # 아카이브 2 (500줄 초과 시 생성)
+└── Setup_archive_2.md # 아카이브 3 ...
+```
+
+### 3. 워크플로우
+1. Setup_archive.md 줄 수 확인
+2. 500줄 이상이면 `Setup_archive_1.md` 생성 (기존 archive 내용 이동)
+3. 기존 Setup.md 내용을 `Setup_archive.md`로 이동
+4. 새 내용을 Setup.md에 작성
+
+### 예시
+```bash
+# 1. 아카이브 줄 수 체크
+wc -l docs/setup/Setup_archive.md
+
+# 2. 500줄 초과 시 새 아카이브 생성
+# Setup_archive.md → Setup_archive_1.md
+# Setup_archive.md (비우고 Setup.md 기존 내용 이동)
+
+# 3. Setup.md에 새 내용 작성
+```
