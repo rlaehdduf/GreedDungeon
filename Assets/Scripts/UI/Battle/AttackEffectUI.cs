@@ -17,6 +17,9 @@ namespace GreedDungeon.UI.Battle
 
         private void Awake()
         {
+            if (_effectImage == null)
+                _effectImage = GetComponent<Image>();
+            
             if (_effectImage != null)
             {
                 _effectImage.enabled = false;
@@ -31,13 +34,28 @@ namespace GreedDungeon.UI.Battle
 
         public async void ShowEffect(SkillType skillType)
         {
+            if (_effectImage == null)
+            {
+                _effectImage = GetComponent<Image>();
+            }
+
+            if (_effectImage == null)
+            {
+                Debug.LogWarning("[AttackEffectUI] _effectImage is null");
+                return;
+            }
+
             string address = GetEffectAddress(skillType);
             if (string.IsNullOrEmpty(address)) return;
 
             if (_assetLoader == null && Services.IsInitialized)
                 _assetLoader = Services.Get<IAssetLoader>();
 
-            if (_assetLoader == null) return;
+            if (_assetLoader == null)
+            {
+                Debug.LogWarning("[AttackEffectUI] _assetLoader is null");
+                return;
+            }
 
             Sprite sprite = null;
             try
@@ -46,14 +64,21 @@ namespace GreedDungeon.UI.Battle
             }
             catch
             {
+                Debug.LogWarning($"[AttackEffectUI] Failed to load: {address}");
             }
 
-            if (sprite == null || _effectImage == null) return;
+            if (sprite == null)
+            {
+                Debug.LogWarning($"[AttackEffectUI] Sprite not found: {address}");
+                return;
+            }
 
+            Debug.Log($"[AttackEffectUI] Showing effect: {address}");
             _effectImage.sprite = sprite;
             _effectImage.enabled = true;
             _effectImage.color = Color.white;
 
+            CancelInvoke(nameof(FadeOut));
             Invoke(nameof(FadeOut), _displayDuration);
         }
 

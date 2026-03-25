@@ -185,7 +185,11 @@ namespace GreedDungeon.UI.Battle
 
         public void ShowAttackEffect(ScriptableObjects.SkillType skillType)
         {
-            if (_attackEffectUI == null) return;
+            if (_attackEffectUI == null)
+            {
+                Debug.LogWarning("[BattleUI] _attackEffectUI is null");
+                return;
+            }
             _attackEffectUI.ShowEffect(skillType);
         }
     }

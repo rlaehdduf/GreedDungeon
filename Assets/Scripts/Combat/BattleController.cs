@@ -5,6 +5,7 @@ using GreedDungeon.Core;
 using GreedDungeon.ScriptableObjects;
 using GreedDungeon.Skill;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace GreedDungeon.Combat
 {
@@ -26,6 +27,7 @@ namespace GreedDungeon.Combat
         private Player _testPlayer;
         private Monster _currentMonster;
         private bool _isActionInProgress;
+        private int _debugDebuffIndex;
 
         public event Action<Monster> OnBattleStarted;
         public event Action<Monster, int> OnMonsterDamaged;
@@ -67,6 +69,30 @@ namespace GreedDungeon.Combat
             _battleManager.OnAttackEffect += HandleAttackEffect;
 
             SetupUIEvents();
+        }
+
+        private void Update()
+        {
+            if (Keyboard.current != null && Keyboard.current.pKey.wasPressedThisFrame)
+            {
+                ApplyDebugDebuff();
+            }
+        }
+
+        private void ApplyDebugDebuff()
+        {
+            if (_testPlayer == null || _gameDataManager == null) return;
+
+            int[] debuffIds = { 1, 2, 3 };
+            int id = debuffIds[_debugDebuffIndex % 3];
+            _debugDebuffIndex++;
+
+            var effect = _gameDataManager.GetStatusEffectData(id);
+            if (effect != null)
+            {
+                _testPlayer.ApplyStatusEffect(effect, 3);
+                Debug.Log($"[Debug] 디버프 적용: {effect.Name}");
+            }
         }
 
         private void SetupUIEvents()
