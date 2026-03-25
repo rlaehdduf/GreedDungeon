@@ -21,11 +21,11 @@ MonoBehaviour:
   EffectValue: 5
   ValueFloat: i
   HitCount: 0
-  Duration: 5
+  Duration: 6
   Target: 2
   StatusEffectID: 
   StatusEffectChance: 0
-  Cooldown: 8
+  Cooldown: 9
   Tier: 3
   IconAddress: Skills/SpeedBuff
   Element: 0

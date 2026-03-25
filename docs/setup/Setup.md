@@ -137,12 +137,14 @@ Battle.unity
 | `_hpText` | HP Text |
 | `_mpBar` | MP Slider |
 | `_mpText` | MP Text |
-| `_debuffSlots` | DeBuff 슬롯들 (StatusEffectSlotUI 컴포넌트) |
-| `_buffSlots` | Buff 슬롯들 (StatusEffectSlotUI 컴포넌트) |
+| `_debuffContainer` | 디버프 슬롯 부모 Transform |
+| `_debuffSlotPrefab` | StatusEffectSlotUI 프리팹 |
+| `_buffContainer` | 버프 슬롯 부모 Transform |
+| `_buffSlotPrefab` | StatusEffectSlotUI 프리팹 |
 
 > Player 이름은 고정 "Player", 레벨 없음
-> 슬롯 구조: Image (아이콘) + Text (이름에 "Count" 포함 → 지속시간 표시)
-> 버프/디버프 없으면 슬롯 비활성화, 발생 시 활성화하고 아이콘 로드
+> 슬롯 구조: Image (아이콘) + Text (지속시간 표시)
+> 버프/디버프 동적 생성: 필요한 만큼 자동 생성됨
 
 ### MonsterStatusUI (EnemyInfomation에 추가)
 | 필드 | 연결 대상 |
@@ -151,11 +153,12 @@ Battle.unity
 | `_hpBar` | HP Slider |
 | `_hpText` | HP Text |
 | `_elementIcon` | 속성 아이콘 Image |
-| `_debuffSlots` | DeBuff 슬롯들 (StatusEffectSlotUI 컴포넌트) |
+| `_debuffContainer` | 디버프 슬롯 부모 Transform |
+| `_debuffSlotPrefab` | StatusEffectSlotUI 프리팹 |
 
 > Monster 레벨 없음
 > 디버프 아이콘: Addressables에서 로드 (`StatusEffectDataSO.IconAddress`)
-> 디버프 없으면 슬롯 비활성화, 발생 시 활성화하고 아이콘 로드 + Count 표시
+> 디버프 동적 생성: 필요한 만큼 자동 생성됨
 
 ### BattleLogUI (LogUI에 추가)
 

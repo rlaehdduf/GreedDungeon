@@ -25,7 +25,7 @@ MonoBehaviour:
   Target: 1
   StatusEffectID: 
   StatusEffectChance: 0
-  Cooldown: 3
+  Cooldown: 4
   Tier: 2
   IconAddress: Skills/IceRain
   Element: 0

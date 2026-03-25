@@ -17,9 +17,12 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private Image _elementIcon;
 
         [Header("Status Effects (Debuffs)")]
-        [SerializeField] private List<StatusEffectSlotUI> _debuffSlots = new();
+        [SerializeField] private Transform _debuffContainer;
+        [SerializeField] private GameObject _debuffSlotPrefab;
 
         private IAssetLoader _assetLoader;
+        private Monster _monster;
+        private readonly List<StatusEffectSlotUI> _debuffSlots = new();
 
         private void Start()
         {
@@ -27,17 +30,53 @@ namespace GreedDungeon.UI.Battle
             {
                 _assetLoader = Services.Get<IAssetLoader>();
             }
-            ClearAllSlots();
+        }
+
+        private void OnDestroy()
+        {
+            UnsubscribeMonsterEvents();
         }
 
         public void Setup(Monster monster)
         {
+            UnsubscribeMonsterEvents();
+            _monster = monster;
+            SubscribeMonsterEvents();
+
             if (_nameText != null)
                 _nameText.text = monster.Name;
 
             LoadElementIcon(monster.Element);
             UpdateStatus(monster);
             UpdateDebuffs(monster);
+        }
+
+        private void SubscribeMonsterEvents()
+        {
+            if (_monster == null) return;
+            _monster.OnDamaged += OnMonsterDamaged;
+            _monster.OnStatusEffectApplied += OnStatusEffectChanged;
+            _monster.OnStatusEffectEnded += OnStatusEffectChanged;
+        }
+
+        private void UnsubscribeMonsterEvents()
+        {
+            if (_monster == null) return;
+            _monster.OnDamaged -= OnMonsterDamaged;
+            _monster.OnStatusEffectApplied -= OnStatusEffectChanged;
+            _monster.OnStatusEffectEnded -= OnStatusEffectChanged;
+        }
+
+        private void OnMonsterDamaged(int damage)
+        {
+            if (_monster != null)
+                UpdateStatus(_monster);
+        }
+
+        private void OnStatusEffectChanged(IBattleEntity entity, ActiveStatusEffect effect)
+        {
+            if (_monster != null)
+                UpdateDebuffs(_monster);
         }
 
         private async void LoadElementIcon(Element element)
@@ -103,28 +142,47 @@ namespace GreedDungeon.UI.Battle
 
         public void UpdateDebuffs(Monster monster)
         {
-            int index = 0;
-            foreach (var effect in monster.StatusEffects)
+            EnsureSlotCount(_debuffSlots, _debuffContainer, _debuffSlotPrefab, monster.StatusEffects.Count);
+            
+            for (int i = 0; i < _debuffSlots.Count; i++)
             {
-                if (index >= _debuffSlots.Count) break;
-
-                var slot = _debuffSlots[index];
-                slot.Show();
-
-                if (effect.Data != null && !string.IsNullOrEmpty(effect.Data.IconAddress))
+                if (i < monster.StatusEffects.Count)
                 {
-                    LoadIconAsync(slot, effect.Data.IconAddress, effect.RemainingDuration);
+                    var effect = monster.StatusEffects[i];
+                    var slot = _debuffSlots[i];
+                    slot.Show();
+
+                    if (effect.Data != null && !string.IsNullOrEmpty(effect.Data.IconAddress))
+                    {
+                        LoadIconAsync(slot, effect.Data.IconAddress, effect.RemainingDuration);
+                    }
+                    else
+                    {
+                        slot.SetDuration(effect.RemainingDuration);
+                    }
                 }
                 else
                 {
-                    slot.SetDuration(effect.RemainingDuration);
+                    _debuffSlots[i].Hide();
                 }
-                index++;
             }
+        }
 
-            for (int i = index; i < _debuffSlots.Count; i++)
+        private void EnsureSlotCount(List<StatusEffectSlotUI> slots, Transform container, GameObject prefab, int requiredCount)
+        {
+            while (slots.Count < requiredCount)
             {
-                _debuffSlots[i].Hide();
+                var go = Instantiate(prefab, container);
+                var slot = go.GetComponent<StatusEffectSlotUI>();
+                if (slot != null)
+                {
+                    slots.Add(slot);
+                }
+                else
+                {
+                    Destroy(go);
+                    break;
+                }
             }
         }
 
@@ -146,14 +204,6 @@ namespace GreedDungeon.UI.Battle
             }
             catch
             {
-            }
-        }
-
-        private void ClearAllSlots()
-        {
-            foreach (var slot in _debuffSlots)
-            {
-                slot.Hide();
             }
         }
     }

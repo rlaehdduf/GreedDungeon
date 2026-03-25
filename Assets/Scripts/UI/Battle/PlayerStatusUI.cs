@@ -17,13 +17,17 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private Text _mpText;
 
         [Header("Status Effects (Debuffs)")]
-        [SerializeField] private List<StatusEffectSlotUI> _debuffSlots = new();
+        [SerializeField] private Transform _debuffContainer;
+        [SerializeField] private GameObject _debuffSlotPrefab;
 
         [Header("Buffs")]
-        [SerializeField] private List<StatusEffectSlotUI> _buffSlots = new();
+        [SerializeField] private Transform _buffContainer;
+        [SerializeField] private GameObject _buffSlotPrefab;
 
         private IAssetLoader _assetLoader;
         private Player _player;
+        private readonly List<StatusEffectSlotUI> _debuffSlots = new();
+        private readonly List<StatusEffectSlotUI> _buffSlots = new();
 
         private void Start()
         {
@@ -31,7 +35,6 @@ namespace GreedDungeon.UI.Battle
             {
                 _assetLoader = Services.Get<IAssetLoader>();
             }
-            ClearAllSlots();
         }
 
         private void OnDestroy()
@@ -115,56 +118,76 @@ namespace GreedDungeon.UI.Battle
 
         public void UpdateDebuffs(Player player)
         {
-            int index = 0;
-            foreach (var effect in player.StatusEffects)
+            EnsureSlotCount(_debuffSlots, _debuffContainer, _debuffSlotPrefab, player.StatusEffects.Count);
+            
+            for (int i = 0; i < _debuffSlots.Count; i++)
             {
-                if (index >= _debuffSlots.Count) break;
-
-                var slot = _debuffSlots[index];
-                slot.Show();
-
-                if (effect.Data != null && !string.IsNullOrEmpty(effect.Data.IconAddress))
+                if (i < player.StatusEffects.Count)
                 {
-                    LoadIconAsync(slot, effect.Data.IconAddress, effect.RemainingDuration);
+                    var effect = player.StatusEffects[i];
+                    var slot = _debuffSlots[i];
+                    slot.Show();
+
+                    if (effect.Data != null && !string.IsNullOrEmpty(effect.Data.IconAddress))
+                    {
+                        LoadIconAsync(slot, effect.Data.IconAddress, effect.RemainingDuration);
+                    }
+                    else
+                    {
+                        slot.SetDuration(effect.RemainingDuration);
+                    }
                 }
                 else
                 {
-                    slot.SetDuration(effect.RemainingDuration);
+                    _debuffSlots[i].Hide();
                 }
-                index++;
-            }
-
-            for (int i = index; i < _debuffSlots.Count; i++)
-            {
-                _debuffSlots[i].Hide();
             }
         }
 
         public void UpdateBuffs(Player player)
         {
-            int index = 0;
-            foreach (var buff in player.Buffs)
+            EnsureSlotCount(_buffSlots, _buffContainer, _buffSlotPrefab, player.Buffs.Count);
+            
+            for (int i = 0; i < _buffSlots.Count; i++)
             {
-                if (index >= _buffSlots.Count) break;
-
-                var slot = _buffSlots[index];
-                slot.Show();
-
-                string iconAddress = buff.GetIconAddress();
-                if (!string.IsNullOrEmpty(iconAddress))
+                if (i < player.Buffs.Count)
                 {
-                    LoadIconAsync(slot, iconAddress, buff.RemainingDuration);
+                    var buff = player.Buffs[i];
+                    var slot = _buffSlots[i];
+                    slot.Show();
+
+                    string iconAddress = buff.GetIconAddress();
+                    if (!string.IsNullOrEmpty(iconAddress))
+                    {
+                        LoadIconAsync(slot, iconAddress, buff.RemainingDuration);
+                    }
+                    else
+                    {
+                        slot.SetDuration(buff.RemainingDuration);
+                    }
                 }
                 else
                 {
-                    slot.SetDuration(buff.RemainingDuration);
+                    _buffSlots[i].Hide();
                 }
-                index++;
             }
+        }
 
-            for (int i = index; i < _buffSlots.Count; i++)
+        private void EnsureSlotCount(List<StatusEffectSlotUI> slots, Transform container, GameObject prefab, int requiredCount)
+        {
+            while (slots.Count < requiredCount)
             {
-                _buffSlots[i].Hide();
+                var go = Instantiate(prefab, container);
+                var slot = go.GetComponent<StatusEffectSlotUI>();
+                if (slot != null)
+                {
+                    slots.Add(slot);
+                }
+                else
+                {
+                    Destroy(go);
+                    break;
+                }
             }
         }
 
@@ -186,18 +209,6 @@ namespace GreedDungeon.UI.Battle
             }
             catch
             {
-            }
-        }
-
-        private void ClearAllSlots()
-        {
-            foreach (var slot in _debuffSlots)
-            {
-                slot.Hide();
-            }
-            foreach (var slot in _buffSlots)
-            {
-                slot.Hide();
             }
         }
     }

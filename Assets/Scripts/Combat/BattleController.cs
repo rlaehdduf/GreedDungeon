@@ -165,12 +165,9 @@ namespace GreedDungeon.Combat
         private void AddTestItemsToInventory()
         {
             var allEquipment = _gameDataManager.GetAllEquipmentData();
-            if (allEquipment != null)
+            if (allEquipment != null && allEquipment.Count > 0)
             {
-                foreach (var equipment in allEquipment)
-                {
-                    _testPlayer.TryAddEquipmentWithHighestRarity(equipment);
-                }
+                _testPlayer.TryAddEquipmentWithHighestRarity(allEquipment[0]);
             }
 
             var allConsumables = _gameDataManager.GetAllConsumableData();

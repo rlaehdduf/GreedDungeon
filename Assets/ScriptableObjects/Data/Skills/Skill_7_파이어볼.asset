@@ -21,11 +21,11 @@ MonoBehaviour:
   EffectValue: 2
   ValueFloat: m
   HitCount: 1
-  Duration: 2
+  Duration: 3
   Target: 0
   StatusEffectID: Burn
   StatusEffectChance: 50
-  Cooldown: 2
+  Cooldown: 3
   Tier: 2
   IconAddress: Skills/FireBall
   Element: 0

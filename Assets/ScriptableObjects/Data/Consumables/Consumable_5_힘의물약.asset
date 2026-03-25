@@ -18,7 +18,7 @@ MonoBehaviour:
   EffectValue: 30
   Target: 0
   StatusEffectID: 
-  Duration: 2
+  Duration: 4
   BuffType: 1
   BuyPrice: 120
   SellPrice: 60

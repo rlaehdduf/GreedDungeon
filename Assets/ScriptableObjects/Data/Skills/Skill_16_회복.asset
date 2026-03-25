@@ -25,7 +25,7 @@ MonoBehaviour:
   Target: 2
   StatusEffectID: 
   StatusEffectChance: 0
-  Cooldown: 3
+  Cooldown: 4
   Tier: 2
   IconAddress: Skills/Heal
   Element: 0

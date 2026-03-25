@@ -60,8 +60,11 @@ event Action<string, UI.Battle.LogType> OnBattleLog;
             OnBattleLog?.Invoke(message, logType);
         }
 
+        private bool _battleEnded;
+
         public void StartBattle(Player player, Monster monster)
         {
+            _battleEnded = false;
             CleanupPreviousBattle();
             
             _player = player;
@@ -350,7 +353,10 @@ public void ExecuteMonsterTurn()
 
         private void CheckBattleEnd()
         {
+            if (_battleEnded) return;
             if (!IsBattleOver) return;
+
+            _battleEnded = true;
 
             if (PlayerWon)
             {
