@@ -34,6 +34,7 @@ public class CSVConverter : EditorWindow
             EquipmentDataSO e => e.ID,
             MonsterDataSO m => m.ID,
             ConsumableDataSO c => c.ID,
+            MonsterSkillDataSO ms => ms.ID,
             _ => -1
         };
     }
@@ -74,6 +75,7 @@ public class CSVConverter : EditorWindow
         total += ConvertEquipments();
         total += ConvertMonsters();
         total += ConvertConsumables();
+        total += ConvertMonsterSkills();
         
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -342,7 +344,7 @@ public class CSVConverter : EditorWindow
         for (int i = 1; i < lines.Count; i++)
         {
             var values = lines[i];
-            if (values.Count < 17 || !int.TryParse(values[0], out int id)) continue;
+            if (values.Count < 19 || !int.TryParse(values[0], out int id)) continue;
 
             var data = FindExistingAsset<MonsterDataSO>(id, outputPath);
             bool isNew = data == null;
@@ -368,11 +370,13 @@ public class CSVConverter : EditorWindow
             data.GoldDropMax = int.TryParse(values[9], out int gmax) ? gmax : 0;
             data.StatusEffectID = values[10] == "None" ? "" : values[10].Replace("Brun", "Burn");
             data.StatusEffectChance = float.TryParse(values[11], NumberStyles.Float, CultureInfo.InvariantCulture, out float sec) ? sec : 0;
-            data.SpecialSkill = values[12];
-            data.IsBoss = values[13].ToLower().Replace("fasle", "false") == "true";
-            data.PrefabAddress = values[14];
-            data.ScaleX = float.TryParse(values[15], NumberStyles.Float, CultureInfo.InvariantCulture, out float sx) ? sx : 1f;
-            data.ScaleY = float.TryParse(values[16], NumberStyles.Float, CultureInfo.InvariantCulture, out float sy) ? sy : 1f;
+            data.UniqueSkillID = int.TryParse(values[12], out int usid) ? usid : 0;
+            data.SharedSkillID = int.TryParse(values[13], out int ssid) ? ssid : 0;
+            data.SkillChance = float.TryParse(values[14], NumberStyles.Float, CultureInfo.InvariantCulture, out float sc) ? sc : 0;
+            data.IsBoss = values[15].ToLower().Replace("fasle", "false") == "true";
+            data.PrefabAddress = values[16];
+            data.ScaleX = float.TryParse(values[17], NumberStyles.Float, CultureInfo.InvariantCulture, out float sx) ? sx : 1f;
+            data.ScaleY = float.TryParse(values[18], NumberStyles.Float, CultureInfo.InvariantCulture, out float sy) ? sy : 1f;
 
             if (isNew)
             {
@@ -599,4 +603,88 @@ private static SkillPoolType ParseSkillPoolType(string value)
             
             return Color.white;
         }
+
+    [MenuItem("Tools/CSV/Convert MonsterSkills")]
+    public static int ConvertMonsterSkills()
+    {
+        string csvFile = Path.Combine(CSV_PATH, "MonsterSkill.csv");
+        if (!File.Exists(csvFile))
+        {
+            Debug.LogWarning($"파일 없음: {csvFile}");
+            return 0;
+        }
+
+        string outputPath = Path.Combine(OUTPUT_PATH, "MonsterSkills");
+        if (!Directory.Exists(outputPath))
+            Directory.CreateDirectory(outputPath);
+
+        var lines = ReadCSV(csvFile);
+        int count = 0;
+        for (int i = 1; i < lines.Count; i++)
+        {
+            var values = lines[i];
+            if (values.Count < 13 || !int.TryParse(values[0], out int id)) continue;
+
+            var data = FindExistingAsset<MonsterSkillDataSO>(id, outputPath);
+            bool isNew = data == null;
+            
+            if (isNew)
+            {
+                data = ScriptableObject.CreateInstance<MonsterSkillDataSO>();
+            }
+            else
+            {
+                RenameAssetIfNeeded(data, id, values[1], outputPath);
+            }
+
+            data.ID = id;
+            data.Name = values[1];
+            data.Description = values[2];
+            data.SkillType = ParseMonsterSkillType(values[3]);
+            data.IsShared = values[4].ToLower() == "true";
+            data.DamageMultiplier = float.TryParse(values[5], NumberStyles.Float, CultureInfo.InvariantCulture, out float dm) ? dm : 1f;
+            data.HitCount = int.TryParse(values[6], out int hc) ? hc : 1;
+            data.StatusEffectID = values[7] == "None" ? "" : values[7];
+            data.StatusEffectChance = float.TryParse(values[8], NumberStyles.Float, CultureInfo.InvariantCulture, out float sec) ? sec : 0;
+            data.BuffType = ParseBuffTypeForMonsterSkill(values[9]);
+            data.BuffValue = float.TryParse(values[10], NumberStyles.Float, CultureInfo.InvariantCulture, out float bv) ? bv : 0;
+            data.BuffDuration = int.TryParse(values[11], out int bd) ? bd : 0;
+            data.HealPercent = float.TryParse(values[12], NumberStyles.Float, CultureInfo.InvariantCulture, out float hp) ? hp : 0;
+
+            if (isNew)
+            {
+                string assetPath = Path.Combine(outputPath, GetAssetFileName<MonsterSkillDataSO>(id, data.Name));
+                AssetDatabase.CreateAsset(data, assetPath);
+            }
+            
+            EditorUtility.SetDirty(data);
+            count++;
+        }
+        
+        Debug.Log($"MonsterSkill 변환 완료: {count}개");
+        return count;
+    }
+
+    private static MonsterSkillType ParseMonsterSkillType(string value)
+    {
+        return value switch
+        {
+            "Attack" => MonsterSkillType.Attack,
+            "Buff" => MonsterSkillType.Buff,
+            "Debuff" => MonsterSkillType.Debuff,
+            "Heal" => MonsterSkillType.Heal,
+            _ => MonsterSkillType.Attack
+        };
+    }
+
+    private static BuffType ParseBuffTypeForMonsterSkill(string value)
+    {
+        return value switch
+        {
+            "Attack" => BuffType.Attack,
+            "Defense" => BuffType.Defense,
+            "Speed" => BuffType.Speed,
+            _ => BuffType.None
+        };
+    }
 }
