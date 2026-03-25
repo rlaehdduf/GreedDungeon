@@ -79,6 +79,32 @@ Assets/Sprites/Effects/
 **빌드:**
 - Tools → Addressables → 🔄 Setup & Build
 
+**⚠️ 주의: Addressables 확인 방법**
+1. Window → Asset Management → Addressables → Groups
+2. 검색창에서 각 주소 검색:
+   - `Effects/Neutral` → 올바른 스프라이트인지 확인
+   - `Effects/Melee` → 올바른 스프라이트인지 확인
+   - `Effects/Magic` → 올바른 스프라이트인지 확인
+3. 잘못되었으면 스프라이트 선택 → Inspector에서 Address 수정
+4. 수정 후 **반드시 다시 빌드**
+
+---
+
+### 4-1. 디버프 아이콘 Addressables 등록
+
+**이미 등록된 주소 (CONTEXT.md 참고):**
+| 디버프 | Address |
+|-------|---------|
+| Burn | Skills/BurnDeBuff |
+| Poison | Skills/PoisonDeBuff |
+| Stun | Skills/Stun |
+
+**⚠️ Stun 아이콘이 없을 경우:**
+1. `Assets/Sprites/Skills/` 폴더에 Stun 아이콘 스프라이트 배치
+2. 스프라이트 선택 → Inspector → Addressable 체크
+3. Address: `Skills/Stun`
+4. Tools → Addressables → 🔄 Setup & Build
+
 ---
 
 ### 5. BattleUI 컴포넌트 연결
