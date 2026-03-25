@@ -16,12 +16,14 @@ namespace GreedDungeon.Core
         ConsumableDataSO GetConsumableData(int id);
         RarityDataSO GetRarityData(int id);
         StatusEffectDataSO GetStatusEffectData(int id);
+        MonsterSkillDataSO GetMonsterSkillData(int id);
         
         IReadOnlyList<MonsterDataSO> GetAllMonsterData();
         IReadOnlyList<SkillDataSO> GetAllSkillData();
         IReadOnlyList<EquipmentDataSO> GetAllEquipmentData();
         IReadOnlyList<ConsumableDataSO> GetAllConsumableData();
         IReadOnlyList<RarityDataSO> GetAllRarityData();
+        IReadOnlyList<MonsterSkillDataSO> GetAllMonsterSkillData();
         
         Task<GameObject> LoadMonsterPrefabAsync(string address);
         Task<GameObject> LoadSkillIconAsync(string address);

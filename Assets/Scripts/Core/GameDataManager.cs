@@ -18,12 +18,14 @@ namespace GreedDungeon.Core
         private readonly Dictionary<int, ConsumableDataSO> _consumables = new Dictionary<int, ConsumableDataSO>();
         private readonly Dictionary<int, RarityDataSO> _rarities = new Dictionary<int, RarityDataSO>();
         private readonly Dictionary<int, StatusEffectDataSO> _statusEffects = new Dictionary<int, StatusEffectDataSO>();
+        private readonly Dictionary<int, MonsterSkillDataSO> _monsterSkills = new Dictionary<int, MonsterSkillDataSO>();
 
         private readonly List<MonsterDataSO> _monsterList = new List<MonsterDataSO>();
         private readonly List<SkillDataSO> _skillList = new List<SkillDataSO>();
         private readonly List<EquipmentDataSO> _equipmentList = new List<EquipmentDataSO>();
         private readonly List<ConsumableDataSO> _consumableList = new List<ConsumableDataSO>();
         private readonly List<RarityDataSO> _rarityList = new List<RarityDataSO>();
+        private readonly List<MonsterSkillDataSO> _monsterSkillList = new List<MonsterSkillDataSO>();
 
         public async Task InitializeAsync()
         {
@@ -42,7 +44,8 @@ namespace GreedDungeon.Core
                 LoadDataAsync("EquipmentData", _equipments, _equipmentList),
                 LoadDataAsync("ConsumableData", _consumables, _consumableList),
                 LoadDataAsync("RarityData", _rarities, _rarityList),
-                LoadDataAsync("StatusEffectData", _statusEffects)
+                LoadDataAsync("StatusEffectData", _statusEffects),
+                LoadDataAsync("MonsterSkillData", _monsterSkills, _monsterSkillList)
             );
         }
 
@@ -65,12 +68,14 @@ namespace GreedDungeon.Core
         public ConsumableDataSO GetConsumableData(int id) => _consumables.TryGetValue(id, out var data) ? data : null;
         public RarityDataSO GetRarityData(int id) => _rarities.TryGetValue(id, out var data) ? data : null;
         public StatusEffectDataSO GetStatusEffectData(int id) => _statusEffects.TryGetValue(id, out var data) ? data : null;
+        public MonsterSkillDataSO GetMonsterSkillData(int id) => _monsterSkills.TryGetValue(id, out var data) ? data : null;
 
         public IReadOnlyList<MonsterDataSO> GetAllMonsterData() => _monsterList;
         public IReadOnlyList<SkillDataSO> GetAllSkillData() => _skillList;
         public IReadOnlyList<EquipmentDataSO> GetAllEquipmentData() => _equipmentList;
         public IReadOnlyList<ConsumableDataSO> GetAllConsumableData() => _consumableList;
         public IReadOnlyList<RarityDataSO> GetAllRarityData() => _rarityList;
+        public IReadOnlyList<MonsterSkillDataSO> GetAllMonsterSkillData() => _monsterSkillList;
 
         public async Task<GameObject> LoadMonsterPrefabAsync(string address)
         {
