@@ -110,6 +110,7 @@ namespace GreedDungeon.Combat
             _battleManager.ExecuteItem(item, target);
             _battleManager.EndTurn();
             
+            _battleUI?.CloseInventory();
             _battleUI?.UpdatePlayerStatus(_testPlayer);
             _battleUI?.UpdateMonsterStatus(_currentMonster);
         }

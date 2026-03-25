@@ -88,6 +88,13 @@ namespace GreedDungeon.UI.Battle
             }
         }
 
+        public void CloseInventory()
+        {
+            if (_inventoryUI == null || !_inventoryUI.IsOpen) return;
+            _inventoryUI.Hide();
+            EnableActions(true);
+        }
+
         public void UpdatePlayerStatus(Player player)
         {
             if (_playerStatus != null)

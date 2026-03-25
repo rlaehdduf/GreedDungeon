@@ -406,6 +406,36 @@ ISkillManager → SkillManager (Singleton)
 
 ---
 
+## 2026-03-25: Environment 레이어 제거
+
+### 작업 내용
+1. 모든 StatusEffectSlot 프리팹의 Layer를 UI로 변경 완료
+2. Unity Tags and Layers에서 Environment 레이어 제거
+
+### 제거 방법
+1. **Edit → Project Settings → Tags and Layers**
+2. **Layers 섹션**에서 Environment 레이어 찾기
+3. 레이어 이름을 **빈 문자열로 지우기**
+4. Unity 자동 저장
+
+---
+
+## 2026-03-25: 버프/디버프 Container 왼쪽 정렬
+
+### 문제
+- 슬롯이 가운데 정렬되어 UI를 침범
+
+### 해결
+Container 프리팹 설정 변경:
+- **RectTransform**: Anchor Min/Max (0, 0.5), Pivot (0, 0.5)
+- **HorizontalLayoutGroup**: ChildAlignment = Middle Left (3)
+
+### 프리팹
+- `Assets/Prefabs/IconSlot/PlayerEffectsContainer_buff.prefab`
+- `Assets/Prefabs/IconSlot/PlayerEffectsContainer_Debuff.prefab`
+
+---
+
 ## 2026-03-25: Rarity Color 적용
 
 ### 해야 할 일

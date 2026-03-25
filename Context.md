@@ -25,6 +25,7 @@
 8. **스킬 쿨타임** - `Cooldown + 1`로 설정 (1턴 쿨타임 = 1턴 대기)
 
 9. **턴 전환** - ExecuteMonsterTurn 후 EndTurn 호출 필수
+10. **Container 왼쪽 정렬** - Anchor Min/Max (0, 0.5), Pivot (0, 0.5), ChildAlignment (3)
 
 ## Accomplished
 
@@ -55,6 +56,12 @@
 - 상태이상/버프 이벤트 시스템 구현 ✅
 - 전투 로그 실시간 연결 ✅
 - PlayerStatusUI 실시간 갱신 ✅
+- Environment 레이어 제거 (모든 오브젝트 UI 레이어로 변경) ✅
+- 버프/디버프 Container 왼쪽 정렬 수정 ✅
+- CRIT % 중복 버그 수정 ✅
+- 아이템 사용 후 인벤토리 자동 닫기 ✅
+- 툴팁 hover 문제 수정 (아이템 사용 후 툴팁 숨김) ✅
+- 스킬 슬롯 hover 마우스 위치 기반으로 변경 ✅
 
 ## In Progress
 

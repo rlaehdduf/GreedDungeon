@@ -307,8 +307,8 @@ namespace GreedDungeon.UI.Inventory
         private string FormatStat(string label, float baseValue, float bonusValue, string suffix = "")
         {
             if (bonusValue > 0)
-                return $"{label}: {baseValue:F0}% (+{bonusValue:F0}%){suffix}";
-            return $"{label}: {baseValue:F0}%{suffix}";
+                return $"{label}: {baseValue:F0}{suffix} (+{bonusValue:F0}{suffix})";
+            return $"{label}: {baseValue:F0}{suffix}";
         }
 
         private void RefreshEquipSlots()
@@ -371,11 +371,15 @@ namespace GreedDungeon.UI.Inventory
 
         private void UseConsumable(int index, InventoryItem item)
         {
+            if (_tooltip != null)
+                _tooltip.Hide();
             OnItemUsed?.Invoke(item);
         }
 
         private void EquipItem(int index)
         {
+            if (_tooltip != null)
+                _tooltip.Hide();
             _player.EquipItem(index);
         }
 

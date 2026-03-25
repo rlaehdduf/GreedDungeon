@@ -7,11 +7,10 @@ using GreedDungeon.Skill;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Collections;
 
 namespace GreedDungeon.UI.Battle
 {
-    public class SkillSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class SkillSlotUI : MonoBehaviour
     {
         [Header("Slots")]
         [SerializeField] private Button _slot1;
@@ -155,12 +154,15 @@ namespace GreedDungeon.UI.Battle
 #endif
             int newSlotIndex = GetSlotIndexFromScreenPoint(mousePos);
             
-            if (newSlotIndex >= 0 && newSlotIndex != _hoveredSlotIndex && _slotSkills[newSlotIndex] != null)
+            if (newSlotIndex >= 0 && _slotSkills[newSlotIndex] != null)
             {
-                _hoveredSlotIndex = newSlotIndex;
-                ShowTooltipFromMouse(_slotSkills[newSlotIndex], mousePos);
+                if (newSlotIndex != _hoveredSlotIndex)
+                {
+                    _hoveredSlotIndex = newSlotIndex;
+                    ShowTooltipFromMouse(_slotSkills[newSlotIndex], mousePos);
+                }
             }
-            else if (newSlotIndex < 0 && _hoveredSlotIndex >= 0)
+            else if (_hoveredSlotIndex >= 0)
             {
                 HideTooltip();
                 _hoveredSlotIndex = -1;
@@ -323,71 +325,6 @@ namespace GreedDungeon.UI.Battle
 
         public void UpdateCooldownDisplay()
         {
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            int slotIndex = GetSlotIndexFromEvent(eventData);
-            if (slotIndex < 0 || _slotSkills[slotIndex] == null) return;
-            
-            if (_hoveredSlotIndex != slotIndex)
-            {
-                _hoveredSlotIndex = slotIndex;
-                ShowTooltip(_slotSkills[slotIndex], eventData);
-            }
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            StartCoroutine(CheckSlotAfterExit(eventData));
-        }
-
-        private IEnumerator CheckSlotAfterExit(PointerEventData eventData)
-        {
-            yield return null;
-            
-            int newSlotIndex = GetSlotIndexFromEvent(eventData);
-            
-            if (newSlotIndex >= 0 && newSlotIndex != _hoveredSlotIndex && _slotSkills[newSlotIndex] != null)
-            {
-                _hoveredSlotIndex = newSlotIndex;
-                ShowTooltip(_slotSkills[newSlotIndex], eventData);
-            }
-            else if (newSlotIndex < 0)
-            {
-                HideTooltip();
-                _hoveredSlotIndex = -1;
-            }
-        }
-
-        private bool IsOverAnySlot(PointerEventData eventData)
-        {
-            if (eventData.pointerEnter == null) return false;
-            
-            var current = eventData.pointerEnter.transform;
-            while (current != null)
-            {
-                if (current == _slot1?.transform || current == _slot2?.transform || current == _slot3?.transform)
-                    return true;
-                current = current.parent;
-            }
-            return false;
-        }
-
-        private int GetSlotIndexFromEvent(PointerEventData eventData)
-        {
-            if (eventData.pointerEnter == null) return -1;
-            
-            if (eventData.pointerEnter == _slot1?.gameObject) return 0;
-            if (eventData.pointerEnter == _slot2?.gameObject) return 1;
-            if (eventData.pointerEnter == _slot3?.gameObject) return 2;
-
-            var parent = eventData.pointerEnter.transform.parent;
-            if (parent == _slot1?.transform) return 0;
-            if (parent == _slot2?.transform) return 1;
-            if (parent == _slot3?.transform) return 2;
-
-            return -1;
         }
 
         private void ShowTooltip(SkillDataSO skill, PointerEventData eventData)
