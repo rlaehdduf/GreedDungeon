@@ -26,7 +26,9 @@ namespace GreedDungeon.ScriptableObjects
         public int GoldDropMax;
         public string StatusEffectID;
         [Range(0f, 100f)] public float StatusEffectChance;
-        public string SpecialSkill;
+        public int UniqueSkillID;
+        public int SharedSkillID;
+        [Range(0f, 100f)] public float SkillChance;
         public bool IsBoss;
         public string PrefabAddress;
         public float ScaleX = 1f;
