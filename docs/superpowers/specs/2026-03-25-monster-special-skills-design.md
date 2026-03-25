@@ -121,43 +121,42 @@ public interface IGameDataManager
     // 기존 메서드...
     
     MonsterSkillDataSO GetMonsterSkillData(int id);
-    List<MonsterSkillDataSO> GetAllMonsterSkillData();
+    IReadOnlyList<MonsterSkillDataSO> GetAllMonsterSkillData();
 }
 ```
 
 ### GameDataManager (수정)
 
 ```csharp
-private Dictionary<int, MonsterSkillDataSO> _monsterSkillData;
+// 추가 필드
+private readonly Dictionary<int, MonsterSkillDataSO> _monsterSkills = new();
+private readonly List<MonsterSkillDataSO> _monsterSkillList = new();
 
-public MonsterSkillDataSO GetMonsterSkillData(int id)
+// LoadAllDataAsync() 수정
+private async Task LoadAllDataAsync()
 {
-    if (_monsterSkillData == null || !_monsterSkillData.TryGetValue(id, out var data))
-        return null;
-    return data;
+    await Task.WhenAll(
+        LoadDataAsync("MonsterData", _monsters, _monsterList),
+        LoadDataAsync("SkillData", _skills, _skillList),
+        LoadDataAsync("EquipmentData", _equipments, _equipmentList),
+        LoadDataAsync("ConsumableData", _consumables, _consumableList),
+        LoadDataAsync("RarityData", _rarities, _rarityList),
+        LoadDataAsync("StatusEffectData", _statusEffects),
+        LoadDataAsync("MonsterSkillData", _monsterSkills, _monsterSkillList)  // 추가
+    );
 }
 
-public List<MonsterSkillDataSO> GetAllMonsterSkillData()
-{
-    return _monsterSkillData?.Values.ToList();
-}
-
-// InitializeAsync() 내부
-private void LoadMonsterSkillData()
-{
-    var folder = "Assets/ScriptableObjects/Data/MonsterSkills";
-    var guids = AssetDatabase.FindAssets("t:MonsterSkillDataSO", new[] { folder });
-    _monsterSkillData = new Dictionary<int, MonsterSkillDataSO>();
+// 추가 메서드
+public MonsterSkillDataSO GetMonsterSkillData(int id) 
+    => _monsterSkills.TryGetValue(id, out var data) ? data : null;
     
-    foreach (var guid in guids)
-    {
-        var path = AssetDatabase.GUIDToAssetPath(guid);
-        var data = AssetDatabase.LoadAssetAtPath<MonsterSkillDataSO>(path);
-        if (data != null)
-            _monsterSkillData[data.ID] = data;
-    }
-}
+public IReadOnlyList<MonsterSkillDataSO> GetAllMonsterSkillData() 
+    => _monsterSkillList;
 ```
+
+**Unity Addressables 설정:**
+- `Assets/ScriptableObjects/Data/MonsterSkills` 폴더 생성
+- MonsterSkillDataSO 에셋에 "MonsterSkillData" 레이블 추가
 
 ### Monster (수정)
 
@@ -493,11 +492,13 @@ public static int ConvertMonsters()
 ```
 CSVConverter.ConvertAll()
     ↓ ConvertMonsterSkills()
-MonsterSkillDataSO 에셋 생성
+MonsterSkillDataSO 에셋 생성 (Assets/ScriptableObjects/Data/MonsterSkills)
+    ↓
+Unity Addressables: "MonsterSkillData" 레이블 설정
     ↓
 GameDataManager.InitializeAsync()
-    ↓ LoadMonsterSkillData()
-_monsterSkillData Dictionary 구축
+    ↓ LoadAllDataAsync() → LoadDataAsync("MonsterSkillData", ...)
+_monsterSkills Dictionary + _monsterSkillList 구축
     ↓
 BattleController.StartTestBattle()
     ↓ new Monster(monsterData)
@@ -508,7 +509,7 @@ HandleMonsterTurnCoroutine()
     ↓ monster.GetRandomSkill()
     ↓ SkillChance 체크
 skill != null → BattleManager.ExecuteMonsterSkill(skill)
-skill == null → BattleManager.ExecuteMonsterAttack()
+skill == null → BattleManager.ExecuteMonsterAttack() (기본 공격)
 ```
 
 ## 공용 스킬 예시
@@ -537,14 +538,15 @@ skill == null → BattleManager.ExecuteMonsterAttack()
 3. MonsterDataSO 수정 (SpecialSkill 제거, UniqueSkillID/SharedSkillID/SkillChance 추가)
 4. CSVConverter 수정 (ConvertMonsterSkills, ParseMonsterSkillType, ParseBuffTypeForMonsterSkill, GetAssetID, ConvertMonsters)
 5. IGameDataManager 인터페이스 수정 (GetMonsterSkillData, GetAllMonsterSkillData)
-6. GameDataManager 수정 (LoadMonsterSkillData, _monsterSkillData)
+6. GameDataManager 수정 (_monsterSkills, _monsterSkillList, LoadAllDataAsync)
 7. Monster.cs 수정 (SetSkills, GetRandomSkill)
 8. IBattleManager 이벤트 추가 (OnMonsterHealed, OnMonsterBuffApplied)
 9. BattleManager 수정 (ExecuteMonsterSkill 및 서브 메서드, 이벤트)
 10. BattleController 수정 (StartTestBattle 스킬 주입, HandleMonsterTurnCoroutine 분기)
 11. MonsterSkill.csv 생성
 12. MonsterData.csv 수정
-13. 테스트 데이터 생성 및 검증
+13. Unity: MonsterSkills 폴더 생성, Addressables "MonsterSkillData" 레이블 설정
+14. 테스트 데이터 생성 및 검증
 
 ## UI 고려사항
 
