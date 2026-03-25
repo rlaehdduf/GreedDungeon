@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using GreedDungeon.Character;
 using GreedDungeon.Core;
+using GreedDungeon.Dungeon;
 using GreedDungeon.ScriptableObjects;
 using GreedDungeon.Skill;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace GreedDungeon.Combat
         [Header("UI References")]
         [SerializeField] private UI.Battle.MonsterDisplay _monsterDisplay;
         [SerializeField] private UI.Battle.BattleUI _battleUI;
+        [SerializeField] private Dungeon.DungeonController _dungeonController;
 
         [Header("Delay Settings")]
         [SerializeField] private float _attackStartDelay = 0.3f;
@@ -69,6 +71,11 @@ namespace GreedDungeon.Combat
             _battleManager.OnAttackEffect += HandleAttackEffect;
 
             SetupUIEvents();
+
+            if (_dungeonController != null)
+            {
+                _dungeonController.Initialize(_testPlayer);
+            }
         }
 
         private void Update()
@@ -448,6 +455,10 @@ namespace GreedDungeon.Combat
 
         private void HandleMonsterDeath()
         {
+            if (_dungeonController != null)
+            {
+                _dungeonController.OnMonsterDeath();
+            }
         }
 
         private void OnDestroy()
