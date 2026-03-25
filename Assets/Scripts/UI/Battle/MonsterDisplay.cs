@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Threading.Tasks;
 using GreedDungeon.Character;
 using GreedDungeon.Core;
@@ -64,6 +66,15 @@ namespace GreedDungeon.UI.Battle
             {
                 _spriteView.PlayDamageAnimation();
             }
+        }
+
+        public Coroutine PlayAttackAnimation()
+        {
+            if (_spriteView != null)
+            {
+                return _spriteView.PlayAttackAnimation();
+            }
+            return null;
         }
 
         public void Clear()

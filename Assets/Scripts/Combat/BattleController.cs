@@ -169,6 +169,11 @@ namespace GreedDungeon.Combat
 
             yield return new WaitForSeconds(_attackStartDelay);
 
+            if (_monsterDisplay != null)
+            {
+                yield return _monsterDisplay.PlayAttackAnimation();
+            }
+
             yield return new WaitForSeconds(_effectDisplayDelay);
 
             _battleManager.ExecuteMonsterAttack();

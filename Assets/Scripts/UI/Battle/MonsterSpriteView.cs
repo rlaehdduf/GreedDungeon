@@ -18,18 +18,24 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private float _damageScaleAmount = 0.9f;
         [SerializeField] private float _damageDuration = 0.3f;
         [SerializeField] private Color _damageColor = new Color(1f, 0.3f, 0.3f);
+
+        [Header("Attack Animation")]
+        [SerializeField] private float _attackScale = 1.4f;
+        [SerializeField] private float _attackDuration = 0.4f;
         
         private Vector3 _baseScale = Vector3.one;
         private float _breathTimer;
         private bool _isAnimatingDamage;
+        private bool _isAnimatingAttack;
         private bool _isSetupComplete;
         private Coroutine _damageCoroutine;
+        private Coroutine _attackCoroutine;
 
         public event Action OnDamageAnimationComplete;
 
         private void Update()
         {
-            if (!_isAnimatingDamage && _isSetupComplete)
+            if (!_isAnimatingDamage && !_isAnimatingAttack && _isSetupComplete)
             {
                 UpdateBreathAnimation();
             }
@@ -63,6 +69,15 @@ namespace GreedDungeon.UI.Battle
                 StopCoroutine(_damageCoroutine);
             
             _damageCoroutine = StartCoroutine(DamageAnimationRoutine());
+        }
+
+        public Coroutine PlayAttackAnimation()
+        {
+            if (_attackCoroutine != null)
+                StopCoroutine(_attackCoroutine);
+            
+            _attackCoroutine = StartCoroutine(AttackAnimationRoutine());
+            return _attackCoroutine;
         }
 
         private IEnumerator DamageAnimationRoutine()
@@ -107,6 +122,38 @@ namespace GreedDungeon.UI.Battle
             _isAnimatingDamage = false;
             _damageCoroutine = null;
             OnDamageAnimationComplete?.Invoke();
+        }
+
+        private IEnumerator AttackAnimationRoutine()
+        {
+            _isAnimatingAttack = true;
+
+            Vector3 originalScale = _baseScale;
+            Vector3 targetScale = _baseScale * _attackScale;
+
+            float elapsed = 0f;
+            float halfDuration = _attackDuration / 2f;
+
+            while (elapsed < halfDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / halfDuration;
+                transform.localScale = Vector3.Lerp(originalScale, targetScale, t);
+                yield return null;
+            }
+
+            elapsed = 0f;
+            while (elapsed < halfDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / halfDuration;
+                transform.localScale = Vector3.Lerp(targetScale, originalScale, t);
+                yield return null;
+            }
+
+            transform.localScale = _baseScale;
+            _isAnimatingAttack = false;
+            _attackCoroutine = null;
         }
 
         public void SubscribeToMonster(Monster monster)
