@@ -223,7 +223,7 @@ event Action<string, UI.Battle.LogType> OnBattleLog;
 
                 case ConsumableEffectType.Poison:
                 case ConsumableEffectType.Burn:
-                    var effect = FindStatusEffect(data.EffectType == ConsumableEffectType.Poison ? "Poison" : "Burn");
+                    var effect = FindStatusEffect(data.StatusEffectID);
                     if (effect != null)
                     {
                         target.ApplyStatusEffect(effect, data.Duration);

@@ -1702,7 +1702,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7425250182672459358, guid: f6c6b155e333e1c47995ee697e8aae07, type: 3}
       propertyPath: m_Name
-      value: EnemyStatusEffectSlot
+      value: EnemyStatusEffectSlot_Debuff
       objectReference: {fileID: 0}
     - target: {fileID: 7425250182672459358, guid: f6c6b155e333e1c47995ee697e8aae07, type: 3}
       propertyPath: m_IsActive
@@ -5179,7 +5179,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7425250182672459358, guid: f6c6b155e333e1c47995ee697e8aae07, type: 3}
       propertyPath: m_Name
-      value: PlayerStatusEffectSlot
+      value: PlayerEffectsContainer_Debuff
       objectReference: {fileID: 0}
     - target: {fileID: 7425250182672459358, guid: f6c6b155e333e1c47995ee697e8aae07, type: 3}
       propertyPath: m_IsActive
@@ -6265,8 +6265,8 @@ MonoBehaviour:
   _hpBar: {fileID: 721200594}
   _hpText: {fileID: 1421293388}
   _elementIcon: {fileID: 303997897}
-  _debuffSlots:
-  - {fileID: 491441108}
+  _debuffContainer: {fileID: 491441104}
+  _debuffSlotPrefab: {fileID: 491441107}
 --- !u!1 &1824314803
 GameObject:
   m_ObjectHideFlags: 0
@@ -6534,10 +6534,10 @@ MonoBehaviour:
   _hpText: {fileID: 630071322}
   _mpBar: {fileID: 1165471763}
   _mpText: {fileID: 2124737978}
-  _debuffSlots:
-  - {fileID: 987191980}
-  _buffSlots:
-  - {fileID: 1420639274}
+  _debuffContainer: {fileID: 987191979}
+  _debuffSlotPrefab: {fileID: 987191978}
+  _buffContainer: {fileID: 1420639270}
+  _buffSlotPrefab: {fileID: 1420639273}
 --- !u!1 &1927973847
 GameObject:
   m_ObjectHideFlags: 0
@@ -7209,7 +7209,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7425250182672459358, guid: f6c6b155e333e1c47995ee697e8aae07, type: 3}
       propertyPath: m_Name
-      value: PlayerEffectsContainer
+      value: PlayerEffectsContainer_buff
       objectReference: {fileID: 0}
     - target: {fileID: 7425250182672459358, guid: f6c6b155e333e1c47995ee697e8aae07, type: 3}
       propertyPath: m_IsActive
