@@ -15,11 +15,13 @@ public interface IBattleManager
         event Action<Monster, int> OnMonsterDamaged;
         event Action<int, bool> OnPlayerDamaged;
         event Action<int> OnPlayerHealed;
-        event Action<SkillType> OnAttackEffect;
+        event Action<SkillType, int> OnAttackEffect;
         event Action<string, UI.Battle.LogType> OnBattleLog;
         event Action OnPlayerDeath;
         event Action OnMonsterDeath;
         event Action OnMonsterTurnStarted;
+        event Action<int, int> OnMonsterHealed;
+        event Action<BuffType, float, int> OnMonsterBuffApplied;
 
         void StartBattle(Player player, Monster monster);
         void ExecuteAttack(IBattleEntity attacker, IBattleEntity defender, SkillDataSO skill);
@@ -27,6 +29,7 @@ public interface IBattleManager
         bool ExecuteItem(InventoryItem item, IBattleEntity target);
         void EndTurn();
         void ExecuteMonsterAttack();
+        void ExecuteMonsterSkill(MonsterSkillDataSO skill);
         bool IsBattleOver { get; }
         bool PlayerWon { get; }
     }
@@ -49,11 +52,13 @@ public interface IBattleManager
         public event Action<Monster, int> OnMonsterDamaged;
         public event Action<int, bool> OnPlayerDamaged;
         public event Action<int> OnPlayerHealed;
-        public event Action<SkillType> OnAttackEffect;
+        public event Action<SkillType, int> OnAttackEffect;
         public event Action<string, UI.Battle.LogType> OnBattleLog;
         public event Action OnPlayerDeath;
         public event Action OnMonsterDeath;
         public event Action OnMonsterTurnStarted;
+        public event Action<int, int> OnMonsterHealed;
+        public event Action<BuffType, float, int> OnMonsterBuffApplied;
 
         public BattleManager(IDamageCalculator damageCalculator, ITurnManager turnManager, IGameDataManager gameDataManager)
         {
@@ -165,9 +170,10 @@ public interface IBattleManager
             string actionText = skill != null ? skill.Name : "공격";
 
             SkillType skillType = skill != null ? skill.Type : SkillType.Neutral;
-            OnAttackEffect?.Invoke(skillType);
-
             int hitCount = skill?.HitCount ?? 1;
+            
+            OnAttackEffect?.Invoke(skillType, hitCount);
+
             int totalDamage = 0;
             bool isCritical = false;
 
@@ -356,6 +362,84 @@ public interface IBattleManager
                 _player.ApplyStatusEffect(effect, effect.Duration);
                 LogBattle($"→ {effect.Name}", UI.Battle.LogType.Monster);
 }
+        }
+
+        public void ExecuteMonsterSkill(MonsterSkillDataSO skill)
+        {
+            if (skill == null) return;
+
+            switch (skill.SkillType)
+            {
+                case MonsterSkillType.Attack:
+                    ExecuteMonsterAttackSkill(skill);
+                    break;
+                case MonsterSkillType.Buff:
+                    ExecuteMonsterBuffSkill(skill);
+                    break;
+                case MonsterSkillType.Debuff:
+                    ExecuteMonsterDebuffSkill(skill);
+                    break;
+                case MonsterSkillType.Heal:
+                    ExecuteMonsterHealSkill(skill);
+                    break;
+            }
+        }
+
+        private void ExecuteMonsterAttackSkill(MonsterSkillDataSO skill)
+        {
+            int baseDamage = _monster.TotalStats.Attack;
+            int totalDamage = 0;
+
+            for (int i = 0; i < skill.HitCount; i++)
+            {
+                int damage = Mathf.RoundToInt(baseDamage * skill.DamageMultiplier);
+                if (_player.IsDefending) damage /= 2;
+                damage = Mathf.Max(1, damage - _player.TotalStats.Defense / 2);
+                _player.TakeDamage(damage);
+                totalDamage += damage;
+            }
+
+            OnPlayerDamaged?.Invoke(totalDamage, false);
+            LogBattle($"{_monster.Name} {skill.Name}! → {totalDamage} Dmg", UI.Battle.LogType.Monster);
+        }
+
+        private void ExecuteMonsterBuffSkill(MonsterSkillDataSO skill)
+        {
+            if (skill.BuffType == BuffType.None) return;
+
+            _monster.ApplyBuff(skill.BuffType, skill.BuffValue, skill.BuffDuration);
+            OnMonsterBuffApplied?.Invoke(skill.BuffType, skill.BuffValue, skill.BuffDuration);
+            LogBattle($"{_monster.Name} {skill.Name}! {skill.BuffType} +{skill.BuffValue}%", UI.Battle.LogType.Monster);
+        }
+
+        private void ExecuteMonsterDebuffSkill(MonsterSkillDataSO skill)
+        {
+            int damage = Mathf.RoundToInt(_monster.TotalStats.Attack * skill.DamageMultiplier);
+            if (_player.IsDefending) damage /= 2;
+            damage = Mathf.Max(1, damage - _player.TotalStats.Defense / 2);
+
+            _player.TakeDamage(damage);
+            OnPlayerDamaged?.Invoke(damage, false);
+            LogBattle($"{_monster.Name} {skill.Name}! → {damage} Dmg", UI.Battle.LogType.Monster);
+
+            if (!string.IsNullOrEmpty(skill.StatusEffectID) &&
+                UnityEngine.Random.value * 100 < skill.StatusEffectChance)
+            {
+                var effect = FindStatusEffect(skill.StatusEffectID);
+                if (effect != null)
+                {
+                    _player.ApplyStatusEffect(effect, effect.Duration);
+                    LogBattle($"→ {effect.Name}", UI.Battle.LogType.Monster);
+                }
+            }
+        }
+
+        private void ExecuteMonsterHealSkill(MonsterSkillDataSO skill)
+        {
+            int healAmount = Mathf.RoundToInt(_monster.BaseStats.MaxHP * skill.HealPercent / 100f);
+            _monster.Heal(healAmount);
+            OnMonsterHealed?.Invoke(healAmount, _monster.CurrentHP);
+            LogBattle($"{_monster.Name} {skill.Name}! HP +{healAmount}", UI.Battle.LogType.Monster);
         }
 
         private void CheckBattleEnd()
