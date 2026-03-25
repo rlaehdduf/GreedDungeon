@@ -101,5 +101,17 @@ namespace GreedDungeon.Items
             float bonus = (int)(baseValue * Rarity.StatMultiplier) - baseValue;
             return bonus > 0 ? bonus : 0;
         }
+
+        public InventoryItem Clone()
+        {
+            if (Type == ItemType.Consumable)
+            {
+                return new InventoryItem(Consumable, Quantity);
+            }
+            else
+            {
+                return new InventoryItem(Equipment, Rarity, Skill);
+            }
+        }
     }
 }
