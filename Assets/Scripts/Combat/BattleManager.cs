@@ -74,7 +74,7 @@ event Action<string, UI.Battle.LogType> OnBattleLog;
             _monster.OnDamaged += HandleMonsterDamaged;
             OnBattleStarted?.Invoke(_monster);
 
-            LogBattle($"═══ 전투 시작: {_monster.Name} ═══");
+            LogBattle($"전투: {_monster.Name}");
         }
 
         private void HandleMonsterDamaged(int damage)
@@ -94,18 +94,8 @@ event Action<string, UI.Battle.LogType> OnBattleLog;
         {
             if (attacker.IsDead || defender.IsDead) return;
 
-            string attackerName = attacker == _player ? "플레이어" : attacker.Name;
-            string actionText = skill != null ? $"스킬 [{skill.Name}]" : "공격";
-
-            if (skill != null && skill.MPCost > 0)
-            {
-                if (attacker.CurrentMP < skill.MPCost)
-                {
-                    LogBattle($"MP 부족! (필요: {skill.MPCost})");
-                    return;
-                }
-                attacker.UseMP(skill.MPCost);
-            }
+            bool isPlayer = attacker == _player;
+            string actionText = skill != null ? skill.Name : "공격";
 
             int hitCount = skill?.HitCount ?? 1;
             int totalDamage = 0;
@@ -119,9 +109,13 @@ event Action<string, UI.Battle.LogType> OnBattleLog;
                 totalDamage += result.Damage;
             }
 
-            string resultText = hitCount > 1 ? $"{hitCount}연타 {totalDamage}" : $"{totalDamage}";
-            var logType = attacker == _player ? UI.Battle.LogType.Player : UI.Battle.LogType.Monster;
-            LogBattle($"{attackerName} {actionText} → {defender.Name} {resultText} 데미지", logType);
+            string dmgText = hitCount > 1 ? $"{totalDamage} ({hitCount}회)" : $"{totalDamage}";
+            var logType = isPlayer ? UI.Battle.LogType.Player : UI.Battle.LogType.Monster;
+            
+            if (isPlayer)
+                LogBattle($"{actionText} - {defender.Name} {dmgText} Dmg", logType);
+            else
+                LogBattle($"{attacker.Name} → {dmgText} Dmg", logType);
 
             ApplyStatusEffectFromSkill(skill, defender);
 
@@ -137,7 +131,7 @@ event Action<string, UI.Battle.LogType> OnBattleLog;
 
             defender.StartDefend();
             var logType = defender == _player ? UI.Battle.LogType.Player : UI.Battle.LogType.Monster;
-            LogBattle($"방어 태세", logType);
+            LogBattle($"방어", logType);
         }
 
         public bool ExecuteItem(InventoryItem item, IBattleEntity target)
@@ -153,19 +147,19 @@ event Action<string, UI.Battle.LogType> OnBattleLog;
                 case ConsumableEffectType.Heal:
                     int healAmount = (int)data.EffectValue;
                     target.Heal(healAmount);
-                    LogBattle($"아이템 [{data.Name}] → HP +{healAmount}", UI.Battle.LogType.Player);
+                    LogBattle($"[{data.Name}] HP +{healAmount}", UI.Battle.LogType.Player);
                     break;
 
                 case ConsumableEffectType.Cleanse:
                     target.ClearDebuffs();
-                    LogBattle($"아이템 [{data.Name}] → 디버프 해제", UI.Battle.LogType.Player);
+                    LogBattle($"[{data.Name}] 디버프 해제", UI.Battle.LogType.Player);
                     break;
 
                 case ConsumableEffectType.Buff:
                     if (data.BuffType != BuffType.None)
                     {
                         target.ApplyBuff(data.BuffType, data.EffectValue, data.Duration);
-                        LogBattle($"아이템 [{data.Name}] → {data.BuffType} +{data.EffectValue}% ({data.Duration}턴)", UI.Battle.LogType.Player);
+                        LogBattle($"[{data.Name}] {data.BuffType} +{data.EffectValue}%", UI.Battle.LogType.Player);
                     }
                     break;
 
@@ -175,14 +169,14 @@ event Action<string, UI.Battle.LogType> OnBattleLog;
                     if (effect != null)
                     {
                         target.ApplyStatusEffect(effect, data.Duration);
-                        LogBattle($"아이템 [{data.Name}] → {target.Name} {effect.Name}", UI.Battle.LogType.Player);
+                        LogBattle($"[{data.Name}] → {target.Name} {effect.Name}", UI.Battle.LogType.Player);
                     }
                     break;
 
                 case ConsumableEffectType.Attack:
                     int damage = (int)data.EffectValue;
                     target.TakeDamage(damage);
-                    LogBattle($"아이템 [{data.Name}] → {target.Name} {damage} 데미지", UI.Battle.LogType.Player);
+                    LogBattle($"[{data.Name}] → {damage} Dmg", UI.Battle.LogType.Player);
                     if (target.IsDead)
                     {
                         CheckBattleEnd();
@@ -207,7 +201,7 @@ event Action<string, UI.Battle.LogType> OnBattleLog;
             {
                 int duration = skill.Duration > 0 ? skill.Duration : effect.Duration;
                 target.ApplyStatusEffect(effect, duration);
-                LogBattle($"→ {target.Name} {effect.Name} ({duration}턴)");
+                LogBattle($"→ {effect.Name} ({duration}턴)");
             }
         }
 
@@ -276,7 +270,7 @@ public void ExecuteMonsterTurn()
             damage = Mathf.Max(1, damage - defense / 2);
             
             _player.TakeDamage(damage);
-            LogBattle($"{_monster.Name} 공격 → 플레이어 {damage} 데미지", UI.Battle.LogType.Monster);
+            LogBattle($"{_monster.Name} → {damage} Dmg", UI.Battle.LogType.Monster);
             
             TryApplyMonsterStatusEffect();
         }
@@ -292,7 +286,7 @@ public void ExecuteMonsterTurn()
             if (roll < _monster.GetStatusEffectChance())
             {
                 _player.ApplyStatusEffect(effect, effect.Duration);
-                LogBattle($"→ 플레이어 {effect.Name}", UI.Battle.LogType.Monster);
+                LogBattle($"→ {effect.Name}", UI.Battle.LogType.Monster);
 }
         }
 
@@ -305,12 +299,12 @@ public void ExecuteMonsterTurn()
                 _player.AddKill();
                 int goldReward = _monster.GoldDrop;
                 _player.AddGold(goldReward);
-                LogBattle($"═══ 승리! +{goldReward}G ═══");
+                LogBattle($"승리! +{goldReward}G");
                 OnMonsterDeath?.Invoke();
             }
             else
             {
-                LogBattle($"═══ 패배... ═══");
+                LogBattle($"패배...");
                 OnPlayerDeath?.Invoke();
             }
         }

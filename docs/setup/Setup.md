@@ -158,11 +158,56 @@ Battle.unity
 > 디버프 없으면 슬롯 비활성화, 발생 시 활성화하고 아이콘 로드 + Count 표시
 
 ### BattleLogUI (LogUI에 추가)
+
+**구조:**
+```
+LogUI (ScrollRect)
+├── Viewport (Image + Rect Mask 2D)
+│   └── Content (Vertical Layout Group + Content Size Fitter)
+│       └── (Log 프리팹들이 여기에 생성됨)
+```
+
+**1. LogUI 설정:**
+| 컴포넌트 | 설정 |
+|---------|------|
+| RectTransform | Anchor: Top-Center, Size: (600, 200) |
+| ScrollRect | Vertical ✓, Content: Content Transform |
+| Vertical Layout Group | Child Alignment: Middle Center |
+
+**2. Viewport 설정 (LogUI 자식):**
+| 컴포넌트 | 설정 |
+|---------|------|
+| RectTransform | Stretch/Stretch |
+| Image | Color: (0,0,0,100) 또는 투명 |
+| Rect Mask 2D | 추가 |
+
+**3. Content 설정 (Viewport 자식):**
+| 컴포넌트 | 설정 |
+|---------|------|
+| RectTransform | Stretch/Stretch, Left/Top/Right/Bottom = 0 |
+| Vertical Layout Group | Spacing: 5, Child Force Expand Width ✓ |
+| Content Size Fitter | Vertical: Preferred Size |
+
+**4. BattleLogUI 컴포넌트 (LogUI에 추가):**
 | 필드 | 연결 대상 |
 |------|-----------|
-| `_logContainer` | 로그 엔트리 부모 Transform |
-| `_logEntryPrefab` | 로그 텍스트 프리팹 (Text 컴포넌트 포함) |
-| `_scrollRect` | ScrollRect (선택) |
+| `_logContainer` | Content Transform |
+| `_logEntryPrefab` | Log 프리팹 |
+| `_scrollRect` | LogUI의 ScrollRect |
+
+**5. Log 프리팹 설정:**
+```
+Log (GameObject)
+└── Text (Component)
+```
+| Text 설정 | 값 |
+|----------|---|
+| Font Size | 14 |
+| Alignment | Middle Center |
+| Horizontal Overflow | Overflow |
+| Vertical Overflow | Truncate |
+
+> **주의:** `_scrollRect`가 null이면 로그가 화면 밖으로 나감
 
 ### ActionMenuUI (버튼 부모에 추가)
 | 필드 | 연결 대상 |
@@ -342,6 +387,24 @@ ISkillManager → SkillManager (Singleton)
 - [ ] Battle 씬: GameRoot - RootContext, GameInstaller
 - [ ] Battle 씬: Managers - BattleController, MonsterDisplay
 - [ ] Battle 씬: Canvas - BattleUI, SkillSlotUI, PlayerStatusUI, MonsterStatusUI, BattleLogUI, ActionMenuUI
+
+---
+
+## 2026-03-25: Rarity Color 적용
+
+### 해야 할 일
+1. Unity Editor에서 `Tools → CSV → Convert Rarities` 실행
+2. 변환 완료 로그 확인 ("Rarity 변환 완료: 5개")
+3. 테스트: 인벤토리에서 아이템 툴팁 확인
+
+### 색상 매핑
+| Rarity | Color | Hex |
+|--------|-------|-----|
+| Common | 흰색 | FFFFFF |
+| UnCommon | 녹색 | 00FF00 |
+| Rare | 파랑 | 0080FF |
+| Epic | 보라 | A020F0 |
+| Legend | 금색 | FFD700 |
 
 ---
 

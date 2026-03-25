@@ -21,7 +21,7 @@ MonoBehaviour:
   Defense: 0
   Speed: 0
   CriticalRate: 10
-  SkillPoolType: 4
+  SkillPoolType: 5
   BuyPrice: 250
   SellPrice: 125
   Description: "\uC77C\uBC18 \uBCF4\uC11D\uBCF4\uB2E4\uB294 \uBABB\uC0DD\uAE34 \uC218\uC694\uAC00

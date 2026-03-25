@@ -19,3 +19,4 @@ MonoBehaviour:
   SkillTierMin: 1
   SkillTierMax: 2
   DropWeight: 300
+  Color: {r: 0, g: 1, b: 0, a: 1}

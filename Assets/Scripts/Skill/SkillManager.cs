@@ -181,7 +181,7 @@ namespace GreedDungeon.Skill
             }
 
             if (skill.Cooldown > 0)
-                StartCooldown(skill.ID, skill.Cooldown);
+                StartCooldown(skill.ID, skill.Cooldown + 1);
         }
 
         private void ExecuteBuff(SkillDataSO skill, IBattleEntity caster)

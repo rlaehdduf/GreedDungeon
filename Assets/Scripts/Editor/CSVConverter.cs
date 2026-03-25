@@ -156,7 +156,7 @@ public class CSVConverter : EditorWindow
         for (int i = 1; i < lines.Count; i++)
         {
             var values = lines[i];
-            if (values.Count < 8 || !int.TryParse(values[0], out int id)) continue;
+            if (values.Count < 7 || !int.TryParse(values[0], out int id)) continue;
 
             var data = FindExistingAsset<RarityDataSO>(id, outputPath);
             bool isNew = data == null;
@@ -177,7 +177,7 @@ public class CSVConverter : EditorWindow
             data.SkillTierMin = int.TryParse(values[4], out int stmin) ? stmin : 0;
             data.SkillTierMax = int.TryParse(values[5], out int stmax) ? stmax : 0;
             data.DropWeight = int.TryParse(values[6], out int dw) ? dw : 0;
-            data.Color = ParseColorHex(values[7]);
+            data.Color = values.Count > 7 ? ParseColorHex(values[7]) : Color.white;
 
             if (isNew)
             {
