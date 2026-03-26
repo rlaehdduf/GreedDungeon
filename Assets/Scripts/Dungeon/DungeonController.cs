@@ -4,6 +4,7 @@ using GreedDungeon.Core;
 using GreedDungeon.Dungeon.UI;
 using GreedDungeon.Items;
 using GreedDungeon.ScriptableObjects;
+using GreedDungeon.UI.Battle;
 using UnityEngine;
 
 namespace GreedDungeon.Dungeon
@@ -14,6 +15,7 @@ namespace GreedDungeon.Dungeon
         [SerializeField] private TreasurePopupUI _treasurePopupUI;
         [SerializeField] private ShopUI _shopUI;
         [SerializeField] private BackgroundScroller _backgroundScroller;
+        [SerializeField] private MonsterDisplay _monsterDisplay;
         
         [Header("References")]
         [SerializeField] private Combat.BattleController _battleController;
@@ -86,6 +88,10 @@ namespace GreedDungeon.Dungeon
         
         public void OnMonsterDeath()
         {
+            if (_monsterDisplay != null)
+            {
+                _monsterDisplay.Clear();
+            }
             StartCoroutine(HandleMonsterDeathCoroutine());
         }
         

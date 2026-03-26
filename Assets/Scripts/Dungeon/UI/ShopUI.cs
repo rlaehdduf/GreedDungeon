@@ -98,10 +98,12 @@ namespace GreedDungeon.Dungeon.UI
                 
                 int index = i;
                 var button = slot.GetComponent<Button>();
-                if (button != null)
+                if (button == null)
                 {
-                    button.onClick.AddListener(() => TryBuyItem(index));
+                    button = slot.gameObject.AddComponent<Button>();
                 }
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() => TryBuyItem(index));
             }
         }
         
@@ -124,10 +126,12 @@ namespace GreedDungeon.Dungeon.UI
                 
                 int index = i;
                 var button = slot.GetComponent<Button>();
-                if (button != null)
+                if (button == null)
                 {
-                    button.onClick.AddListener(() => TrySellItem(index));
+                    button = slot.gameObject.AddComponent<Button>();
                 }
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() => TrySellItem(index));
             }
         }
         
