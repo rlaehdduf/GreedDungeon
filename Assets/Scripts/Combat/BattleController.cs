@@ -71,8 +71,9 @@ namespace GreedDungeon.Combat
             _battleManager.OnAttackEffect += HandleAttackEffect;
 
             SetupUIEvents();
+            StartTestBattle();
 
-            if (_dungeonController != null)
+            if (_dungeonController != null && _testPlayer != null)
             {
                 _dungeonController.Initialize(_testPlayer);
             }
@@ -112,8 +113,6 @@ namespace GreedDungeon.Combat
                 _battleUI.OnItemClicked += HandleItemClicked;
                 _battleUI.OnItemUsed += HandleItemUsed;
             }
-            
-            StartTestBattle();
         }
 
         private void HandleSkillSelected(int skillId)
@@ -260,8 +259,6 @@ namespace GreedDungeon.Combat
             _isActionInProgress = true;
             _battleUI?.EnableActions(false);
 
-            yield return new WaitForSeconds(_attackStartDelay);
-
             if (item == null || item.Type != Items.ItemType.Consumable)
             {
                 _isActionInProgress = false;
@@ -269,13 +266,16 @@ namespace GreedDungeon.Combat
                 yield break;
             }
 
+            _battleUI?.CloseInventory();
+
+            yield return new WaitForSeconds(_attackStartDelay);
+
             var target = GetConsumableTarget(item);
             _battleManager.ExecuteItem(item, target);
 
             yield return new WaitForSeconds(_afterDamageDelay);
             _battleManager.EndTurn();
 
-            _battleUI?.CloseInventory();
             _battleUI?.UpdatePlayerStatus(_testPlayer);
             _battleUI?.UpdateMonsterStatus(_currentMonster);
 
@@ -402,6 +402,7 @@ namespace GreedDungeon.Combat
 
         private void HandleBattleStarted(Monster monster)
         {
+            _battleManager.OnBattleLog -= HandleBattleLog;
             _battleManager.OnBattleLog += HandleBattleLog;
             
             OnBattleStarted?.Invoke(monster);

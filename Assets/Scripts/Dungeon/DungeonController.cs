@@ -173,14 +173,29 @@ namespace GreedDungeon.Dungeon
         
         private void StartNextBattle()
         {
-            bool isBoss = _encounterSystem.ShouldSpawnBoss();
-            
             MonsterDataSO monsterData;
+            
+            bool isBoss = false;
+            if (_progress != null && _encounterSystem != null)
+            {
+                isBoss = _encounterSystem.ShouldSpawnBoss();
+                Debug.Log($"[Dungeon] KillCount: {_progress.KillCount}, BossProb: {_progress.GetBossProbability()}%, IsBoss: {isBoss}");
+            }
             
             if (isBoss)
             {
                 monsterData = _gameDataManager.GetBossMonsterData();
-                _currentState = DungeonState.Boss;
+                if (monsterData != null)
+                {
+                    _currentState = DungeonState.Boss;
+                    Debug.Log($"[Dungeon] Boss spawn: {monsterData.Name}");
+                }
+                else
+                {
+                    monsterData = _gameDataManager.GetRandomMonsterData();
+                    _currentState = DungeonState.Battle;
+                    Debug.Log($"[Dungeon] No boss data, fallback to random monster");
+                }
             }
             else
             {
