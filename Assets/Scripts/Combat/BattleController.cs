@@ -213,7 +213,16 @@ namespace GreedDungeon.Combat
 
             yield return new WaitForSeconds(0.2f);
 
-            _battleManager.ExecuteMonsterAttack();
+            var skill = _currentMonster.GetRandomSkill();
+
+            if (skill != null)
+            {
+                _battleManager.ExecuteMonsterSkill(skill);
+            }
+            else
+            {
+                _battleManager.ExecuteMonsterAttack();
+            }
 
             if (attackAnim != null)
                 yield return attackAnim;
@@ -311,6 +320,17 @@ namespace GreedDungeon.Combat
             if (monsterData == null) return;
             
             _currentMonster = new Monster(monsterData);
+            
+            MonsterSkillDataSO uniqueSkill = null;
+            MonsterSkillDataSO sharedSkill = null;
+            
+            if (monsterData.UniqueSkillID > 0)
+                uniqueSkill = _gameDataManager.GetMonsterSkillData(monsterData.UniqueSkillID);
+            if (monsterData.SharedSkillID > 0)
+                sharedSkill = _gameDataManager.GetMonsterSkillData(monsterData.SharedSkillID);
+            
+            _currentMonster.SetSkills(uniqueSkill, sharedSkill);
+            
             _testPlayer = new Player();
 
             AddTestItemsToInventory();
