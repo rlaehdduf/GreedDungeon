@@ -76,7 +76,9 @@ namespace GreedDungeon.Core
         public MonsterDataSO GetRandomMonsterData()
         {
             if (_monsterList == null || _monsterList.Count == 0) return null;
-            return _monsterList[UnityEngine.Random.Range(0, _monsterList.Count)];
+            var normalMonsters = _monsterList.FindAll(m => !m.IsBoss);
+            if (normalMonsters == null || normalMonsters.Count == 0) return _monsterList[0];
+            return normalMonsters[UnityEngine.Random.Range(0, normalMonsters.Count)];
         }
         
         public MonsterDataSO GetBossMonsterData()

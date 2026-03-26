@@ -29,6 +29,7 @@ namespace GreedDungeon.Character
         public event System.Action OnInventoryChanged;
         public event System.Action OnLevelUp;
         public event System.Action OnSkillsChanged;
+        public event System.Action OnStatsChanged;
 
         public Player()
         {
@@ -80,6 +81,7 @@ namespace GreedDungeon.Character
             var newStats = CalculateLevelStats(Level);
             InitializeStats(newStats);
             OnLevelUp?.Invoke();
+            OnStatsChanged?.Invoke();
             OnInventoryChanged?.Invoke();
         }
 
@@ -220,6 +222,7 @@ namespace GreedDungeon.Character
                 AddSkill(item.Skill);
             }
             
+            OnStatsChanged?.Invoke();
             OnSkillsChanged?.Invoke();
             OnInventoryChanged?.Invoke();
             return true;
@@ -241,6 +244,7 @@ namespace GreedDungeon.Character
             _inventory[emptySlot] = equipped;
             _equippedItems.Remove(type);
             
+            OnStatsChanged?.Invoke();
             OnSkillsChanged?.Invoke();
             OnInventoryChanged?.Invoke();
             return true;

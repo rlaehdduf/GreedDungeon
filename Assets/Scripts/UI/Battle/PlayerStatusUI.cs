@@ -56,6 +56,7 @@ namespace GreedDungeon.UI.Battle
         {
             if (_player == null) return;
             _player.OnDamaged += OnPlayerDamaged;
+            _player.OnStatsChanged += OnStatsChanged;
             _player.OnStatusEffectApplied += OnStatusEffectChanged;
             _player.OnStatusEffectEnded += OnStatusEffectChanged;
             _player.OnStatusEffectDurationChanged += OnStatusEffectChanged;
@@ -68,6 +69,7 @@ namespace GreedDungeon.UI.Battle
         {
             if (_player == null) return;
             _player.OnDamaged -= OnPlayerDamaged;
+            _player.OnStatsChanged -= OnStatsChanged;
             _player.OnStatusEffectApplied -= OnStatusEffectChanged;
             _player.OnStatusEffectEnded -= OnStatusEffectChanged;
             _player.OnStatusEffectDurationChanged -= OnStatusEffectChanged;
@@ -77,6 +79,12 @@ namespace GreedDungeon.UI.Battle
         }
 
         private void OnPlayerDamaged(int damage)
+        {
+            if (_player != null)
+                UpdateStatus(_player);
+        }
+
+        private void OnStatsChanged()
         {
             if (_player != null)
                 UpdateStatus(_player);
