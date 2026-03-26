@@ -194,6 +194,7 @@ Shop (GameObject) - 초기 비활성화
 | _treasurePopupUI | TreasurePopupUI | TreasurePopup 프리팹 인스턴스 | 보물 팝업 |
 | _shopUI | ShopUI | Shop 프리팹 인스턴스 | 상점 UI |
 | _backgroundScroller | BackgroundScroller | Background의 컴포넌트 | 배경 스크롤 |
+| _monsterDisplay | MonsterDisplay | MonsterDisplay 컴포넌트 | 몬스터 표시 (죽으면 숨김) |
 | _battleController | BattleController | BattleController 컴포넌트 | 전투 컨트롤러 |
 | _minGoldReward | int | 10 | 보물 최소 골드 |
 | _maxGoldReward | int | 50 | 보물 최대 골드 |
