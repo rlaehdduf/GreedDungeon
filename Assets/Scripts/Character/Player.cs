@@ -222,6 +222,7 @@ namespace GreedDungeon.Character
                 AddSkill(item.Skill);
             }
             
+            InvalidateStatsCache();
             OnStatsChanged?.Invoke();
             OnSkillsChanged?.Invoke();
             OnInventoryChanged?.Invoke();
@@ -244,6 +245,7 @@ namespace GreedDungeon.Character
             _inventory[emptySlot] = equipped;
             _equippedItems.Remove(type);
             
+            InvalidateStatsCache();
             OnStatsChanged?.Invoke();
             OnSkillsChanged?.Invoke();
             OnInventoryChanged?.Invoke();

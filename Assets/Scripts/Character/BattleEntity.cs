@@ -56,7 +56,7 @@ namespace GreedDungeon.Character
             return total;
         }
 
-        private void InvalidateStatsCache()
+        protected void InvalidateStatsCache()
         {
             _statsCacheDirty = true;
         }

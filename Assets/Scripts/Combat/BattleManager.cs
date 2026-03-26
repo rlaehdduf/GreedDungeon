@@ -387,6 +387,8 @@ public interface IBattleManager
 
         private void ExecuteMonsterAttackSkill(MonsterSkillDataSO skill)
         {
+            OnAttackEffect?.Invoke(SkillType.Melee, skill.HitCount);
+            
             int baseDamage = _monster.TotalStats.Attack;
             int totalDamage = 0;
 
@@ -414,6 +416,8 @@ public interface IBattleManager
 
         private void ExecuteMonsterDebuffSkill(MonsterSkillDataSO skill)
         {
+            OnAttackEffect?.Invoke(SkillType.Magic, skill.HitCount);
+            
             int damage = Mathf.RoundToInt(_monster.TotalStats.Attack * skill.DamageMultiplier);
             if (_player.IsDefending) damage /= 2;
             damage = Mathf.Max(1, damage - _player.TotalStats.Defense / 2);
