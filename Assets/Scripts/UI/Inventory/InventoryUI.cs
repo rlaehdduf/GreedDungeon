@@ -57,11 +57,18 @@ namespace GreedDungeon.UI.Inventory
 
         public void Setup(Player player)
         {
+            if (_player != null)
+            {
+                _player.OnInventoryChanged -= RefreshAll;
+                _player.OnStatsChanged -= RefreshAll;
+            }
+
             _player = player;
 
             if (_player != null)
             {
                 _player.OnInventoryChanged += RefreshAll;
+                _player.OnStatsChanged += RefreshAll;
             }
 
             SetupEquipSlots();
@@ -76,6 +83,7 @@ namespace GreedDungeon.UI.Inventory
             if (_player != null)
             {
                 _player.OnInventoryChanged -= RefreshAll;
+                _player.OnStatsChanged -= RefreshAll;
             }
         }
 
