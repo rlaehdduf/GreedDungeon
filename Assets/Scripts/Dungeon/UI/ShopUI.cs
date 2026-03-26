@@ -23,12 +23,16 @@ namespace GreedDungeon.Dungeon.UI
         [Header("UI Elements")]
         [SerializeField] private Text _playerGoldText;
         [SerializeField] private Button _leaveButton;
+        [SerializeField] private ItemTooltipUI _tooltipUI;
+        [SerializeField] private Text _priceText;
         
-        private const int SHOP_SLOT_COUNT = 3;
+        private const int SHOP_SLOT_COUNT = 6;
         
         private Player _player;
         private IGameDataManager _gameDataManager;
         private readonly List<InventoryItem> _shopItems = new List<InventoryItem>();
+        private int _hoveredShopIndex = -1;
+        private int _hoveredPlayerIndex = -1;
         
         public event Action OnLeave;
         
@@ -52,6 +56,7 @@ namespace GreedDungeon.Dungeon.UI
             UpdateShopDisplay();
             UpdatePlayerInventoryDisplay();
             UpdatePlayerGold();
+            HideTooltip();
             base.Show();
         }
         
@@ -66,7 +71,7 @@ namespace GreedDungeon.Dungeon.UI
             
             for (int i = 0; i < SHOP_SLOT_COUNT; i++)
             {
-                if (UnityEngine.Random.value < 0.7f && allEquipment != null && allEquipment.Count > 0)
+                if (UnityEngine.Random.value < 0.6f && allEquipment != null && allEquipment.Count > 0)
                 {
                     var equipment = allEquipment[UnityEngine.Random.Range(0, allEquipment.Count)];
                     var item = new InventoryItem(equipment, null, null);
@@ -95,15 +100,12 @@ namespace GreedDungeon.Dungeon.UI
                 var item = _shopItems[i];
                 var slot = Instantiate(_slotPrefab, _shopSlotsContainer);
                 slot.SetItem(item);
+                slot.SetSlotIndex(i);
                 
                 int index = i;
-                var button = slot.GetComponent<Button>();
-                if (button == null)
-                {
-                    button = slot.gameObject.AddComponent<Button>();
-                }
-                button.onClick.RemoveAllListeners();
-                button.onClick.AddListener(() => TryBuyItem(index));
+                slot.OnLeftClick += (slotIndex) => TryBuyItem(index);
+                slot.OnHoverEnter += (hoveredItem, rect) => ShowShopItemTooltip(index, hoveredItem, rect);
+                slot.OnHoverExit += HideTooltip;
             }
         }
         
@@ -123,16 +125,68 @@ namespace GreedDungeon.Dungeon.UI
                 
                 var slot = Instantiate(_playerSlotPrefab, _playerInventoryContainer);
                 slot.SetItem(item);
+                slot.SetSlotIndex(i);
                 
                 int index = i;
-                var button = slot.GetComponent<Button>();
-                if (button == null)
-                {
-                    button = slot.gameObject.AddComponent<Button>();
-                }
-                button.onClick.RemoveAllListeners();
-                button.onClick.AddListener(() => TrySellItem(index));
+                slot.OnLeftClick += (slotIndex) => TrySellItem(index);
+                slot.OnHoverEnter += (hoveredItem, rect) => ShowPlayerItemTooltip(index, hoveredItem, rect);
+                slot.OnHoverExit += HideTooltip;
             }
+        }
+        
+        private void ShowShopItemTooltip(int index, InventoryItem item, RectTransform slotRect)
+        {
+            if (_tooltipUI != null && item != null)
+            {
+                _tooltipUI.Show(item);
+            }
+            
+            if (_priceText != null && item != null)
+            {
+                int price = GetBuyPrice(item);
+                bool canBuy = _player != null && _player.Gold >= price;
+                _priceText.text = canBuy ? $"구매: {price}G" : $"구매: {price}G (골드 부족)";
+                _priceText.color = canBuy ? Color.yellow : Color.red;
+                _priceText.gameObject.SetActive(true);
+            }
+            
+            _hoveredShopIndex = index;
+            _hoveredPlayerIndex = -1;
+        }
+        
+        private void ShowPlayerItemTooltip(int index, InventoryItem item, RectTransform slotRect)
+        {
+            if (_tooltipUI != null && item != null)
+            {
+                _tooltipUI.Show(item);
+            }
+            
+            if (_priceText != null && item != null)
+            {
+                int sellPrice = GetSellPrice(item);
+                _priceText.text = $"판매: {sellPrice}G";
+                _priceText.color = Color.green;
+                _priceText.gameObject.SetActive(true);
+            }
+            
+            _hoveredPlayerIndex = index;
+            _hoveredShopIndex = -1;
+        }
+        
+        private void HideTooltip()
+        {
+            if (_tooltipUI != null)
+            {
+                _tooltipUI.Hide();
+            }
+            
+            if (_priceText != null)
+            {
+                _priceText.gameObject.SetActive(false);
+            }
+            
+            _hoveredShopIndex = -1;
+            _hoveredPlayerIndex = -1;
         }
         
         private void UpdatePlayerGold()
@@ -166,6 +220,7 @@ namespace GreedDungeon.Dungeon.UI
             _player.TryAddItem(item.Clone());
             _shopItems.RemoveAt(index);
             
+            HideTooltip();
             UpdateShopDisplay();
             UpdatePlayerInventoryDisplay();
             UpdatePlayerGold();
@@ -183,6 +238,7 @@ namespace GreedDungeon.Dungeon.UI
             _player.RemoveItemAt(inventoryIndex);
             _player.AddGold(sellPrice);
             
+            HideTooltip();
             UpdatePlayerInventoryDisplay();
             UpdatePlayerGold();
         }
@@ -217,6 +273,7 @@ namespace GreedDungeon.Dungeon.UI
         
         private void HandleLeave()
         {
+            HideTooltip();
             Hide();
             OnLeave?.Invoke();
         }

@@ -122,28 +122,37 @@ Shop (GameObject) - 초기 비활성화
 ├── Background (GameObject)
 │   └── Image (컴포넌트) - Color: (30,30,30,230)
 └── Content (GameObject)
-    ├── Horizontal Layout Group (컴포넌트)
-    │   └── Spacing: 20, Padding: 20
-    ├── LeftPanel (GameObject) - 상점 아이템
-    │   ├── Vertical Layout Group (컴포넌트)
-    │   ├── TitleText (GameObject)
-    │   │   └── Text (컴포넌트) - "상점", Font Size: 20
-    │   ├── ShopSlotsContainer (GameObject)
+    ├── Vertical Layout Group (컴포넌트)
+    │   └── Spacing: 10, Padding: 20
+    ├── TitleText (GameObject)
+    │   └── Text (컴포넌트) - "상점", Font Size: 24, Alignment: Center
+    ├── MainPanel (GameObject)
+    │   ├── Horizontal Layout Group (컴포넌트)
+    │   │   └── Spacing: 20, Child Alignment: Upper Center
+    │   ├── LeftPanel (GameObject) - 상점 아이템
     │   │   ├── Vertical Layout Group (컴포넌트)
-    │   │   │   └── Spacing: 10
-    │   │   └── Content Size Fitter (컴포넌트)
-    │   │       └── Vertical: Preferred
-    │   └── PlayerGoldText (GameObject)
-    │       └── Text (컴포넌트) - "1000G", Font Size: 18, Color: Yellow
-    ├── RightPanel (GameObject) - 판매용 인벤토리
-    │   ├── Vertical Layout Group (컴포넌트)
-    │   ├── TitleText (GameObject)
-    │   │   └── Text (컴포넌트) - "판매", Font Size: 20
-    │   └── PlayerInventoryContainer (GameObject)
-    │       ├── Grid Layout Group (컴포넌트)
-    │       │   └── Cell Size: (80,80), Spacing: (10,10), Constraint: Fixed Column, Count: 4
-    │       └── Content Size Fitter (컴포넌트)
-    │           └── Vertical: Preferred
+    │   │   ├── TitleText (GameObject)
+    │   │   │   └── Text (컴포넌트) - "구매", Font Size: 18
+    │   │   └── ShopSlotsContainer (GameObject)
+    │   │       ├── Grid Layout Group (컴포넌트)
+    │   │       │   └── Cell Size: (80,80), Spacing: (10,10), Constraint: Fixed Column, Count: 3
+    │   │       └── Content Size Fitter (컴포넌트)
+    │   │           └── Vertical: Preferred
+    │   ├── RightPanel (GameObject) - 판매용 인벤토리
+    │   │   ├── Vertical Layout Group (컴포넌트)
+    │   │   ├── TitleText (GameObject)
+    │   │   │   └── Text (컴포넌트) - "판매", Font Size: 18
+    │   │   └── PlayerInventoryContainer (GameObject)
+    │   │       ├── Grid Layout Group (컴포넌트)
+    │   │       │   └── Cell Size: (80,80), Spacing: (10,10), Constraint: Fixed Column, Count: 4
+    │   │       └── Content Size Fitter (컴포넌트)
+    │   │           └── Vertical: Preferred
+    │   └── TooltipPanel (GameObject) - 툴팁 영역
+    │       ├── ItemTooltipUI (컴포넌트)
+    │       └── PriceText (GameObject)
+    │           └── Text (컴포넌트) - Font Size: 16, Color: Yellow
+    ├── PlayerGoldText (GameObject)
+    │   └── Text (컴포넌트) - "1000G", Font Size: 20, Color: Yellow, Alignment: Center
     └── LeaveButton (GameObject)
         ├── Image (컴포넌트)
         └── Button (컴포넌트)
@@ -159,6 +168,8 @@ Shop (GameObject) - 초기 비활성화
 | _playerSlotPrefab | InventorySlotUI | `Assets/Prefabs/UI/InventorySlot.prefab` |
 | _playerGoldText | Text | PlayerGoldText의 Text 컴포넌트 |
 | _leaveButton | Button | LeaveButton의 Button 컴포넌트 |
+| _tooltipUI | ItemTooltipUI | TooltipPanel의 ItemTooltipUI 컴포넌트 |
+| _priceText | Text | PriceText의 Text 컴포넌트 |
 
 ---
 
