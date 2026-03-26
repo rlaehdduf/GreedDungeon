@@ -24,7 +24,6 @@ namespace GreedDungeon.Dungeon.UI
         [SerializeField] private Text _playerGoldText;
         [SerializeField] private Button _leaveButton;
         [SerializeField] private ItemTooltipUI _tooltipUI;
-        [SerializeField] private Text _priceText;
         
         private const int SHOP_SLOT_COUNT = 6;
         
@@ -138,16 +137,8 @@ namespace GreedDungeon.Dungeon.UI
         {
             if (_tooltipUI != null && item != null)
             {
-                _tooltipUI.Show(item);
-            }
-            
-            if (_priceText != null && item != null)
-            {
                 int price = GetBuyPrice(item);
-                bool canBuy = _player != null && _player.Gold >= price;
-                _priceText.text = canBuy ? $"구매: {price}G" : $"구매: {price}G (골드 부족)";
-                _priceText.color = canBuy ? Color.yellow : Color.red;
-                _priceText.gameObject.SetActive(true);
+                _tooltipUI.Show(item, price, true);
             }
             
             _hoveredShopIndex = index;
@@ -158,15 +149,8 @@ namespace GreedDungeon.Dungeon.UI
         {
             if (_tooltipUI != null && item != null)
             {
-                _tooltipUI.Show(item);
-            }
-            
-            if (_priceText != null && item != null)
-            {
                 int sellPrice = GetSellPrice(item);
-                _priceText.text = $"판매: {sellPrice}G";
-                _priceText.color = Color.green;
-                _priceText.gameObject.SetActive(true);
+                _tooltipUI.Show(item, sellPrice, false);
             }
             
             _hoveredPlayerIndex = index;
@@ -178,11 +162,6 @@ namespace GreedDungeon.Dungeon.UI
             if (_tooltipUI != null)
             {
                 _tooltipUI.Hide();
-            }
-            
-            if (_priceText != null)
-            {
-                _priceText.gameObject.SetActive(false);
             }
             
             _hoveredShopIndex = -1;

@@ -13,6 +13,7 @@ namespace GreedDungeon.UI.Inventory
         [SerializeField] private Text _nameText;
         [SerializeField] private Text _descriptionText;
         [SerializeField] private Text _statsText;
+        [SerializeField] private Text _priceText;
 
         [Header("Skill")]
         [SerializeField] private Image _skillIcon;
@@ -47,6 +48,11 @@ namespace GreedDungeon.UI.Inventory
 
         public void Show(InventoryItem item)
         {
+            Show(item, -1, false);
+        }
+
+        public void Show(InventoryItem item, int price, bool isBuying)
+        {
             if (item == null)
             {
                 Hide();
@@ -60,6 +66,7 @@ namespace GreedDungeon.UI.Inventory
             SetDescription(item);
             SetStats(item);
             SetSkillSection(item, itemChanged);
+            SetPrice(price, isBuying);
 
             gameObject.SetActive(true);
         }
@@ -67,6 +74,25 @@ namespace GreedDungeon.UI.Inventory
         public void Hide()
         {
             gameObject.SetActive(false);
+            if (_priceText != null)
+                _priceText.gameObject.SetActive(false);
+        }
+
+        private void SetPrice(int price, bool isBuying)
+        {
+            if (_priceText == null) return;
+
+            if (price >= 0)
+            {
+                string prefix = isBuying ? "구매" : "판매";
+                _priceText.text = $"{prefix}: {price}G";
+                _priceText.color = isBuying ? Color.yellow : Color.green;
+                _priceText.gameObject.SetActive(true);
+            }
+            else
+            {
+                _priceText.gameObject.SetActive(false);
+            }
         }
 
         private void SetName(InventoryItem item)

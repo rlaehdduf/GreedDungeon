@@ -147,10 +147,8 @@ Shop (GameObject) - 초기 비활성화
     │   │       │   └── Cell Size: (80,80), Spacing: (10,10), Constraint: Fixed Column, Count: 4
     │   │       └── Content Size Fitter (컴포넌트)
     │   │           └── Vertical: Preferred
-    │   └── TooltipPanel (GameObject) - 툴팁 영역
-    │       ├── ItemTooltipUI (컴포넌트)
-    │       └── PriceText (GameObject)
-    │           └── Text (컴포넌트) - Font Size: 16, Color: Yellow
+│   └── TooltipPanel (GameObject) - 툴팁 영역
+│       └── ItemTooltipUI (컴포넌트)
     ├── PlayerGoldText (GameObject)
     │   └── Text (컴포넌트) - "1000G", Font Size: 20, Color: Yellow, Alignment: Center
     └── LeaveButton (GameObject)
@@ -169,7 +167,11 @@ Shop (GameObject) - 초기 비활성화
 | _playerGoldText | Text | PlayerGoldText의 Text 컴포넌트 |
 | _leaveButton | Button | LeaveButton의 Button 컴포넌트 |
 | _tooltipUI | ItemTooltipUI | TooltipPanel의 ItemTooltipUI 컴포넌트 |
-| _priceText | Text | PriceText의 Text 컴포넌트 |
+
+**ItemTooltipUI에 추가할 필드:**
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| _priceText | Text | 가격 표시용 Text (NameText 아래에 배치) |
 
 ---
 
