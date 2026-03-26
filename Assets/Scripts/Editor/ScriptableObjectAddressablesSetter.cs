@@ -22,6 +22,7 @@ public class ScriptableObjectAddressablesSetter : EditorWindow
         {"Consumables", "ConsumableData"},
         {"Rarities", "RarityData"},
         {"StatusEffects", "StatusEffectData"},
+        {"MonsterSkills", "MonsterSkillData"},
     };
 
     [MenuItem("Tools/Addressables/Set All SO Labels")]
