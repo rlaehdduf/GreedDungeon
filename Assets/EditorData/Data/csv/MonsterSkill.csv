@@ -1,11 +1,11 @@
-ID,Name,Description,SkillType,IsShared,DamageMultiplier,HitCount,StatusEffectID,StatusEffectChance,BuffType,BuffValue,BuffDuration,HealPercent
-1,강타,강력한 일격을 가합니다,Attack,true,1.5,1,None,0,None,0,0,0
-2,연속공격,빠른 속도로 2회 공격합니다,Attack,true,1,2,None,0,None,0,0,0
-3,독가스,독성 가스로 중독시킵니다,Debuff,true,1,1,2,30,None,0,0,0
-4,분노,공격력이 증가합니다,Buff,true,0,0,None,0,Attack,30,3,0
-5,재생,체력을 회복합니다,Heal,true,0,0,None,0,None,0,0,20
-101,분열,몸을 분열시켜 회복합니다,Heal,false,0,0,None,0,None,0,0,30
-102,역병감엽,역병을 퍼뜨립니다,Debuff,false,1,1,2,50,None,0,0,0
-103,독침,독침을 발사합니다,Debuff,false,1.2,1,2,40,None,0,0,0
-104,화염구,화염구를 던집니다,Debuff,false,1.3,1,1,30,None,0,0,0
-105,지옥의숨결,지옥의 불을 내뿜습니다,Debuff,false,1.5,2,1,60,None,0,0,0
+﻿ID,Name,Description,SkillType,IsShared,DamageMultiplier,HitCount,StatusEffectID,StatusEffectChance,BuffType,BuffValue,BuffDuration,HealPercent
+1,강타,강한공격,Attack,TRUE,1.1,1,0,0,None,0,0,0
+2,연속공격,빠르게 한번더 공격,Attack,TRUE,0.6,2,0,0,None,0,0,0
+3,독가스,독이 포함된 안개를 방사,Attack,TRUE,0.8,1,2,20,None,0,0,0
+4,분노,공격력이 올라감,Buff,TRUE,0,0,0,0,Attack,30,3,0
+5,재생,체력이 회복됨,Heal,TRUE,0,0,0,0,None,0,0,20
+101,분열,체력이 많이 회복됨,Heal,FALSE,0,0,0,0,None,0,0,30
+102,역병,독에걸림,Debuff,FALSE,1.05,1,2,30,None,0,0,0
+103,독침,독에걸림,Debuff,FALSE,1.1,1,2,30,None,0,0,0
+104,강력한일격,엄청 강하게 내려침,Attack,FALSE,1.2,1,3,40,None,0,0,0
+105,지옥불,너무 뜨거운 불을 내뿜음,Attack,FALSE,0.6,2,1,20,None,0,0,0

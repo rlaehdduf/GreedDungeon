@@ -36,6 +36,18 @@ MonoBehaviour:
     - SkillData
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 064574353363ad84ea4aa82db631b937
+    m_Address: "Assets/ScriptableObjects/Data/MonsterSkills/MonsterSkill_1_\uAC15\uD0C0.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MonsterSkillData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 06c06ac10c9f83a4a86db6556f2c8c47
+    m_Address: "Assets/ScriptableObjects/Data/MonsterSkills/MonsterSkill_2_\uC5F0\uC18D\uACF5\uACA9.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MonsterSkillData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 09c453f019a764a43a08e043debe82c7
     m_Address: Skills/Smash
     m_ReadOnly: 0
@@ -92,6 +104,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - StatusEffectData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a65465b17717fc46bf5c673d0524536
+    m_Address: "Assets/ScriptableObjects/Data/MonsterSkills/MonsterSkill_5_\uC7AC\uC0DD.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MonsterSkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2ba1a9e4305728744a392b2926447cf9
     m_Address: "Assets/ScriptableObjects/Data/Equipments/Equipment_101_\uAC00\uC8FD\uAC11\uC637.asset"
@@ -184,6 +202,17 @@ MonoBehaviour:
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a3b78363bfedc94fadb824daf813389
+    m_Address: "Assets/ScriptableObjects/Data/MonsterSkills/MonsterSkill_102_\uC5ED\uBCD1.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MonsterSkillData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4cc163ed6cdea7143a7987c92d7a6f05
+    m_Address: Effects/Melee
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4d0247269139fba4fb9579bc0b9f7f57
     m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_12_\uACF5\uACA9\uB825\uBC84\uD504.asset"
     m_ReadOnly: 0
@@ -227,6 +256,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5da35b55e08ec0d48828450e6764b6b8
+    m_Address: Effects/Neutral
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5de7f7e0b7b9acd48a6f4f03f43fd04a
     m_Address: "Assets/ScriptableObjects/Data/Consumables/Consumable_9_\uB9C8\uBC95\uD654\uC0B4.asset"
     m_ReadOnly: 0
@@ -251,11 +285,22 @@ MonoBehaviour:
     m_SerializedLabels:
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6cd8001849f5c90408d9403f2b0bc44e
+    m_Address: Effects/Magic
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6f69a574f3888d74e8d9e9e97494be8c
     m_Address: "Assets/ScriptableObjects/Data/Consumables/Consumable_1_\uD68C\uBCF5\uD3EC\uC158(\uC18C).asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - ConsumableData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 708bf60d12e8b704aab9720c9d42529a
+    m_Address: "Assets/ScriptableObjects/Data/MonsterSkills/MonsterSkill_4_\uBD84\uB178.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MonsterSkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 713a6fcfbe084044cb96b72ba34b74d6
     m_Address: Monsters/Cerberus
@@ -278,7 +323,7 @@ MonoBehaviour:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7b1d8346076ad9649b3d093052da0840
-    m_Address: Skills/Stun_Icon
+    m_Address: Skills/Stun
     m_ReadOnly: 0
     m_SerializedLabels:
     - SkillData
@@ -334,6 +379,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - MonsterData
     - MonsterSprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 92806497b5dd2eb4cb87d28d5713a3b5
+    m_Address: "Assets/ScriptableObjects/Data/MonsterSkills/MonsterSkill_104_\uAC15\uB825\uD55C\uC77C\uACA9.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MonsterSkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 93f8e19f1cc90c149884465cd256e4a3
     m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_16_\uD68C\uBCF5.asset"
@@ -473,6 +524,12 @@ MonoBehaviour:
     - ElementIcon
     - ElementerData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be09d16ea66043e4089a79e5548f5ede
+    m_Address: "Assets/ScriptableObjects/Data/MonsterSkills/MonsterSkill_101_\uBD84\uC5F4.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MonsterSkillData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bf38ae46665db6540ba3b664684780fc
     m_Address: Skills/HealthBuff
     m_ReadOnly: 0
@@ -532,6 +589,18 @@ MonoBehaviour:
     - AccessoryIcon
     - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c808e2e0606c1ee4cbc1a6376b8c03ff
+    m_Address: "Assets/ScriptableObjects/Data/MonsterSkills/MonsterSkill_103_\uB3C5\uCE68.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MonsterSkillData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc9e5aa113907924696acc5e5cda8577
+    m_Address: "Assets/ScriptableObjects/Data/MonsterSkills/MonsterSkill_3_\uB3C5\uAC00\uC2A4.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MonsterSkillData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ce010254754f83d498a0052e3d8ea049
     m_Address: Skills/ManaBall
     m_ReadOnly: 0
@@ -576,6 +645,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd07d561caceaf7499e2ae38a8c3ddcb
+    m_Address: "Assets/ScriptableObjects/Data/MonsterSkills/MonsterSkill_105_\uC9C0\uC625\uBD88.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MonsterSkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e5de63f56c9c938449f34012f22ef502
     m_Address: Items/Coins

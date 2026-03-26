@@ -161,6 +161,9 @@ namespace GreedDungeon.UI.Battle
                 UnityEngine.Random.Range(-50, 50)
             );
             _damageTextUI.ShowDamage(damage, randomPos, isCritical, false);
+            
+            if (_debuffVignetteUI != null)
+                _debuffVignetteUI.ShowDamageFlash();
         }
 
         public void ShowPlayerHeal(int healAmount)
@@ -183,14 +186,14 @@ namespace GreedDungeon.UI.Battle
             _damageTextUI.ShowDamage(damage, randomPos, isCritical, false);
         }
 
-        public void ShowAttackEffect(ScriptableObjects.SkillType skillType)
+        public void ShowAttackEffect(ScriptableObjects.SkillType skillType, int hitCount = 1)
         {
             if (_attackEffectUI == null)
             {
                 Debug.LogWarning("[BattleUI] _attackEffectUI is null");
                 return;
             }
-            _attackEffectUI.ShowEffect(skillType);
+            _attackEffectUI.ShowEffect(skillType, hitCount);
         }
     }
 }

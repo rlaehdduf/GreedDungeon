@@ -24,7 +24,9 @@ MonoBehaviour:
   GoldDropMax: 45
   StatusEffectID: Poison
   StatusEffectChance: 20
-  SpecialSkill: X
+  UniqueSkillID: 102
+  SharedSkillID: 2
+  SkillChance: 20
   IsBoss: 0
   PrefabAddress: Monsters/Rat
   ScaleX: 0.35

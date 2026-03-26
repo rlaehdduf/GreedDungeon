@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: dfbcf8b871df4484abb9d8745179ccfd
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: 9a0cd5561b38b151c24fd06d88637c4f
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -114,6 +114,7 @@ MonoBehaviour:
     - SkillIcon
     - ElementIcon
     - MonsterSprite
+    - MonsterSkillData
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: f51e8900585755f4d895135470bdb862, type: 2}

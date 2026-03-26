@@ -11,6 +11,7 @@ namespace GreedDungeon.UI.Battle
     public class PlayerStatusUI : MonoBehaviour
     {
         [Header("UI Elements")]
+        [SerializeField] private Text _levelText;
         [SerializeField] private Slider _hpBar;
         [SerializeField] private Text _hpText;
         [SerializeField] private Slider _mpBar;
@@ -107,6 +108,9 @@ namespace GreedDungeon.UI.Battle
 
         public void UpdateStatus(Player player)
         {
+            if (_levelText != null)
+                _levelText.text = $"LV.{player.Level}";
+
             var stats = player.TotalStats;
             
             if (_hpBar != null)

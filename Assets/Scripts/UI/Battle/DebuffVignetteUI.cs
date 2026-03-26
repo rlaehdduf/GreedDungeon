@@ -1,3 +1,4 @@
+using System.Collections;
 using GreedDungeon.Character;
 using GreedDungeon.ScriptableObjects;
 using UnityEngine;
@@ -15,9 +16,14 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private Color _burnColor = new Color(1f, 0.27f, 0.27f, 0.5f);
         [SerializeField] private Color _poisonColor = new Color(0.27f, 1f, 0.27f, 0.5f);
         [SerializeField] private Color _stunColor = new Color(1f, 1f, 0.27f, 0.5f);
+        [SerializeField] private Color _damageColor = new Color(1f, 0.2f, 0.2f, 0.6f);
+
+        [Header("Damage Flash")]
+        [SerializeField] private float _damageFlashDuration = 0.15f;
 
         private Player _player;
-        private bool _isFading;
+        private Coroutine _currentFade;
+        private Color _savedDebuffColor = Color.clear;
 
         private void Awake()
         {
@@ -60,35 +66,66 @@ namespace GreedDungeon.UI.Battle
 
         private void OnDebuffChanged(IBattleEntity entity, ActiveStatusEffect effect)
         {
-            UpdateVignette();
+            _savedDebuffColor = GetCurrentDebuffColor();
+            if (_currentFade == null)
+            {
+                UpdateVignette();
+            }
+        }
+
+        public void ShowDamageFlash()
+        {
+            if (_vignetteImage == null) return;
+            
+            StartCoroutine(DamageFlashCoroutine());
+        }
+
+        private IEnumerator DamageFlashCoroutine()
+        {
+            Color startColor = _vignetteImage.color;
+            
+            if (_currentFade != null)
+                StopCoroutine(_currentFade);
+
+            _vignetteImage.color = _damageColor;
+            
+            yield return new WaitForSeconds(_damageFlashDuration);
+            
+            Color targetColor = _savedDebuffColor;
+            float elapsed = 0f;
+            float fadeTime = 0.2f;
+
+            while (elapsed < fadeTime)
+            {
+                elapsed += Time.deltaTime;
+                _vignetteImage.color = Color.Lerp(_damageColor, targetColor, elapsed / fadeTime);
+                yield return null;
+            }
+
+            _vignetteImage.color = targetColor;
+        }
+
+        private Color GetCurrentDebuffColor()
+        {
+            if (_player == null || _player.StatusEffects.Count == 0)
+                return Color.clear;
+
+            var lastDebuff = _player.StatusEffects[_player.StatusEffects.Count - 1];
+            return GetDebuffColor(lastDebuff.Data?.ID ?? 0);
         }
 
         private void UpdateVignette()
         {
             if (_vignetteImage == null) return;
 
-            if (_player == null || _player.StatusEffects.Count == 0)
-            {
-                FadeOut();
-                return;
-            }
-
-            var lastDebuff = _player.StatusEffects[_player.StatusEffects.Count - 1];
-            Color targetColor = GetDebuffColor(lastDebuff.Data?.ID ?? 0);
-
-            StartCoroutine(FadeToColor(targetColor));
+            Color targetColor = GetCurrentDebuffColor();
+            _currentFade = StartCoroutine(FadeToColor(targetColor));
         }
 
-        private void FadeOut()
+        private IEnumerator FadeToColor(Color targetColor)
         {
-            StartCoroutine(FadeToColor(Color.clear));
-        }
+            if (_vignetteImage == null) yield break;
 
-        private System.Collections.IEnumerator FadeToColor(Color targetColor)
-        {
-            if (_vignetteImage == null || _isFading) yield break;
-
-            _isFading = true;
             Color startColor = _vignetteImage.color;
             float elapsed = 0f;
 
@@ -100,7 +137,7 @@ namespace GreedDungeon.UI.Battle
             }
 
             _vignetteImage.color = targetColor;
-            _isFading = false;
+            _currentFade = null;
         }
 
         private Color GetDebuffColor(int id)

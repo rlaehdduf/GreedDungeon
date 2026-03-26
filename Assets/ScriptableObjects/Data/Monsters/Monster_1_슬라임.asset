@@ -24,7 +24,9 @@ MonoBehaviour:
   GoldDropMax: 15
   StatusEffectID: 
   StatusEffectChance: 0
-  SpecialSkill: X
+  UniqueSkillID: 101
+  SharedSkillID: 5
+  SkillChance: 20
   IsBoss: 0
   PrefabAddress: Monsters/Slime
   ScaleX: 0.3

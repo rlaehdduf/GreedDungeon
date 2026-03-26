@@ -20,6 +20,8 @@ namespace GreedDungeon.Core
         private readonly Dictionary<int, StatusEffectDataSO> _statusEffects = new Dictionary<int, StatusEffectDataSO>();
         private readonly Dictionary<int, MonsterSkillDataSO> _monsterSkills = new Dictionary<int, MonsterSkillDataSO>();
 
+        private PlayerDataSO _playerData;
+
         private readonly List<MonsterDataSO> _monsterList = new List<MonsterDataSO>();
         private readonly List<SkillDataSO> _skillList = new List<SkillDataSO>();
         private readonly List<EquipmentDataSO> _equipmentList = new List<EquipmentDataSO>();
@@ -45,8 +47,19 @@ namespace GreedDungeon.Core
                 LoadDataAsync("ConsumableData", _consumables, _consumableList),
                 LoadDataAsync("RarityData", _rarities, _rarityList),
                 LoadDataAsync("StatusEffectData", _statusEffects),
-                LoadDataAsync("MonsterSkillData", _monsterSkills, _monsterSkillList)
+                LoadDataAsync("MonsterSkillData", _monsterSkills, _monsterSkillList),
+                LoadPlayerDataAsync()
             );
+        }
+
+        private async Task LoadPlayerDataAsync()
+        {
+            var assets = await _assetLoader.LoadAllAssetsByLabelAsync<PlayerDataSO>("PlayerData");
+            foreach (var asset in assets)
+            {
+                _playerData = asset;
+                break;
+            }
         }
 
         private async Task LoadDataAsync<T>(string label, Dictionary<int, T> dict, List<T> list = null) where T : ScriptableObject
@@ -69,6 +82,7 @@ namespace GreedDungeon.Core
         public RarityDataSO GetRarityData(int id) => _rarities.TryGetValue(id, out var data) ? data : null;
         public StatusEffectDataSO GetStatusEffectData(int id) => _statusEffects.TryGetValue(id, out var data) ? data : null;
         public MonsterSkillDataSO GetMonsterSkillData(int id) => _monsterSkills.TryGetValue(id, out var data) ? data : null;
+        public PlayerDataSO GetPlayerData() => _playerData;
 
         public IReadOnlyList<MonsterDataSO> GetAllMonsterData() => _monsterList;
         public IReadOnlyList<SkillDataSO> GetAllSkillData() => _skillList;

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b85b099c73a95754c98f096798671344, type: 3}
+  m_Name: "MonsterSkill_105_\uC9C0\uC625\uBD88"
+  m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.MonsterSkillDataSO
+  ID: 105
+  Name: "\uC9C0\uC625\uBD88"
+  Description: "\uB108\uBB34 \uB728\uAC70\uC6B4 \uBD88\uC744 \uB0B4\uBFDC\uC74C"
+  SkillType: 0
+  IsShared: 0
+  DamageMultiplier: 0.6
+  HitCount: 2
+  StatusEffectID: 1
+  StatusEffectChance: 20
+  BuffType: 0
+  BuffValue: 0
+  BuffDuration: 0
+  HealPercent: 0

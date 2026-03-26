@@ -10,13 +10,14 @@ namespace GreedDungeon.Character
 {
     public class Player : BattleEntity
     {
-        private const int INVENTORY_SIZE = 21;
+        private static PlayerDataSO _cachedPlayerData;
         
-        private readonly List<InventoryItem> _inventory = new List<InventoryItem>(INVENTORY_SIZE);
+        private readonly List<InventoryItem> _inventory;
         private readonly Dictionary<EquipmentType, InventoryItem> _equippedItems = new();
         private int _gold;
         private int _killCount;
         private Stats _originalBaseStats;
+        private int _inventorySize;
 
         public override string Name => "Player";
         public int Gold => _gold;
@@ -24,7 +25,7 @@ namespace GreedDungeon.Character
         public int KillCount => _killCount;
         public int DungeonLevel { get; private set; }
         public IReadOnlyList<InventoryItem> Inventory => _inventory;
-        public int InventorySize => INVENTORY_SIZE;
+        public int InventorySize => _inventorySize;
         
         public event System.Action OnInventoryChanged;
         public event System.Action OnLevelUp;
@@ -33,23 +34,55 @@ namespace GreedDungeon.Character
 
         public Player()
         {
-            _originalBaseStats = new Stats(maxHP: 100, maxMP: 50, attack: 10, defense: 5, speed: 10, criticalRate: 5f);
+            var data = GetPlayerData();
+            
+            _inventorySize = data?.InventorySize ?? 21;
+            _inventory = new List<InventoryItem>(_inventorySize);
+            
+            _originalBaseStats = new Stats(
+                maxHP: data?.BaseMaxHP ?? 100,
+                maxMP: data?.BaseMaxMP ?? 50,
+                attack: data?.BaseAttack ?? 10,
+                defense: data?.BaseDefense ?? 5,
+                speed: data?.BaseSpeed ?? 10,
+                criticalRate: data?.BaseCriticalRate ?? 5f
+            );
+            
             InitializeStats(CalculateLevelStats(1));
-            _gold = 0;
+            _gold = data?.StartingGold ?? 0;
             Level = 1;
             _killCount = 0;
             DungeonLevel = 1;
             
-            for (int i = 0; i < INVENTORY_SIZE; i++)
+            for (int i = 0; i < _inventorySize; i++)
             {
                 _inventory.Add(null);
             }
         }
 
+        private static PlayerDataSO GetPlayerData()
+        {
+            if (_cachedPlayerData != null) return _cachedPlayerData;
+            
+            if (Services.IsInitialized)
+            {
+                var gameDataManager = Services.Get<IGameDataManager>();
+                _cachedPlayerData = gameDataManager?.GetPlayerData();
+            }
+            
+            return _cachedPlayerData;
+        }
+
+        private float GetStatBonusPerLevel()
+        {
+            var data = GetPlayerData();
+            return data?.StatBonusPerLevel ?? 0.1f;
+        }
+
         private Stats CalculateLevelStats(int level)
         {
             var stats = _originalBaseStats.Clone();
-            float bonusPerLevel = 0.1f * (level - 1);
+            float bonusPerLevel = GetStatBonusPerLevel() * (level - 1);
             stats.MaxHP += (int)(_originalBaseStats.MaxHP * bonusPerLevel);
             stats.MaxMP += (int)(_originalBaseStats.MaxMP * bonusPerLevel);
             stats.Attack += (int)(_originalBaseStats.Attack * bonusPerLevel);

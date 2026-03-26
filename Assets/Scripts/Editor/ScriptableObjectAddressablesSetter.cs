@@ -44,7 +44,17 @@ public class ScriptableObjectAddressablesSetter : EditorWindow
             string soName = System.IO.Path.GetFileNameWithoutExtension(path);
             string folderName = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(path));
 
-            string label = FolderToLabel.ContainsKey(folderName) ? FolderToLabel[folderName] : folderName;
+            string label;
+            
+            if (soName.StartsWith("Player_") || soName == "PlayerData")
+            {
+                label = "PlayerData";
+            }
+            else
+            {
+                label = FolderToLabel.ContainsKey(folderName) ? FolderToLabel[folderName] : folderName;
+            }
+            
             SetLabelOnly(guid, label);
             count++;
         }

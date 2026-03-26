@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Threading.Tasks;
 using GreedDungeon.Core;
 using GreedDungeon.ScriptableObjects;
@@ -8,12 +9,15 @@ namespace GreedDungeon.UI.Battle
 {
     public class AttackEffectUI : MonoBehaviour
     {
-        [Header("Effect Images")]
+        [Header("Effect Settings")]
         [SerializeField] private Image _effectImage;
-        [SerializeField] private float _displayDuration = 0.5f;
-        [SerializeField] private float _fadeDuration = 0.3f;
+        [SerializeField] private float _displayDuration = 0.4f;
+        [SerializeField] private float _fadeDuration = 0.2f;
+        [SerializeField] private float _effectInterval = 0.12f;
+        [SerializeField] private float _randomOffset = 50f;
 
         private IAssetLoader _assetLoader;
+        private Coroutine _currentCoroutine;
 
         private void Awake()
         {
@@ -32,68 +36,70 @@ namespace GreedDungeon.UI.Battle
                 _assetLoader = Services.Get<IAssetLoader>();
         }
 
-        public async void ShowEffect(SkillType skillType)
+        public async void ShowEffect(SkillType skillType, int hitCount = 1)
         {
-            Debug.Log($"[AttackEffectUI] ShowEffect called with SkillType: {skillType}");
-
             if (_effectImage == null)
-            {
                 _effectImage = GetComponent<Image>();
-            }
 
-            if (_effectImage == null)
-            {
-                Debug.LogWarning("[AttackEffectUI] _effectImage is null");
-                return;
-            }
+            if (_effectImage == null) return;
 
             string address = GetEffectAddress(skillType);
-            Debug.Log($"[AttackEffectUI] Loading effect from: {address}");
-            
             if (string.IsNullOrEmpty(address)) return;
 
             if (_assetLoader == null && Services.IsInitialized)
                 _assetLoader = Services.Get<IAssetLoader>();
 
-            if (_assetLoader == null)
-            {
-                Debug.LogWarning("[AttackEffectUI] _assetLoader is null");
-                return;
-            }
+            if (_assetLoader == null) return;
 
             Sprite sprite = null;
             try
             {
                 sprite = await _assetLoader.LoadAssetAsync<Sprite>(address);
             }
-            catch
-            {
-                Debug.LogWarning($"[AttackEffectUI] Failed to load: {address}");
-            }
+            catch { }
 
-            if (sprite == null)
-            {
-                Debug.LogWarning($"[AttackEffectUI] Sprite not found: {address}");
-                return;
-            }
+            if (sprite == null) return;
 
-            Debug.Log($"[AttackEffectUI] Showing effect: {address}");
-            _effectImage.sprite = sprite;
-            _effectImage.enabled = true;
-            _effectImage.color = Color.white;
-
-            CancelInvoke(nameof(FadeOut));
-            Invoke(nameof(FadeOut), _displayDuration);
+            if (_currentCoroutine != null)
+                StopCoroutine(_currentCoroutine);
+            
+            _currentCoroutine = StartCoroutine(ShowMultipleEffects(sprite, hitCount));
         }
 
-        private void FadeOut()
+        private IEnumerator ShowMultipleEffects(Sprite sprite, int hitCount)
         {
-            if (_effectImage == null) return;
-            StartCoroutine(FadeOutCoroutine());
+            Vector2 originalPosition = _effectImage.rectTransform.anchoredPosition;
+            int actualHits = Mathf.Max(1, hitCount);
+
+            for (int i = 0; i < actualHits; i++)
+            {
+                Vector2 randomOffset = new Vector2(
+                    Random.Range(-_randomOffset, _randomOffset),
+                    Random.Range(-_randomOffset, _randomOffset)
+                );
+                
+                _effectImage.rectTransform.anchoredPosition = originalPosition + randomOffset;
+                _effectImage.sprite = sprite;
+                _effectImage.enabled = true;
+                _effectImage.color = Color.white;
+
+                yield return new WaitForSeconds(_displayDuration);
+                yield return StartCoroutine(FadeOutEffect());
+                
+                if (i < actualHits - 1)
+                {
+                    yield return new WaitForSeconds(_effectInterval);
+                }
+            }
+
+            _effectImage.rectTransform.anchoredPosition = originalPosition;
+            _currentCoroutine = null;
         }
 
-        private System.Collections.IEnumerator FadeOutCoroutine()
+        private IEnumerator FadeOutEffect()
         {
+            if (_effectImage == null) yield break;
+            
             float elapsed = 0f;
             Color startColor = _effectImage.color;
             Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
@@ -101,7 +107,7 @@ namespace GreedDungeon.UI.Battle
             while (elapsed < _fadeDuration)
             {
                 elapsed += Time.deltaTime;
-                _effectImage.color = UnityEngine.Color.Lerp(startColor, endColor, elapsed / _fadeDuration);
+                _effectImage.color = Color.Lerp(startColor, endColor, elapsed / _fadeDuration);
                 yield return null;
             }
 

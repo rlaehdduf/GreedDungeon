@@ -10,6 +10,8 @@ namespace GreedDungeon.Core
         bool IsInitialized { get; }
         Task InitializeAsync();
         
+        PlayerDataSO GetPlayerData();
+        
         MonsterDataSO GetMonsterData(int id);
         SkillDataSO GetSkillData(int id);
         EquipmentDataSO GetEquipmentData(int id);

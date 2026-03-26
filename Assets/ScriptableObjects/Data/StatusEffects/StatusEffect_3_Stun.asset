@@ -17,6 +17,6 @@ MonoBehaviour:
   DamagePerTurn: 0
   DamageCurrentPercent: 0
   DamageMaxPercent: 0
-  Duration: 1
+  Duration: 2
   SkipTurn: 1
   IconAddress: Skills/Stun

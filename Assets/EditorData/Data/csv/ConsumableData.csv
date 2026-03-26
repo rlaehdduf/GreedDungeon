@@ -5,7 +5,7 @@
 4,해독제,Cleanse,0,Player,All,0,80,40,모든 디버프를 해제한다,Items/Antidote
 5,힘의물약,Buff,30,Player,None,4,120,60,공격력이 일정비율 증가한다,Items/BuffPotion
 6,철의물약,Buff,30,Player,None,4,120,60,방어력이 일정비율 증가한다,Items/BuffPotion
-7,저주의물약,Poison,0,Single,2,4,100,50,적에게 독 디버프를 부여한다,Items/DeBuffPotion
-8,화염병,Burn,0,Single,1,4,150,75,적에게 화상 디버프를 부여한다,Items/DeBuffPotion
+7,저주의물약,Poison,0,Single,None,4,100,50,적에게 독 디버프를 부여한다,Items/DeBuffPotion
+8,화염병,Burn,0,Single,None,4,150,75,적에게 화상 디버프를 부여한다,Items/DeBuffPotion
 9,마법화살,Attack,30,Single,None,0,80,40,적에게 강한 화살을 발사한다,Items/MagicArrow
 10,폭발의서,Attack,50,All,None,0,250,125,적들에게 강력한 폭발을 일으킨다,Items/Explosion

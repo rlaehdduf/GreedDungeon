@@ -24,7 +24,9 @@ MonoBehaviour:
   GoldDropMax: 35
   StatusEffectID: Burn
   StatusEffectChance: 10
-  SpecialSkill: X
+  UniqueSkillID: 104
+  SharedSkillID: 4
+  SkillChance: 20
   IsBoss: 0
   PrefabAddress: Monsters/Skull
   ScaleX: 0.45

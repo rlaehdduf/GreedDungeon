@@ -17,6 +17,6 @@ MonoBehaviour:
   DamagePerTurn: 0
   DamageCurrentPercent: 0.1
   DamageMaxPercent: 0
-  Duration: 2
+  Duration: 3
   SkipTurn: 0
   IconAddress: Skills/BurnDeBuff

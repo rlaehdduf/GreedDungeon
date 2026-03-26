@@ -3,7 +3,7 @@
 
 던전 크롤러 턴제 RPG 프로토타입 개발 (Unity 2D)
 
-**현재 작업:** 전투 시스템 이벤트 시스템 완료
+**현재 작업:** PlayerData CSV 데이터화 완료
 
 ## Instructions
 
@@ -23,53 +23,49 @@
 6. **Input System** - 새 Input System 사용 (`UnityEngine.InputSystem`)
 7. **스킬 MP 차감** - SkillManager에서만 담당 (BattleManager 중복 차감 방지)
 8. **스킬 쿨타임** - `Cooldown + 1`로 설정 (1턴 쿨타임 = 1턴 대기)
-
 9. **턴 전환** - ExecuteMonsterTurn 후 EndTurn 호출 필수
 10. **Container 왼쪽 정렬** - Anchor Min/Max (0, 0.5), Pivot (0, 0.5), ChildAlignment (3)
+11. **PlayerData 캐싱** - Player 생성자에서 Services 미초기화 가능 → static 캐싱 사용
 
 ## Accomplished
 
-- Phase 1~4 (전투, 속성/상태이상, 인벤토리/버프) ✅
-- Phase 5 스킬 시스템 + 스킬 슬롯 UI + 툴팁 ✅
-- 인벤토리 UI 시스템 (InventoryItem, InventorySlotUI, EquipSlotUI, ItemTooltipUI, ConfirmDropPopup) ✅
-- 버프/디버프 아이콘 시스템 (StatusEffectSlotUI, Addressables 로드) ✅
-- 데이터 워크플로우 (CSV → ScriptableObject, VBA 매크로) ✅
-- 인벤토리 UI 수정 (툴팁 Raycast, ESC 닫기, 외부클릭 닫기) ✅
-- Input System 새 버전 적용 ✅
-- Addressables 자동화 메뉴 (`Tools → Addressables → 🔄 Setup & Build`) ✅
-- 인벤토리 소모품 사용 이벤트 연결 ✅
-- 테스트 코드 정리 (AddTestItemsToInventory만 유지) ✅
-- 인벤토리 닫기 시 ActionMenuUI 재활성화 ✅
-- 던전 시스템 설계 문서 작성 ✅
-- 장비 시스템 개선 (레벨 시스템, 스탯 표시) ✅
-- 전투 종료 감지 및 레벨업 연결 ✅
-- 소모품 사용 UI 갱신 수정 ✅
-- 장비 스킬 풀 시스템 (장비 타입별 스킬 풀 매칭) ✅
-- 툴팁 위치 개선 (화면 경계 내 고정, 자식 요소 bounds 계산) ✅
-- 전투 시스템 완성 (몬스터 턴, 전투 로그, 사망 이벤트) ✅
-- Rarity Color 적용 (툴팁 이름 색상) ✅
-- 전투 로그 간략화 ✅
-- 스킬 MP 중복 차감 버그 수정 ✅
-- 스킬 쿨타임 매커니즘 수정 (+1) ✅
-- 턴 전환 버그 수정 (ExecuteMonsterTurn → EndTurn) ✅
-- MP 부족시 턴 미소모 수정 ✅
-- 상태이상/버프 이벤트 시스템 구현 ✅
-- 전투 로그 실시간 연결 ✅
-- PlayerStatusUI 실시간 갱신 ✅
-- Environment 레이어 제거 (모든 오브젝트 UI 레이어로 변경) ✅
-- 버프/디버프 Container 왼쪽 정렬 수정 ✅
-- CRIT % 중복 버그 수정 ✅
-- 아이템 사용 후 인벤토리 자동 닫기 ✅
-- 툴팁 hover 문제 수정 (아이템 사용 후 툴팁 숨김) ✅
-- 스킬 슬롯 hover 마우스 위치 기반으로 변경 ✅
+### 기존 완료
+- Phase 1~5 (전투, 속성/상태이상, 인벤토리/버프, 스킬) ✅
+- 전투 비주얼 시스템 (턴 딜레이, 공격 모션, 데미지 텍스트, 이펙트, 디버프 비네트) ✅
+- 몬스터 특수 스킬 시스템 ✅
 
-## In Progress
+### 던전 시스템 ✅
+- DungeonState, EncounterType, DungeonProgress, EncounterSystem
+- BackgroundScroller, DungeonController
+- TreasurePopupUI, ShopUI
+- BattleController와 DungeonController 연결
 
-- 없음
+### UI 개선
+- 보물방 아이템 툴팁 표시 ✅
+- PlayerStatusUI Level 텍스트 추가 ✅
+
+### 데이터 시스템
+- PlayerDataSO 생성 (플레이어 기본 스탯 CSV 데이터화) ✅
+- PlayerData.csv 템플릿 생성 ✅
 
 ## Pending
 
-- 던전 시스템
+- Unity Editor 작업:
+  - `Tools → CSV → Convert All` 실행
+  - `Tools → Addressables → 🔄 Setup & Build` 실행
+
+## CSV 데이터 파일
+
+| 파일 | 설명 |
+|------|------|
+| PlayerData.csv | 플레이어 기본 스탯 (HP, MP, ATK, DEF, SPD, CRIT, 레벨업 보너스 등) |
+| MonsterData.csv | 몬스터 데이터 |
+| MonsterSkill.csv | 몬스터 스킬 |
+| SkillData.csv | 플레이어 스킬 |
+| EquipmentData.csv | 장비 |
+| ConsumableData.csv | 소모품 |
+| RarityData.csv | 희귀도 |
+| StatusEffect.csv | 상태이상 |
 
 ## Test Code
 
@@ -85,5 +81,6 @@
 | 버프 | Skills/PowerBuff, Skills/DefenseBuff, Skills/SpeedBuff |
 | 디버프 | Skills/BurnDeBuff, Skills/PoisonDeBuff, Skills/Stun |
 | 속성 | Elements/Fire, Elements/Water, Elements/Leaf, Elements/Neutral |
+| 이펙트 | Effects/Neutral, Effects/Melee, Effects/Magic |
 
 ---

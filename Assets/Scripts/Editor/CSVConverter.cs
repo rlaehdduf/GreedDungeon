@@ -35,6 +35,7 @@ public class CSVConverter : EditorWindow
             MonsterDataSO m => m.ID,
             ConsumableDataSO c => c.ID,
             MonsterSkillDataSO ms => ms.ID,
+            PlayerDataSO p => 1,
             _ => -1
         };
     }
@@ -76,6 +77,7 @@ public class CSVConverter : EditorWindow
         total += ConvertMonsters();
         total += ConvertConsumables();
         total += ConvertMonsterSkills();
+        total += ConvertPlayerData();
         
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -686,5 +688,62 @@ private static SkillPoolType ParseSkillPoolType(string value)
             "Speed" => BuffType.Speed,
             _ => BuffType.None
         };
+    }
+
+    [MenuItem("Tools/CSV/Convert PlayerData")]
+    public static int ConvertPlayerData()
+    {
+        string csvFile = Path.Combine(CSV_PATH, "PlayerData.csv");
+        if (!File.Exists(csvFile))
+        {
+            Debug.LogWarning($"파일 없음: {csvFile}");
+            return 0;
+        }
+
+        string outputPath = OUTPUT_PATH;
+        if (!Directory.Exists(outputPath))
+            Directory.CreateDirectory(outputPath);
+
+        var lines = ReadCSV(csvFile);
+        if (lines.Count < 2)
+        {
+            Debug.LogWarning("PlayerData.csv에 데이터가 없습니다.");
+            return 0;
+        }
+
+        var values = lines[1];
+        if (values.Count < 10)
+        {
+            Debug.LogWarning($"PlayerData 필드 수 부족: {values.Count}");
+            return 0;
+        }
+
+        var data = FindExistingAsset<PlayerDataSO>(1, outputPath);
+        bool isNew = data == null;
+
+        if (isNew)
+        {
+            data = ScriptableObject.CreateInstance<PlayerDataSO>();
+        }
+
+        data.BaseMaxHP = int.TryParse(values[0], out int hp) ? hp : 100;
+        data.BaseMaxMP = int.TryParse(values[1], out int mp) ? mp : 50;
+        data.BaseAttack = int.TryParse(values[2], out int atk) ? atk : 10;
+        data.BaseDefense = int.TryParse(values[3], out int def) ? def : 5;
+        data.BaseSpeed = int.TryParse(values[4], out int spd) ? spd : 10;
+        data.BaseCriticalRate = float.TryParse(values[5], NumberStyles.Float, CultureInfo.InvariantCulture, out float cr) ? cr : 5f;
+        data.StatBonusPerLevel = float.TryParse(values[6], NumberStyles.Float, CultureInfo.InvariantCulture, out float bpl) ? bpl : 0.1f;
+        data.StartingGold = int.TryParse(values[7], out int gold) ? gold : 0;
+        data.InventorySize = int.TryParse(values[8], out int inv) ? inv : 21;
+
+        if (isNew)
+        {
+            string assetPath = Path.Combine(outputPath, "PlayerData.asset");
+            AssetDatabase.CreateAsset(data, assetPath);
+        }
+
+        EditorUtility.SetDirty(data);
+        Debug.Log($"PlayerData 변환 완료");
+        return 1;
     }
 }
