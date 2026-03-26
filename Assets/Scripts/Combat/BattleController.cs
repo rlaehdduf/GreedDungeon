@@ -29,7 +29,8 @@ namespace GreedDungeon.Combat
         private Player _testPlayer;
         private Monster _currentMonster;
         private bool _isActionInProgress;
-        private int _debugDebuffIndex;
+        private int _debugMonsterIndex;
+        private readonly int[] _testMonsterIds = { 1, 2, 3, 4, 5 };
 
         public event Action<Monster> OnBattleStarted;
         public event Action<Monster, int> OnMonsterDamaged;
@@ -83,24 +84,50 @@ namespace GreedDungeon.Combat
         {
             if (Keyboard.current != null && Keyboard.current.pKey.wasPressedThisFrame)
             {
-                ApplyDebugDebuff();
+                SpawnNextMonster();
             }
         }
 
-        private void ApplyDebugDebuff()
+        private void SpawnNextMonster()
         {
-            if (_testPlayer == null || _gameDataManager == null) return;
+            if (_gameDataManager == null || _testPlayer == null) return;
 
-            int[] debuffIds = { 1, 2, 3 };
-            int id = debuffIds[_debugDebuffIndex % 3];
-            _debugDebuffIndex++;
+            int monsterId = _testMonsterIds[_debugMonsterIndex % _testMonsterIds.Length];
+            _debugMonsterIndex++;
 
-            var effect = _gameDataManager.GetStatusEffectData(id);
-            if (effect != null)
+            var monsterData = _gameDataManager.GetMonsterData(monsterId);
+            if (monsterData == null)
             {
-                _testPlayer.ApplyStatusEffect(effect, 3);
-                Debug.Log($"[Debug] 디버프 적용: {effect.Name}");
+                Debug.Log($"[Debug] 몬스터 데이터 없음: ID {monsterId}");
+                return;
             }
+
+            _currentMonster = new Monster(monsterData);
+
+            MonsterSkillDataSO uniqueSkill = null;
+            MonsterSkillDataSO sharedSkill = null;
+
+            if (monsterData.UniqueSkillID > 0)
+                uniqueSkill = _gameDataManager.GetMonsterSkillData(monsterData.UniqueSkillID);
+            if (monsterData.SharedSkillID > 0)
+                sharedSkill = _gameDataManager.GetMonsterSkillData(monsterData.SharedSkillID);
+
+            _currentMonster.SetSkills(uniqueSkill, sharedSkill);
+            _currentMonster.InitializeForBattle();
+
+            if (_battleUI != null)
+            {
+                _battleUI.SetupBattle(_testPlayer, _currentMonster);
+            }
+
+            _battleManager.StartBattle(_testPlayer, _currentMonster);
+
+            Debug.Log($"[Debug] 몬스터 스폰: {_currentMonster.Name} (ID: {monsterId})");
+            if (uniqueSkill != null)
+                Debug.Log($"  - 전용 스킬: {uniqueSkill.Name} ({uniqueSkill.SkillType})");
+            if (sharedSkill != null)
+                Debug.Log($"  - 공용 스킬: {sharedSkill.Name} ({sharedSkill.SkillType})");
+            Debug.Log($"  - 스킬 발동 확률: {_currentMonster.SkillChance}%");
         }
 
         private void SetupUIEvents()
