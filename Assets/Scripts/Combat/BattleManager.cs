@@ -467,8 +467,8 @@ public interface IBattleManager
                 int goldReward = _monster.GoldDrop;
                 _player.AddGold(goldReward);
                 
-                // 전투 후 70% HP 회복
-                int healAmount = (int)(_player.TotalStats.MaxHP * 0.7f);
+                // 전투 후 50% HP 회복
+                int healAmount = (int)(_player.TotalStats.MaxHP * 0.5f);
                 if (healAmount > 0)
                 {
                     _player.Heal(healAmount);

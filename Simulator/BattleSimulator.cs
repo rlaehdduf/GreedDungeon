@@ -40,7 +40,7 @@ namespace GreedDungeon.Simulator
             };
 
             float difficultyRate = 0.01f;
-            float healRate = 0.7f;
+            float healRate = 0.5f;
             int simulationCount = 1000;
             
             foreach (var player in playerScenarios)
