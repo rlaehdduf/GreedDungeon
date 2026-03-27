@@ -118,7 +118,7 @@ namespace GreedDungeon.Dungeon
             }
             else
             {
-                encounter = _encounterSystem.GetNextEncounter();
+                encounter = _encounterSystem.GetNextEncounter(afterBattle: true);
             }
             
             switch (encounter)
