@@ -58,7 +58,7 @@ namespace GreedDungeon.Combat
 
                 var readyEntities = _entities
                     .Where(e => !e.IsDead && e.ActionGauge >= ACTION_GAUGE_THRESHOLD)
-                    .OrderByDescending(e => e.ActionGauge)
+                    .OrderByDescending(e => e.ActionGauge + (e.IsPlayer ? 0.1f : 0f))
                     .ThenBy(e => e.Name)
                     .ToList();
 

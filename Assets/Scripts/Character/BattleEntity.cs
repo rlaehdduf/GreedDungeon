@@ -18,6 +18,7 @@ namespace GreedDungeon.Character
         private int _actionGauge;
 
         public abstract string Name { get; }
+        public abstract bool IsPlayer { get; }
         public Stats BaseStats => _baseStats;
         public int ActionGauge => _actionGauge;
 

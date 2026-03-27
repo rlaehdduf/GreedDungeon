@@ -12,6 +12,7 @@ namespace GreedDungeon.Character
         Stats BaseStats { get; }
         Stats TotalStats { get; }
         bool IsDead { get; }
+        bool IsPlayer { get; }
         IReadOnlyList<ActiveStatusEffect> StatusEffects { get; }
         IReadOnlyList<SkillDataSO> Skills { get; }
         IReadOnlyList<ActiveBuff> Buffs { get; }

@@ -20,6 +20,7 @@ namespace GreedDungeon.Character
         private int _inventorySize;
 
         public override string Name => "Player";
+        public override bool IsPlayer => true;
         public int Gold => _gold;
         public int Level { get; private set; }
         public int KillCount => _killCount;

@@ -11,6 +11,7 @@ namespace GreedDungeon.Character
         private MonsterSkillDataSO _sharedSkill;
 
         public override string Name => _data.Name;
+        public override bool IsPlayer => false;
         public MonsterSkillDataSO UniqueSkill => _uniqueSkill;
         public MonsterSkillDataSO SharedSkill => _sharedSkill;
         public float SkillChance => _data.SkillChance;
