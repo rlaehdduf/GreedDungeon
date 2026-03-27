@@ -146,8 +146,8 @@ namespace GreedDungeon.Simulator
                 if (!result.PlayerWon)
                     return false;
                 
-                // 전투 후 20% HP 회복
-                currentHP = Math.Min(playerStats.HP, result.RemainingHP + (int)(playerStats.HP * 0.2f));
+                // 전투 후 30% HP 회복
+                currentHP = Math.Min(playerStats.HP, result.RemainingHP + (int)(playerStats.HP * 0.3f));
             }
 
             return true;
@@ -201,8 +201,8 @@ namespace GreedDungeon.Simulator
                 if (!result.PlayerWon)
                     return battle - 1;
                 
-                // 전투 후 20% HP 회복
-                currentHP = Math.Min(playerStats.HP, result.RemainingHP + (int)(playerStats.HP * 0.2f));
+                // 전투 후 30% HP 회복
+                currentHP = Math.Min(playerStats.HP, result.RemainingHP + (int)(playerStats.HP * 0.3f));
             }
 
             return maxBattles;

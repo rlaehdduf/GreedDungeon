@@ -396,12 +396,12 @@ EffectiveSpeed = min(Speed, 5) + sqrt(max(0, Speed - 5)) * 0.8
 | Legend | 주황 | #FFAA00 |
 
 **전투 후 HP 회복 ✅**
-- 승리 시 최대 HP의 20% 회복
+- 승리 시 최대 HP의 30% 회복
 - BattleManager.CheckBattleEnd()에 적용
 
 #### 시뮬레이션 결과
 
-**연속 전투 생존율 (20% HP 회복 적용)**
+**연속 전투 생존율 (30% HP 회복 적용)**
 
 | 장비 | 1전투 | 2전투 | 3전투 | 평균 생존 |
 |------|-------|-------|-------|----------|
@@ -419,7 +419,7 @@ EffectiveSpeed = min(Speed, 5) + sqrt(max(0, Speed - 5)) * 0.8
 - [x] CSVConverter.cs 수정 (FixedSkillID 파싱)
 - [x] Player.cs 수정 (FixedSkillID 사용)
 - [x] ShopUI.cs 수정 (FixedSkillID 사용)
-- [x] BattleManager.cs 수정 (전투 후 20% HP 회복)
+- [x] BattleManager.cs 수정 (전투 후 30% HP 회복)
 - [x] RarityData.csv 수정 (Color 컬럼)
 - [ ] Unity에서 `Tools > CSV > Convert All` 실행 필요
 
