@@ -1,2 +1,2 @@
-﻿BaseMaxHP,BaseMaxMP,BaseAttack,BaseDefense,BaseSpeed,BaseCriticalRate,StatBonusPerLevel,StartingGold,InventorySize
-100,50,10,5,10,5,0.1,200,21
+BaseMaxHP,BaseMaxMP,BaseAttack,BaseDefense,BaseSpeed,BaseCriticalRate,StatBonusPerLevel,StartingGold,InventorySize
+70,40,8,3,10,5,0.1,200,21

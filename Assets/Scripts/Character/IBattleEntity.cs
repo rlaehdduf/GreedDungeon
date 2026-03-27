@@ -38,6 +38,10 @@ namespace GreedDungeon.Character
         void ProcessTurnStart();
         void ProcessTurnEnd();
         void ClearAllStatusEffects();
+        int ActionGauge { get; }
+        void AddActionGauge(int amount);
+        void ConsumeActionGauge(int amount);
+        void ResetActionGauge();
     }
 
     public class ActiveStatusEffect

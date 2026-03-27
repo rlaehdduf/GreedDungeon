@@ -15,9 +15,9 @@ MonoBehaviour:
   ID: 2
   Name: "\uC5ED\uBCD1\uC950"
   Element: 0
-  MaxHP: 40
-  Attack: 15
-  Defense: 3
+  MaxHP: 60
+  Attack: 22
+  Defense: 5
   Speed: 8
   CriticalRate: 2
   GoldDropMin: 15
@@ -26,7 +26,7 @@ MonoBehaviour:
   StatusEffectChance: 20
   UniqueSkillID: 102
   SharedSkillID: 2
-  SkillChance: 40
+  SkillChance: 30
   IsBoss: 0
   PrefabAddress: Monsters/Rat
   ScaleX: 0.35

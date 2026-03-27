@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb51cdcb5757fec43821a694050cf34e, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.PlayerDataSO
-  BaseMaxHP: 100
-  BaseMaxMP: 50
-  BaseAttack: 10
-  BaseDefense: 5
+  BaseMaxHP: 70
+  BaseMaxMP: 40
+  BaseAttack: 8
+  BaseDefense: 3
   BaseSpeed: 10
   BaseCriticalRate: 5
   StatBonusPerLevel: 0.1

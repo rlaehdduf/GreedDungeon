@@ -15,10 +15,10 @@ MonoBehaviour:
   ID: 3
   Name: "\uBC29\uD328"
   Type: 0
-  HP: 20
+  HP: 10
   MP: 0
   Attack: 5
-  Defense: 3
+  Defense: 2
   Speed: -5
   CriticalRate: 1
   SkillPoolType: 0

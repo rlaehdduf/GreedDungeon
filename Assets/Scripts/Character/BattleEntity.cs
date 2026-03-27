@@ -7,15 +7,19 @@ namespace GreedDungeon.Character
 {
     public abstract class BattleEntity : IBattleEntity
     {
+        private const int ACTION_GAUGE_THRESHOLD = 1000;
+        
         private readonly List<ActiveStatusEffect> _statusEffects = new();
         private readonly List<SkillDataSO> _skills = new();
         private readonly List<ActiveBuff> _buffs = new();
         private Stats _baseStats;
         private Stats _cachedTotalStats;
         private bool _statsCacheDirty = true;
+        private int _actionGauge;
 
         public abstract string Name { get; }
         public Stats BaseStats => _baseStats;
+        public int ActionGauge => _actionGauge;
 
         public int CurrentHP { get; private set; }
         public int CurrentMP { get; private set; }
@@ -89,6 +93,7 @@ namespace GreedDungeon.Character
             _baseStats = baseStats;
             CurrentHP = _baseStats.MaxHP;
             CurrentMP = _baseStats.MaxMP;
+            _statsCacheDirty = true;
         }
 
         protected abstract Stats GetEquipmentStats();
@@ -255,6 +260,22 @@ namespace GreedDungeon.Character
         protected void SetInitialMP(int mp)
         {
             CurrentMP = mp;
+        }
+
+        public void AddActionGauge(int amount)
+        {
+            _actionGauge += amount;
+        }
+
+        public void ConsumeActionGauge(int amount)
+        {
+            _actionGauge -= amount;
+            if (_actionGauge < 0) _actionGauge = 0;
+        }
+
+        public void ResetActionGauge()
+        {
+            _actionGauge = 0;
         }
     }
 }

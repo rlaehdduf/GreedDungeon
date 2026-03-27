@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.RarityDataSO
   ID: 2
   Name: UnCommon
-  StatMultiplier: 1.2
+  StatMultiplier: 1.1
   HasSkill: 1
   SkillTierMin: 1
   SkillTierMax: 2

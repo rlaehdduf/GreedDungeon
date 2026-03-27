@@ -15,9 +15,9 @@ MonoBehaviour:
   ID: 3
   Name: "\uAC70\uBBF8"
   Element: 3
-  MaxHP: 45
-  Attack: 14
-  Defense: 2
+  MaxHP: 66
+  Attack: 20
+  Defense: 4
   Speed: 6
   CriticalRate: 5
   GoldDropMin: 12
@@ -26,7 +26,7 @@ MonoBehaviour:
   StatusEffectChance: 30
   UniqueSkillID: 103
   SharedSkillID: 3
-  SkillChance: 40
+  SkillChance: 30
   IsBoss: 0
   PrefabAddress: Monsters/Spider
   ScaleX: 0.5

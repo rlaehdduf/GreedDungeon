@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.RarityDataSO
   ID: 4
   Name: Epic
-  StatMultiplier: 2
+  StatMultiplier: 1.5
   HasSkill: 1
   SkillTierMin: 2
   SkillTierMax: 3

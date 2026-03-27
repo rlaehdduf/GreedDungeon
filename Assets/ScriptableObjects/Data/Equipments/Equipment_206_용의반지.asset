@@ -15,12 +15,12 @@ MonoBehaviour:
   ID: 206
   Name: "\uC6A9\uC758\uBC18\uC9C0"
   Type: 2
-  HP: 50
+  HP: 25
   MP: 30
-  Attack: 15
-  Defense: 10
+  Attack: 10
+  Defense: 5
   Speed: 5
-  CriticalRate: 20
+  CriticalRate: 12
   SkillPoolType: 5
   BuyPrice: 800
   SellPrice: 400

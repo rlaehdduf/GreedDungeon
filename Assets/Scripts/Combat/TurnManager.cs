@@ -17,60 +17,77 @@ namespace GreedDungeon.Combat
 
     public class TurnManager : ITurnManager
     {
+        private const int ACTION_GAUGE_THRESHOLD = 1000;
+
         private List<IBattleEntity> _entities = new();
-        private List<IBattleEntity> _turnOrder = new();
-        private int _currentIndex;
+        private IBattleEntity _currentEntity;
         private int _turnNumber;
 
-        public IBattleEntity CurrentEntity => _turnOrder.Count > _currentIndex ? _turnOrder[_currentIndex] : null;
-        public bool HasNextTurn => _currentIndex < _turnOrder.Count - 1;
-        public IReadOnlyList<IBattleEntity> TurnOrder => _turnOrder;
+        public IBattleEntity CurrentEntity => _currentEntity;
+        public bool HasNextTurn => _currentEntity != null && !_currentEntity.IsDead;
+        public IReadOnlyList<IBattleEntity> TurnOrder => _entities.AsReadOnly();
         public int CurrentTurnNumber => _turnNumber;
 
         public void Initialize(IEnumerable<IBattleEntity> entities)
         {
             _entities = entities.Where(e => !e.IsDead).ToList();
             _turnNumber = 1;
-            CalculateTurnOrder();
-            _currentIndex = 0;
+            
+            foreach (var entity in _entities)
+            {
+                entity.ResetActionGauge();
+            }
+            
+            _currentEntity = null;
+            AdvanceToNextActor();
         }
 
-        private void CalculateTurnOrder()
+        private void AdvanceToNextActor()
         {
-            _turnOrder = _entities
-                .Where(e => !e.IsDead)
-                .OrderByDescending(e => e.TotalStats.Speed)
-                .ThenBy(e => e.Name)
-                .ToList();
+            while (true)
+            {
+                foreach (var entity in _entities)
+                {
+                    if (entity.IsDead) continue;
+                    entity.AddActionGauge(entity.TotalStats.Speed);
+                }
+
+                var readyEntities = _entities
+                    .Where(e => !e.IsDead && e.ActionGauge >= ACTION_GAUGE_THRESHOLD)
+                    .OrderByDescending(e => e.ActionGauge)
+                    .ThenBy(e => e.Name)
+                    .ToList();
+
+                if (readyEntities.Count > 0)
+                {
+                    _currentEntity = readyEntities[0];
+                    return;
+                }
+            }
         }
 
         public void NextTurn()
         {
-            if (!HasNextTurn)
-            {
-                StartNewRound();
-                return;
-            }
-            _currentIndex++;
-        }
-
-        private void StartNewRound()
-        {
+            if (_currentEntity == null) return;
+            
+            _currentEntity.ConsumeActionGauge(ACTION_GAUGE_THRESHOLD);
             _turnNumber++;
-            _currentIndex = 0;
-            CalculateTurnOrder();
+            
+            AdvanceToNextActor();
         }
 
         public void RemoveEntity(IBattleEntity entity)
         {
-            int index = _turnOrder.IndexOf(entity);
-            if (index >= 0)
-            {
-                _turnOrder.RemoveAt(index);
-                if (index < _currentIndex)
-                    _currentIndex--;
-            }
             _entities.Remove(entity);
+            
+            if (_currentEntity == entity)
+            {
+                _currentEntity = null;
+                if (_entities.Any(e => !e.IsDead))
+                {
+                    AdvanceToNextActor();
+                }
+            }
         }
     }
 }

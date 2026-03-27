@@ -109,10 +109,17 @@ namespace GreedDungeon.Character
 
         private void LevelUp()
         {
+            float hpRatio = (float)CurrentHP / TotalStats.MaxHP;
+            float mpRatio = (float)CurrentMP / TotalStats.MaxMP;
+            
             Level++;
             _killCount = 0;
             var newStats = CalculateLevelStats(Level);
             InitializeStats(newStats);
+            
+            SetInitialHP((int)(TotalStats.MaxHP * hpRatio));
+            SetInitialMP((int)(TotalStats.MaxMP * mpRatio));
+            
             OnLevelUp?.Invoke();
             OnStatsChanged?.Invoke();
             OnInventoryChanged?.Invoke();

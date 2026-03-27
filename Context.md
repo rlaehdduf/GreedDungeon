@@ -3,7 +3,7 @@
 
 Unity 2D 던전 크롤러 턴제 RPG 프로토타입 개발 (GreedDungeon)
 
-**현재 작업:** Console Log 정리 및 프로토타입 완성
+**현재 작업:** 행동 게이지 시스템 & 밸런스 대폭 조정 완료
 
 ## Instructions
 
@@ -27,6 +27,8 @@ Unity 2D 던전 크롤러 턴제 RPG 프로토타입 개발 (GreedDungeon)
 8. **몬스터 스킬 이펙트** - 플레이어 공격에만 `OnAttackEffect` 사용, 몬스터 공격에는 사용하지 않음
 9. **BackgroundScroller** - SpriteRenderer용으로 수정, `_bobCycles`로 정확한 sin 사이클 완료
 10. **DamageTextUI** - Player 데미지는 빨간색(`_playerDamageColor`)으로 구분
+11. **행동 게이지 시스템** - Speed만큼 게이지 증가, 1000 도달 시 행동
+12. **레벨업 캐시 무효화** - `InitializeStats()`에서 `_statsCacheDirty = true` 필수
 
 ## Accomplished
 
@@ -39,57 +41,36 @@ Unity 2D 던전 크롤러 턴제 RPG 프로토타입 개발 (GreedDungeon)
 - PlayerData CSV 데이터화 ✅
 
 ### 이번 세션 완료
-- ✅ Monster.GetRandomSkill() 유닛 테스트 작성 및 통과
-- ✅ TurnManager 유닛 테스트 작성 및 통과
-- ✅ TitleUI.cs 작성 (클릭 시 걷는 애니메이션, 텍스트 깜빡임)
-- ✅ BackgroundScroller.cs 수정 (SpriteRenderer용, 부드러운 sin 사이클)
-- ✅ MonsterDisplay/MonsterStatusUI Show/Hide 기능 추가
-- ✅ DamageTextUI Player 데미지 색상 구분 (빨간색)
-- ✅ InventorySlotUI 스프라이트 깜빡임 수정
-- ✅ DungeonController 테스트 모드 추가 (O키 = 다음 방 상점 고정)
+- ✅ 행동 게이지 시스템 구현 (TurnManager, IBattleEntity, BattleEntity)
+- ✅ 레벨업 체력 비율 유지 (Player.cs)
+- ✅ 레벨업 스탯 캐시 버그 수정 (BattleEntity.cs)
+- ✅ Player 기본 스탯 하향 (HP 70, MP 40, ATK 8, DEF 3)
+- ✅ 시작 장비 지급 (막대기 자동 장착)
+- ✅ 장비 HP/DEF 50% 감소
+- ✅ 몬스터 HP/ATK/DEF 20% 상향
+- ✅ Rarity 배율 하향 (Legend 3.0x → 2.0x)
+- ✅ 전투 시뮬레이터 작성 (Simulator/BattleSimulator.cs)
+- ✅ Game Over UI 구현 (화면 붉어짐, Text 페이드인, 타이틀 이동)
 
-### 진행 중
-- 🔄 Debug.Log 제거 (런타임 스크립트만)
+## 시뮬레이션 결과
 
-## Test Code
-
-### 테스트 키
-| 키 | 기능 |
-|----|------|
-| P | 몬스터 스폰 (BattleController) |
-| O | 다음 방 상점 고정 (DungeonController, _testMode 필요) |
-| Space | BackgroundScroller 테스트 (BackgroundScroller, _testMode 필요) |
-
-### 유닛 테스트
-- `Assets/Tests/Editor/MonsterSkillTests.cs` - 몬스터 스킬 선택 로직
-- `Assets/Tests/Editor/TurnManagerTests.cs` - 턴 관리 로직
-
-### 인벤토리 테스트 아이템
-`BattleController.AddTestItemsToInventory()`:
-- 모든 장비 인벤토리 추가
-- 모든 소모품 x5 인벤토리 추가
-- 골드 1000G 추가
-
-## Icon Addresses
-
-| 타입 | 주소 |
-|-----|------|
-| 버프 | Skills/PowerBuff, Skills/DefenseBuff, Skills/SpeedBuff |
-| 디버프 | Skills/BurnDeBuff, Skills/PoisonDeBuff, Skills/Stun |
-| 속성 | Elements/Fire, Elements/Water, Elements/Leaf, Elements/Neutral |
-| 이펙트 | Effects/Neutral, Effects/Melee, Effects/Magic |
+| 시나리오 | 슬라임 | 역병쥐 | 거미 | 해골 | 켈베로스 |
+|----------|--------|--------|------|------|----------|
+| 시작 장비 (막대기) | 100% | 27% | 99% | 0% | 0% |
+| 일반 장비 | 100% | 100% | 100% | 100% | 0% |
+| 전설 장비 | 100% | 100% | 100% | 100% | 31% |
+| 전설+스킬 | 100% | 100% | 100% | 100% | 100% |
 
 ## CSV 데이터 파일
 
 | 파일 | 설명 |
 |------|------|
-| PlayerData.csv | 플레이어 기본 스탯 |
-| MonsterData.csv | 몬스터 데이터 |
-| MonsterSkill.csv | 몬스터 스킬 |
+| PlayerData.csv | 플레이어 기본 스탯 (HP 70, MP 40, ATK 8, DEF 3) |
+| MonsterData.csv | 몬스터 데이터 (HP/ATK/DEF 20% 상향) |
+| EquipmentData.csv | 장비 (HP/DEF 50% 감소) |
+| RarityData.csv | 희귀도 배율 (Legend 2.0x) |
 | SkillData.csv | 플레이어 스킬 |
-| EquipmentData.csv | 장비 |
 | ConsumableData.csv | 소모품 |
-| RarityData.csv | 희귀도 |
 | StatusEffect.csv | 상태이상 |
 
 ---

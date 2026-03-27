@@ -151,6 +151,9 @@ namespace GreedDungeon.UI.Battle
         {
             AddBattleLog("게임 오버!");
             EnableActions(false);
+            
+            if (_debuffVignetteUI != null)
+                _debuffVignetteUI.ShowGameOver();
         }
 
         public void ShowPlayerDamage(int damage, bool isCritical)

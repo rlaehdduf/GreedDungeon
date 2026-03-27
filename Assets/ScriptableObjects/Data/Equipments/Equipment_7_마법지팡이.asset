@@ -16,8 +16,8 @@ MonoBehaviour:
   Name: "\uB9C8\uBC95\uC9C0\uD321\uC774"
   Type: 0
   HP: 0
-  MP: 50
-  Attack: 20
+  MP: 40
+  Attack: 15
   Defense: 0
   Speed: 0
   CriticalRate: 5

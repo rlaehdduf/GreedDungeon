@@ -307,6 +307,13 @@ namespace GreedDungeon.Combat
             
             _testPlayer = new Player();
 
+            var startingWeapon = _gameDataManager.GetEquipmentData(1);
+            if (startingWeapon != null)
+            {
+                _testPlayer.TryAddEquipment(startingWeapon);
+                _testPlayer.EquipItem(0);
+            }
+
             if (_battleUI != null)
             {
                 _battleUI.SetupBattle(_testPlayer, _currentMonster);
