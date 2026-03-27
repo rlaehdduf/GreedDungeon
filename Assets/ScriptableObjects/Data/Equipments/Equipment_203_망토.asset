@@ -18,7 +18,7 @@ MonoBehaviour:
   HP: 0
   MP: 0
   Attack: 0
-  Defense: 2
+  Defense: 3
   Speed: 8
   CriticalRate: 2
   SkillPoolType: 5

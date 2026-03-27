@@ -16,8 +16,8 @@ MonoBehaviour:
   Name: "\uC655\uAD00"
   Type: 2
   HP: 0
-  MP: 15
-  Attack: 5
+  MP: 25
+  Attack: 8
   Defense: 0
   Speed: 0
   CriticalRate: 0

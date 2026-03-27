@@ -712,7 +712,7 @@ private static SkillPoolType ParseSkillPoolType(string value)
         }
 
         var values = lines[1];
-        if (values.Count < 10)
+        if (values.Count < 9)
         {
             Debug.LogWarning($"PlayerData 필드 수 부족: {values.Count}");
             return 0;

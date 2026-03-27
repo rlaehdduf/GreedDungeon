@@ -79,7 +79,8 @@ namespace GreedDungeon.UI.Inventory
         {
             if (_iconImage == null) return;
 
-            _iconImage.color = Color.white;
+            _iconImage.sprite = null;
+            _iconImage.color = new Color(1f, 1f, 1f, 0.3f);
 
             if (_assetLoader == null && Services.IsInitialized)
             {
@@ -93,9 +94,10 @@ namespace GreedDungeon.UI.Inventory
                 try
                 {
                     var sprite = await _assetLoader.LoadAssetAsync<Sprite>(iconAddress);
-                    if (sprite != null)
+                    if (sprite != null && _item != null && _item.IconAddress == iconAddress)
                     {
                         _iconImage.sprite = sprite;
+                        _iconImage.color = Color.white;
                         return;
                     }
                 }

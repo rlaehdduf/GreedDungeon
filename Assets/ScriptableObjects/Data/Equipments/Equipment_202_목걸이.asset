@@ -15,8 +15,8 @@ MonoBehaviour:
   ID: 202
   Name: "\uBAA9\uAC78\uC774"
   Type: 2
-  HP: 10
-  MP: 5
+  HP: 15
+  MP: 10
   Attack: 0
   Defense: 3
   Speed: 0

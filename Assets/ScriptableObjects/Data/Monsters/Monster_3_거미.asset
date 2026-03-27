@@ -15,18 +15,18 @@ MonoBehaviour:
   ID: 3
   Name: "\uAC70\uBBF8"
   Element: 3
-  MaxHP: 50
-  Attack: 7
-  Defense: 3
+  MaxHP: 45
+  Attack: 14
+  Defense: 2
   Speed: 6
   CriticalRate: 5
-  GoldDropMin: 20
-  GoldDropMax: 30
+  GoldDropMin: 12
+  GoldDropMax: 25
   StatusEffectID: Poison
   StatusEffectChance: 30
   UniqueSkillID: 103
   SharedSkillID: 3
-  SkillChance: 20
+  SkillChance: 40
   IsBoss: 0
   PrefabAddress: Monsters/Spider
   ScaleX: 0.5

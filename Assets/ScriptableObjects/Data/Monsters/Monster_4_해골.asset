@@ -15,18 +15,18 @@ MonoBehaviour:
   ID: 4
   Name: "\uD574\uACE8"
   Element: 1
-  MaxHP: 40
-  Attack: 10
-  Defense: 2
+  MaxHP: 35
+  Attack: 18
+  Defense: 1
   Speed: 10
   CriticalRate: 15
-  GoldDropMin: 25
-  GoldDropMax: 35
+  GoldDropMin: 15
+  GoldDropMax: 30
   StatusEffectID: Burn
   StatusEffectChance: 10
   UniqueSkillID: 104
   SharedSkillID: 4
-  SkillChance: 20
+  SkillChance: 40
   IsBoss: 0
   PrefabAddress: Monsters/Skull
   ScaleX: 0.45

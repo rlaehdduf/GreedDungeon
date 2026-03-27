@@ -19,7 +19,7 @@ MonoBehaviour:
   IsShared: 0
   DamageMultiplier: 0
   HitCount: 0
-  StatusEffectID: 
+  StatusEffectID: 0
   StatusEffectChance: 0
   BuffType: 0
   BuffValue: 0

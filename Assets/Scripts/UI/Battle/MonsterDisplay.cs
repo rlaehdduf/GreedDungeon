@@ -106,5 +106,15 @@ namespace GreedDungeon.UI.Battle
             if (_spriteRenderer != null)
                 _spriteRenderer.sprite = null;
         }
+
+        public void Show()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void Hide()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

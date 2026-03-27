@@ -160,7 +160,7 @@ namespace GreedDungeon.UI.Battle
                 UnityEngine.Random.Range(-100, 100),
                 UnityEngine.Random.Range(-50, 50)
             );
-            _damageTextUI.ShowDamage(damage, randomPos, isCritical, false);
+            _damageTextUI.ShowDamage(damage, randomPos, isCritical, false, true);
             
             if (_debuffVignetteUI != null)
                 _debuffVignetteUI.ShowDamageFlash();
@@ -194,6 +194,18 @@ namespace GreedDungeon.UI.Battle
                 return;
             }
             _attackEffectUI.ShowEffect(skillType, hitCount);
+        }
+
+        public void ShowMonsterInfo()
+        {
+            if (_monsterStatus != null)
+                _monsterStatus.Show();
+        }
+
+        public void HideMonsterInfo()
+        {
+            if (_monsterStatus != null)
+                _monsterStatus.Hide();
         }
     }
 }

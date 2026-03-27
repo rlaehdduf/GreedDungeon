@@ -17,7 +17,7 @@ MonoBehaviour:
   Type: 0
   HP: 0
   MP: 0
-  Attack: 10
+  Attack: 15
   Defense: 0
   Speed: 0
   CriticalRate: 8

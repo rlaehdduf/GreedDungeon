@@ -1,6 +1,6 @@
 ﻿ID,Name,StatMultiplier,HasSkill,SkillTierMin,SkillTierMax,DropWeight
 1,Common,1,FALSE,0,0,1000
-2,UnCommon,1.1,TRUE,1,2,300
-3,Rare,1.25,TRUE,1,2,100
-4,Epic,1.5,TRUE,2,3,25
-5,Legend,2,TRUE,2,4,5
+2,UnCommon,1.2,TRUE,1,2,300
+3,Rare,1.5,TRUE,1,2,100
+4,Epic,2,TRUE,2,3,25
+5,Legend,3,TRUE,2,4,5

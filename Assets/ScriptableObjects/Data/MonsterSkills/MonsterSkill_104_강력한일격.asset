@@ -20,7 +20,7 @@ MonoBehaviour:
   DamageMultiplier: 1.2
   HitCount: 1
   StatusEffectID: 3
-  StatusEffectChance: 40
+  StatusEffectChance: 70
   BuffType: 0
   BuffValue: 0
   BuffDuration: 0

@@ -6,7 +6,6 @@ using GreedDungeon.Dungeon;
 using GreedDungeon.ScriptableObjects;
 using GreedDungeon.Skill;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace GreedDungeon.Combat
 {
@@ -29,8 +28,6 @@ namespace GreedDungeon.Combat
         private Player _testPlayer;
         private Monster _currentMonster;
         private bool _isActionInProgress;
-        private int _debugMonsterIndex;
-        private readonly int[] _testMonsterIds = { 1, 2, 3, 4, 5 };
 
         public event Action<Monster> OnBattleStarted;
         public event Action<Monster, int> OnMonsterDamaged;
@@ -78,56 +75,6 @@ namespace GreedDungeon.Combat
             {
                 _dungeonController.Initialize(_testPlayer);
             }
-        }
-
-        private void Update()
-        {
-            if (Keyboard.current != null && Keyboard.current.pKey.wasPressedThisFrame)
-            {
-                SpawnNextMonster();
-            }
-        }
-
-        private void SpawnNextMonster()
-        {
-            if (_gameDataManager == null || _testPlayer == null) return;
-
-            int monsterId = _testMonsterIds[_debugMonsterIndex % _testMonsterIds.Length];
-            _debugMonsterIndex++;
-
-            var monsterData = _gameDataManager.GetMonsterData(monsterId);
-            if (monsterData == null)
-            {
-                Debug.Log($"[Debug] 몬스터 데이터 없음: ID {monsterId}");
-                return;
-            }
-
-            _currentMonster = new Monster(monsterData);
-
-            MonsterSkillDataSO uniqueSkill = null;
-            MonsterSkillDataSO sharedSkill = null;
-
-            if (monsterData.UniqueSkillID > 0)
-                uniqueSkill = _gameDataManager.GetMonsterSkillData(monsterData.UniqueSkillID);
-            if (monsterData.SharedSkillID > 0)
-                sharedSkill = _gameDataManager.GetMonsterSkillData(monsterData.SharedSkillID);
-
-            _currentMonster.SetSkills(uniqueSkill, sharedSkill);
-            _currentMonster.InitializeForBattle();
-
-            if (_battleUI != null)
-            {
-                _battleUI.SetupBattle(_testPlayer, _currentMonster);
-            }
-
-            _battleManager.StartBattle(_testPlayer, _currentMonster);
-
-            Debug.Log($"[Debug] 몬스터 스폰: {_currentMonster.Name} (ID: {monsterId})");
-            if (uniqueSkill != null)
-                Debug.Log($"  - 전용 스킬: {uniqueSkill.Name} ({uniqueSkill.SkillType})");
-            if (sharedSkill != null)
-                Debug.Log($"  - 공용 스킬: {sharedSkill.Name} ({sharedSkill.SkillType})");
-            Debug.Log($"  - 스킬 발동 확률: {_currentMonster.SkillChance}%");
         }
 
         private void SetupUIEvents()
@@ -360,8 +307,6 @@ namespace GreedDungeon.Combat
             
             _testPlayer = new Player();
 
-            AddTestItemsToInventory();
-            
             if (_battleUI != null)
             {
                 _battleUI.SetupBattle(_testPlayer, _currentMonster);
@@ -382,26 +327,6 @@ namespace GreedDungeon.Combat
             }
             
             _battleManager.StartBattle(_testPlayer, _currentMonster);
-        }
-
-        private void AddTestItemsToInventory()
-        {
-            var allEquipment = _gameDataManager.GetAllEquipmentData();
-            if (allEquipment != null && allEquipment.Count > 0)
-            {
-                _testPlayer.TryAddEquipmentWithHighestRarity(allEquipment[0]);
-            }
-
-            var allConsumables = _gameDataManager.GetAllConsumableData();
-            if (allConsumables != null)
-            {
-                foreach (var consumable in allConsumables)
-                {
-                    _testPlayer.TryAddConsumable(consumable, 5);
-                }
-            }
-
-            _testPlayer.AddGold(1000);
         }
 
         public bool UseSkill(int skillId)
@@ -436,8 +361,11 @@ namespace GreedDungeon.Combat
             
             if (_monsterDisplay != null)
             {
+                _monsterDisplay.Show();
                 _monsterDisplay.DisplayMonster(monster);
             }
+
+            _battleUI?.ShowMonsterInfo();
 
             if (monster != null)
             {
@@ -503,6 +431,9 @@ namespace GreedDungeon.Combat
 
         private void HandleMonsterDeath()
         {
+            _monsterDisplay?.Hide();
+            _battleUI?.HideMonsterInfo();
+            
             if (_dungeonController != null)
             {
                 _dungeonController.OnMonsterDeath();

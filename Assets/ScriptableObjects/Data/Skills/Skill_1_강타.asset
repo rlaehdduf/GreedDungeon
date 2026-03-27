@@ -18,7 +18,7 @@ MonoBehaviour:
   MPCost: 5
   Description: "\uC801\uC5D0\uAC8C \uAC15\uD55C \uD55C\uBC29"
   EffectType: 0
-  EffectValue: 1.2
+  EffectValue: 1.5
   ValueFloat: m
   HitCount: 1
   Duration: 0

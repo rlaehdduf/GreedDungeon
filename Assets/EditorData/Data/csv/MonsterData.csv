@@ -1,6 +1,6 @@
 ﻿ID,Name,Element,MaxHP,Attack,Defense,Speed,CriticalRate,GoldDropMin,GoldDropMax,StatusEffect,StatusEffectChance,UniqueSkillID,SharedSkillID,SkillChance,IsBoss,PrefabAddress,ScaleX,ScaleY
-1,슬라임,풀,60,6,2,5,5,10,15,None,0,101,5,20,FALSE,Monsters/Slime,0.3,0.3
-2,역병쥐,무,45,8,4,8,2,30,45,Poison,20,102,2,20,FALSE,Monsters/Rat,0.35,0.35
-3,거미,풀,50,7,3,6,5,20,30,Poison,30,103,3,20,FALSE,Monsters/Spider,0.5,0.5
-4,해골,불,40,10,2,10,15,25,35,Burn,10,104,4,20,FALSE,Monsters/Skull,0.45,0.45
-5,켈베로스,불,500,25,10,7,10,200,500,Stun,0,105,1,20,TRUE,Monsters/Cerberus,0.6,0.6
+1,슬라임,풀,50,12,2,5,5,10,20,None,0,101,5,40,FALSE,Monsters/Slime,0.3,0.3
+2,역병쥐,무,40,15,3,8,2,15,30,Poison,20,102,2,40,FALSE,Monsters/Rat,0.35,0.35
+3,거미,풀,45,14,2,6,5,12,25,Poison,30,103,3,40,FALSE,Monsters/Spider,0.5,0.5
+4,해골,불,35,18,1,10,15,15,30,Burn,10,104,4,40,FALSE,Monsters/Skull,0.45,0.45
+5,켈베로스,불,400,30,12,7,10,200,500,Stun,0,105,1,40,TRUE,Monsters/Cerberus,0.6,0.6

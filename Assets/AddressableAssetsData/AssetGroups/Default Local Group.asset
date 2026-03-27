@@ -491,6 +491,12 @@ MonoBehaviour:
     - EquipmentData
     - WeaponIcon
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b27d02fe41bf5fb4d9d3b0e794763601
+    m_Address: Assets/ScriptableObjects/Data/PlayerData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PlayerData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b49141cdedeba7644bbfb98b3a6498c5
     m_Address: "Assets/ScriptableObjects/Data/Skills/Skill_13_\uBC29\uC5B4\uB825\uBC84\uD504.asset"
     m_ReadOnly: 0

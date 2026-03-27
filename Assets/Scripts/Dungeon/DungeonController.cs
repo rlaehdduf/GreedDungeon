@@ -6,6 +6,7 @@ using GreedDungeon.Items;
 using GreedDungeon.ScriptableObjects;
 using GreedDungeon.UI.Battle;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace GreedDungeon.Dungeon
 {
@@ -23,6 +24,7 @@ namespace GreedDungeon.Dungeon
         [Header("Settings")]
         [SerializeField] private int _minGoldReward = 10;
         [SerializeField] private int _maxGoldReward = 50;
+        [SerializeField] private bool _testMode = false;
         
         private DungeonProgress _progress;
         private EncounterSystem _encounterSystem;
@@ -30,6 +32,7 @@ namespace GreedDungeon.Dungeon
         private Player _player;
         private Monster _currentMonster;
         private DungeonState _currentState;
+        private EncounterType? _forceNextEncounter = null;
         
         public DungeonState CurrentState => _currentState;
         
@@ -60,6 +63,14 @@ namespace GreedDungeon.Dungeon
             if (_shopUI != null)
             {
                 _shopUI.OnLeave += HandleShopLeave;
+            }
+        }
+        
+        private void Update()
+        {
+            if (_testMode && Keyboard.current.oKey.wasPressedThisFrame)
+            {
+                _forceNextEncounter = EncounterType.Shop;
             }
         }
         
@@ -99,7 +110,16 @@ namespace GreedDungeon.Dungeon
         {
             yield return new WaitForSeconds(1f);
             
-            var encounter = _encounterSystem.GetNextEncounter();
+            EncounterType encounter;
+            if (_forceNextEncounter.HasValue)
+            {
+                encounter = _forceNextEncounter.Value;
+                _forceNextEncounter = null;
+            }
+            else
+            {
+                encounter = _encounterSystem.GetNextEncounter();
+            }
             
             switch (encounter)
             {
@@ -185,7 +205,6 @@ namespace GreedDungeon.Dungeon
             if (_progress != null && _encounterSystem != null)
             {
                 isBoss = _encounterSystem.ShouldSpawnBoss();
-                Debug.Log($"[Dungeon] KillCount: {_progress.KillCount}, BossProb: {_progress.GetBossProbability()}%, IsBoss: {isBoss}");
             }
             
             if (isBoss)
@@ -194,13 +213,11 @@ namespace GreedDungeon.Dungeon
                 if (monsterData != null)
                 {
                     _currentState = DungeonState.Boss;
-                    Debug.Log($"[Dungeon] Boss spawn: {monsterData.Name}");
                 }
                 else
                 {
                     monsterData = _gameDataManager.GetRandomMonsterData();
                     _currentState = DungeonState.Battle;
-                    Debug.Log($"[Dungeon] No boss data, fallback to random monster");
                 }
             }
             else

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using GreedDungeon.Character;
 using GreedDungeon.Core;
 using GreedDungeon.Items;
+using GreedDungeon.ScriptableObjects;
+using GreedDungeon.Skill;
 using GreedDungeon.UI;
 using GreedDungeon.UI.Inventory;
 using UnityEngine;
@@ -26,6 +28,9 @@ namespace GreedDungeon.Dungeon.UI
         [SerializeField] private ItemTooltipUI _tooltipUI;
         
         private const int SHOP_SLOT_COUNT = 6;
+        private const float RARITY_PRICE_MULTIPLIER = 0.1f;
+        
+        private static readonly int[] QuantityWeights = { 50, 25, 15, 7, 3 };
         
         private Player _player;
         private IGameDataManager _gameDataManager;
@@ -67,22 +72,106 @@ namespace GreedDungeon.Dungeon.UI
             
             var allEquipment = _gameDataManager.GetAllEquipmentData();
             var allConsumables = _gameDataManager.GetAllConsumableData();
+            var usedConsumableIds = new HashSet<int>();
             
             for (int i = 0; i < SHOP_SLOT_COUNT; i++)
             {
                 if (UnityEngine.Random.value < 0.6f && allEquipment != null && allEquipment.Count > 0)
                 {
                     var equipment = allEquipment[UnityEngine.Random.Range(0, allEquipment.Count)];
-                    var item = new InventoryItem(equipment, null, null);
+                    var rarity = GetWeightedRandomRarity();
+                    var skill = RollSkillForEquipment(equipment.SkillPoolType, rarity);
+                    var item = new InventoryItem(equipment, rarity, skill);
                     _shopItems.Add(item);
                 }
                 else if (allConsumables != null && allConsumables.Count > 0)
                 {
-                    var consumable = allConsumables[UnityEngine.Random.Range(0, allConsumables.Count)];
-                    var item = new InventoryItem(consumable, 1);
+                    var availableConsumables = new List<ConsumableDataSO>();
+                    foreach (var c in allConsumables)
+                    {
+                        if (!usedConsumableIds.Contains(c.ID))
+                        {
+                            availableConsumables.Add(c);
+                        }
+                    }
+                    
+                    if (availableConsumables.Count == 0)
+                    {
+                        usedConsumableIds.Clear();
+                        availableConsumables = new List<ConsumableDataSO>(allConsumables);
+                    }
+                    
+                    var consumable = availableConsumables[UnityEngine.Random.Range(0, availableConsumables.Count)];
+                    usedConsumableIds.Add(consumable.ID);
+                    
+                    int quantity = GetRandomConsumableQuantity();
+                    var item = new InventoryItem(consumable, quantity);
                     _shopItems.Add(item);
                 }
             }
+        }
+        
+        private RarityDataSO GetWeightedRandomRarity()
+        {
+            var rarities = _gameDataManager.GetAllRarityData();
+            if (rarities == null || rarities.Count == 0) return null;
+            
+            int totalWeight = 0;
+            var weights = new int[rarities.Count];
+            
+            for (int i = 0; i < rarities.Count; i++)
+            {
+                int weight = (rarities.Count - i) * 10;
+                weights[i] = weight;
+                totalWeight += weight;
+            }
+            
+            int random = UnityEngine.Random.Range(0, totalWeight);
+            int cumulative = 0;
+            
+            for (int i = 0; i < rarities.Count; i++)
+            {
+                cumulative += weights[i];
+                if (random < cumulative)
+                {
+                    return rarities[i];
+                }
+            }
+            
+            return rarities[0];
+        }
+        
+        private int GetRandomConsumableQuantity()
+        {
+            int totalWeight = 0;
+            foreach (int w in QuantityWeights)
+            {
+                totalWeight += w;
+            }
+            
+            int random = UnityEngine.Random.Range(0, totalWeight);
+            int cumulative = 0;
+            
+            for (int i = 0; i < QuantityWeights.Length; i++)
+            {
+                cumulative += QuantityWeights[i];
+                if (random < cumulative)
+                {
+                    return i + 1;
+                }
+            }
+            
+            return 1;
+        }
+        
+        private SkillDataSO RollSkillForEquipment(SkillPoolType poolType, RarityDataSO rarity)
+        {
+            if (rarity == null || !rarity.HasSkill) return null;
+            
+            var skillManager = Services.Get<ISkillManager>();
+            if (skillManager == null) return null;
+            
+            return skillManager.GetRandomSkill(poolType, rarity.SkillTierMin, rarity.SkillTierMax);
         }
         
         private void UpdateShopDisplay()
@@ -228,11 +317,33 @@ namespace GreedDungeon.Dungeon.UI
             
             if (item.Type == ItemType.Equipment)
             {
-                return item.Equipment?.BuyPrice ?? 50;
+                int basePrice = item.Equipment?.BuyPrice ?? 50;
+                
+                if (item.Rarity != null)
+                {
+                    var rarities = _gameDataManager?.GetAllRarityData();
+                    if (rarities != null)
+                    {
+                        int rarityIndex = 0;
+                        for (int i = 0; i < rarities.Count; i++)
+                        {
+                            if (rarities[i].ID == item.Rarity.ID)
+                            {
+                                rarityIndex = i;
+                                break;
+                            }
+                        }
+                        float multiplier = 1f + (rarityIndex * RARITY_PRICE_MULTIPLIER / 100f);
+                        basePrice = Mathf.RoundToInt(basePrice * multiplier);
+                    }
+                }
+                
+                return basePrice;
             }
             else
             {
-                return item.Consumable?.BuyPrice ?? 20;
+                int unitPrice = item.Consumable?.BuyPrice ?? 20;
+                return unitPrice * item.Quantity;
             }
         }
         

@@ -15,10 +15,10 @@ MonoBehaviour:
   ID: 104
   Name: "\uAC00\uC2DC\uAC11\uC637"
   Type: 1
-  HP: 20
+  HP: 30
   MP: 0
   Attack: 5
-  Defense: 5
+  Defense: 8
   Speed: 0
   CriticalRate: 5
   SkillPoolType: 3

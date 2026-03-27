@@ -69,7 +69,6 @@ public interface IBattleManager
 
         private void LogBattle(string message, UI.Battle.LogType logType = UI.Battle.LogType.System)
         {
-            Debug.Log(message);
             OnBattleLog?.Invoke(message, logType);
         }
 
@@ -182,6 +181,7 @@ public interface IBattleManager
                 if (defender.IsDead) break;
 
                 var result = _damageCalculator.CalculateDamage(attacker, defender, skill);
+                Debug.Log($"[Damage] Base:{result.BaseDamage} Def:{result.Defense} AfterDef:{result.DamageAfterDefense} Crit:{result.IsCritical}({result.CriticalMultiplier}) Elem:{result.ElementMultiplier} Final:{result.Damage}");
                 defender.TakeDamage(result.Damage);
                 totalDamage += result.Damage;
                 if (result.IsCritical) isCritical = true;

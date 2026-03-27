@@ -15,18 +15,18 @@ MonoBehaviour:
   ID: 2
   Name: "\uC5ED\uBCD1\uC950"
   Element: 0
-  MaxHP: 45
-  Attack: 8
-  Defense: 4
+  MaxHP: 40
+  Attack: 15
+  Defense: 3
   Speed: 8
   CriticalRate: 2
-  GoldDropMin: 30
-  GoldDropMax: 45
+  GoldDropMin: 15
+  GoldDropMax: 30
   StatusEffectID: Poison
   StatusEffectChance: 20
   UniqueSkillID: 102
   SharedSkillID: 2
-  SkillChance: 20
+  SkillChance: 40
   IsBoss: 0
   PrefabAddress: Monsters/Rat
   ScaleX: 0.35

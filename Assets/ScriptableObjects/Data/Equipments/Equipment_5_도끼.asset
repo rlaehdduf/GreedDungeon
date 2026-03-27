@@ -17,10 +17,10 @@ MonoBehaviour:
   Type: 0
   HP: 0
   MP: 0
-  Attack: 8
+  Attack: 18
   Defense: 0
   Speed: -3
-  CriticalRate: 10
+  CriticalRate: 12
   SkillPoolType: 0
   BuyPrice: 220
   SellPrice: 110

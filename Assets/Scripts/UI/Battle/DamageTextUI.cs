@@ -17,10 +17,14 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private float _animationDuration = 0.8f;
         [SerializeField] private float _fadeDuration = 0.3f;
 
+        [Header("Font")]
+        [SerializeField] private int _fontSize = 36;
+
         [Header("Colors")]
         [SerializeField] private Color _normalColor = Color.white;
         [SerializeField] private Color _criticalColor = Color.yellow;
         [SerializeField] private Color _healColor = Color.green;
+        [SerializeField] private Color _playerDamageColor = new Color(1f, 0.4f, 0.4f);
 
         private readonly Queue<GameObject> _pool = new();
 
@@ -37,7 +41,7 @@ namespace GreedDungeon.UI.Battle
             }
         }
 
-        public void ShowDamage(int damage, Vector2 position, bool isCritical = false, bool isHeal = false)
+        public void ShowDamage(int damage, Vector2 position, bool isCritical = false, bool isHeal = false, bool isPlayerDamage = false)
         {
             var text = GetText();
             text.transform.localPosition = position;
@@ -47,7 +51,7 @@ namespace GreedDungeon.UI.Battle
             if (textComponent != null)
             {
                 textComponent.text = isHeal ? $"+{damage}" : $"-{damage}";
-                textComponent.color = GetColor(isCritical, isHeal);
+                textComponent.color = GetColor(isCritical, isHeal, isPlayerDamage);
             }
 
             StartCoroutine(AnimateDamageText(text, position));
@@ -120,8 +124,8 @@ namespace GreedDungeon.UI.Battle
             rectTransform.sizeDelta = new Vector2(100, 50);
 
             var text = go.AddComponent<Text>();
-            text.font = Font.CreateDynamicFontFromOSFont("Arial", 36);
-            text.fontSize = 36;
+            text.font = Font.CreateDynamicFontFromOSFont("Arial", _fontSize);
+            text.fontSize = _fontSize;
             text.alignment = TextAnchor.MiddleCenter;
             text.horizontalOverflow = HorizontalWrapMode.Overflow;
             text.verticalOverflow = VerticalWrapMode.Overflow;
@@ -133,9 +137,10 @@ namespace GreedDungeon.UI.Battle
             return go;
         }
 
-        private Color GetColor(bool isCritical, bool isHeal)
+        private Color GetColor(bool isCritical, bool isHeal, bool isPlayerDamage)
         {
             if (isHeal) return _healColor;
+            if (isPlayerDamage) return _playerDamageColor;
             if (isCritical) return _criticalColor;
             return _normalColor;
         }
