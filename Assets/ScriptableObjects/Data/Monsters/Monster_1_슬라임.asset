@@ -15,9 +15,9 @@ MonoBehaviour:
   ID: 1
   Name: "\uC2AC\uB77C\uC784"
   Element: 3
-  MaxHP: 72
-  Attack: 18
-  Defense: 4
+  MaxHP: 90
+  Attack: 22
+  Defense: 6
   Speed: 5
   CriticalRate: 5
   GoldDropMin: 10

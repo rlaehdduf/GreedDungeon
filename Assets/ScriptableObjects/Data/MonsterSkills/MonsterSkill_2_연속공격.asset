@@ -17,7 +17,7 @@ MonoBehaviour:
   Description: "\uBE60\uB974\uAC8C \uD55C\uBC88\uB354 \uACF5\uACA9"
   SkillType: 0
   IsShared: 1
-  DamageMultiplier: 0.6
+  DamageMultiplier: 0.4
   HitCount: 2
   StatusEffectID: 0
   StatusEffectChance: 0

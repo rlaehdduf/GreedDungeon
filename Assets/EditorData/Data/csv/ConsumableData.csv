@@ -1,4 +1,4 @@
-﻿ID,Name,EffectType,EffectValue,Target,StatusEffectID,Duration,BuyPrice,SellPrice,Description,IconAddress
+﻿﻿ID,Name,EffectType,EffectValue,Target,StatusEffectID,Duration,BuyPrice,SellPrice,Description,IconAddress
 1,회복포션(소),Heal,30,Player,None,0,50,25,체력을 소량 회복한다,Items/Potion
 2,회복포션(중),Heal,50,Player,None,0,150,75,체력을 적당량 회복한다,Items/Potion
 3,회복포션(대),Heal,100,Player,None,0,400,200,체력을 대량 회복한다,Items/Potion

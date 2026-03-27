@@ -1,4 +1,4 @@
-ID,Name,StatMultiplier,HasSkill,SkillTierMin,SkillTierMax,DropWeight
+﻿ID,Name,StatMultiplier,HasSkill,SkillTierMin,SkillTierMax,DropWeight
 1,Common,1,FALSE,0,0,1000
 2,UnCommon,1.1,TRUE,1,2,300
 3,Rare,1.25,TRUE,1,2,100

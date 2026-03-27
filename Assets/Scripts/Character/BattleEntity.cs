@@ -159,6 +159,12 @@ namespace GreedDungeon.Character
                     OnStatusEffectDurationChanged?.Invoke(this, effect);
                 }
             }
+
+            int mpRegen = (int)(TotalStats.MaxMP * 0.1f);
+            if (mpRegen > 0)
+            {
+                RestoreMP(mpRegen);
+            }
         }
 
         private void ProcessStatusEffectDamage(ActiveStatusEffect effect)

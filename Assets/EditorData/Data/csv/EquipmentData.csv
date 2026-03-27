@@ -1,4 +1,4 @@
-ID,Name,Type,Description,HP,MP,Attack,Defense,Speed,CriticalRate,SkillPoolType,BuyPrice,SellPrice,IconAddress
+﻿ID,Name,Type,Description,HP,MP,Attack,Defense,Speed,CriticalRate,SkillPoolType,BuyPrice,SellPrice,IconAddress
 1,막대기,Weapon,길 가다보면 흔히 보이는 나무 막대기다,0,0,5,0,0,2,Neutral,50,25,Weapons/Stick
 2,검,Weapon,날이 무뎌진 낡은 검이다,0,0,15,0,0,8,Melee,200,100,Weapons/Sword
 3,방패,Weapon,오랫동안 방치된듯 거미줄이 쳐진 먼지많은 방패다,10,0,5,2,-5,1,Neutral,180,90,Weapons/Shield

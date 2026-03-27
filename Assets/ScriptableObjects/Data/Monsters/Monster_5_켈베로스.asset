@@ -15,9 +15,9 @@ MonoBehaviour:
   ID: 5
   Name: "\uCF08\uBCA0\uB85C\uC2A4"
   Element: 1
-  MaxHP: 600
-  Attack: 48
-  Defense: 22
+  MaxHP: 350
+  Attack: 40
+  Defense: 18
   Speed: 7
   CriticalRate: 10
   GoldDropMin: 200
@@ -26,7 +26,7 @@ MonoBehaviour:
   StatusEffectChance: 0
   UniqueSkillID: 105
   SharedSkillID: 1
-  SkillChance: 30
+  SkillChance: 35
   IsBoss: 1
   PrefabAddress: Monsters/Cerberus
   ScaleX: 0.6

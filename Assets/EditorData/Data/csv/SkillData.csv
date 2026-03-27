@@ -1,4 +1,4 @@
-﻿ID,Name,Type,MPCost,Description,EffectType,EffectValue,ValueFloat,HitCount,Duration,Target,StatusEffect,StatusEffectChance,Cooldown,Tier,IconAddress
+﻿﻿ID,Name,Type,MPCost,Description,EffectType,EffectValue,ValueFloat,HitCount,Duration,Target,StatusEffect,StatusEffectChance,Cooldown,Tier,IconAddress
 1,강타,Neutral,5,적에게 강한 한방,Damage,1.5,m,1,0,Single,None,0,2,1,Skills/Smash
 2,이중타격,Neutral,12,적에게 두번 공격,Damage,1.2,m,2,0,Single,None,0,2,2,Skills/DoubleSmash
 3,가로베기,Melee,15,적들에게 넓은 공격,Damage,1.0,m,1,0,All,None,0,2,1,Skills/Slash

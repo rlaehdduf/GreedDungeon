@@ -17,10 +17,10 @@ MonoBehaviour:
   Description: "\uB3C5\uC5D0\uAC78\uB9BC"
   SkillType: 2
   IsShared: 0
-  DamageMultiplier: 1.1
+  DamageMultiplier: 1
   HitCount: 1
   StatusEffectID: 2
-  StatusEffectChance: 50
+  StatusEffectChance: 35
   BuffType: 0
   BuffValue: 0
   BuffDuration: 0

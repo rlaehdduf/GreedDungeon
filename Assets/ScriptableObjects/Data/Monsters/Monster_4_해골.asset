@@ -15,11 +15,11 @@ MonoBehaviour:
   ID: 4
   Name: "\uD574\uACE8"
   Element: 1
-  MaxHP: 54
-  Attack: 26
-  Defense: 3
+  MaxHP: 58
+  Attack: 24
+  Defense: 4
   Speed: 10
-  CriticalRate: 15
+  CriticalRate: 12
   GoldDropMin: 15
   GoldDropMax: 30
   StatusEffectID: Burn
