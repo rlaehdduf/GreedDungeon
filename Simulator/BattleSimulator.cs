@@ -216,7 +216,9 @@ namespace GreedDungeon.Simulator
                     if (playerGauge >= GAUGE_THRESHOLD && (monsterGauge < GAUGE_THRESHOLD || playerGauge >= monsterGauge))
                     {
                         turns++;
-                        playerGauge -= GAUGE_THRESHOLD;
+                        playerGauge = 0;
+                        
+                        if (skillCooldown > 0) skillCooldown--;
 
                         bool useSkillThisTurn = playerStats.HasSkill && skillCooldown == 0 && playerMP >= skillMPCost;
 
@@ -233,8 +235,6 @@ namespace GreedDungeon.Simulator
                         }
                         
                         monsterHP -= damage;
-                        
-                        if (skillCooldown > 0) skillCooldown--;
 
                         if (monsterBuffDuration > 0)
                         {
@@ -246,7 +246,7 @@ namespace GreedDungeon.Simulator
                     }
                     else if (monsterGauge >= GAUGE_THRESHOLD)
                     {
-                        monsterGauge -= GAUGE_THRESHOLD;
+                        monsterGauge = 0;
 
                         int monsterATK = monster.ATK + monsterATKBuff;
                         bool useSkill = rng.Next(100) < monster.SkillChance;

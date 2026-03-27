@@ -74,7 +74,7 @@ namespace GreedDungeon.Combat
         {
             if (_currentEntity == null) return;
             
-            _currentEntity.ConsumeActionGauge(ACTION_GAUGE_THRESHOLD);
+            _currentEntity.ResetActionGauge();
             _turnNumber++;
             
             AdvanceToNextActor();

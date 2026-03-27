@@ -314,12 +314,6 @@ public interface IBattleManager
             var current = _turnManager.CurrentEntity;
             current?.ProcessTurnEnd();
 
-            if (Services.IsInitialized)
-            {
-                var skillManager = Services.Get<ISkillManager>();
-                skillManager?.ReduceAllCooldowns();
-            }
-
             _turnManager.NextTurn();
 
             var nextEntity = _turnManager.CurrentEntity;
@@ -330,6 +324,15 @@ public interface IBattleManager
                 {
                     CheckBattleEnd();
                     return;
+                }
+                
+                if (nextEntity == _player)
+                {
+                    if (Services.IsInitialized)
+                    {
+                        var skillManager = Services.Get<ISkillManager>();
+                        skillManager?.ReduceAllCooldowns();
+                    }
                 }
                 
                 if (nextEntity == _monster)
