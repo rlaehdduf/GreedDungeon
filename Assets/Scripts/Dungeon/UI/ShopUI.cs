@@ -79,8 +79,26 @@ namespace GreedDungeon.Dungeon.UI
                 if (UnityEngine.Random.value < 0.6f && allEquipment != null && allEquipment.Count > 0)
                 {
                     var equipment = allEquipment[UnityEngine.Random.Range(0, allEquipment.Count)];
-                    var rarity = GetWeightedRandomRarity();
-                    var skill = RollSkillForEquipment(equipment.SkillPoolType, rarity);
+                    
+                    RarityDataSO rarity;
+                    if (equipment.FixedRarityID > 0)
+                    {
+                        rarity = _gameDataManager.GetRarityData(equipment.FixedRarityID);
+                    }
+                    else
+                    {
+                        rarity = GetWeightedRandomRarity();
+                    }
+                    
+                    SkillDataSO skill = null;
+                    if (equipment.FixedSkillID > 0)
+                    {
+                        skill = _gameDataManager.GetSkillData(equipment.FixedSkillID);
+                    }
+                    else
+                    {
+                        skill = RollSkillForEquipment(equipment.SkillPoolType, rarity);
+                    }
                     var item = new InventoryItem(equipment, rarity, skill);
                     _shopItems.Add(item);
                 }

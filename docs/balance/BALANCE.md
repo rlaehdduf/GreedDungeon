@@ -355,3 +355,72 @@ EffectiveSpeed = min(Speed, 5) + sqrt(max(0, Speed - 5)) * 0.8
 - [ ] Unity에서 `Tools > CSV > Convert All` 실행 필요
 
 ---
+
+### 2026-03-27: 다전투 시스템 밸런스 재조정 ✅
+
+#### 문제점
+1. 시작 장비로 1전투 생존율 35% (너무 낮음)
+2. 2연속 전투 생존 거의 불가능 (0%)
+3. 슬라임 힐 스킬(분열 25%, 재생 10%)이 너무 강력
+4. 연속 전투 시 HP 회복 수단 없음
+
+#### 적용 내역
+
+**슬라임 밸런스 조정 ✅**
+
+| 스탯 | 기존 | 변경 | 비고 |
+|------|------|------|------|
+| HP | 90 | 60 | 빠른 처치 유도 |
+| ATK | 22 | 28 | 위협 유지 |
+
+**Monster Skill 힐량 조정 ✅**
+
+| 스킬 | 기존 | 변경 |
+|------|------|------|
+| 분열 (Unique) | 25% | 15% |
+| 재생 (Shared) | 10% | 8% |
+
+**시작 장비에 스킬 부여 ✅**
+- 막대기: FixedSkillID = 1 (강타, 1.5x 데미지)
+- EquipmentDataSO에 FixedSkillID 필드 추가
+- Player.cs, ShopUI.cs에서 FixedSkillID 우선 사용
+
+**Rarity 색상 추가 ✅**
+
+| 등급 | 색상 | Hex Code |
+|------|------|----------|
+| Common | 회색 | #AAAAAA |
+| UnCommon | 초록 | #55FF55 |
+| Rare | 파랑 | #5555FF |
+| Epic | 보라 | #AA55FF |
+| Legend | 주황 | #FFAA00 |
+
+**전투 후 HP 회복 ✅**
+- 승리 시 최대 HP의 20% 회복
+- BattleManager.CheckBattleEnd()에 적용
+
+#### 시뮬레이션 결과
+
+**연속 전투 생존율 (20% HP 회복 적용)**
+
+| 장비 | 1전투 | 2전투 | 3전투 | 평균 생존 |
+|------|-------|-------|-------|----------|
+| 시작 장비 + 스킬 | 98% | 25% | 2% | 1.2전 |
+| 장비 1개 | 99% | 19% | 0% | 1.1전 |
+| 장비 2개 | 100% | 62% | 10% | 1.7전 |
+| 장비 3개 | 100% | 99% | 72% | 2.9전 |
+| 장비 4개 | 100% | 100% | 99% | 4.1전 |
+
+#### 적용 상태
+- [x] MonsterData.csv 수정 (슬라임 HP/ATK)
+- [x] MonsterSkill.csv 수정 (분열, 재생 힐량)
+- [x] EquipmentData.csv 수정 (FixedRarityID, FixedSkillID 컬럼)
+- [x] EquipmentDataSO.cs 수정 (FixedSkillID 필드)
+- [x] CSVConverter.cs 수정 (FixedSkillID 파싱)
+- [x] Player.cs 수정 (FixedSkillID 사용)
+- [x] ShopUI.cs 수정 (FixedSkillID 사용)
+- [x] BattleManager.cs 수정 (전투 후 20% HP 회복)
+- [x] RarityData.csv 수정 (Color 컬럼)
+- [ ] Unity에서 `Tools > CSV > Convert All` 실행 필요
+
+---

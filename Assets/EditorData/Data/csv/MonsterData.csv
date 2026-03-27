@@ -1,5 +1,5 @@
 ﻿ID,Name,Element,MaxHP,Attack,Defense,Speed,CriticalRate,GoldDropMin,GoldDropMax,StatusEffect,StatusEffectChance,UniqueSkillID,SharedSkillID,SkillChance,IsBoss,PrefabAddress,ScaleX,ScaleY
-1,슬라임,풀,90,22,6,5,5,10,20,None,0,101,5,30,FALSE,Monsters/Slime,0.3,0.3
+1,슬라임,풀,60,28,6,5,5,10,20,None,0,101,5,30,FALSE,Monsters/Slime,0.3,0.3
 2,역병쥐,무,65,22,6,7,3,15,30,Poison,20,102,2,25,FALSE,Monsters/Rat,0.35,0.35
 3,거미,풀,72,20,5,6,5,12,25,Poison,30,103,3,25,FALSE,Monsters/Spider,0.5,0.5
 4,해골,불,58,24,4,10,12,15,30,Burn,10,104,4,30,FALSE,Monsters/Skull,0.45,0.45

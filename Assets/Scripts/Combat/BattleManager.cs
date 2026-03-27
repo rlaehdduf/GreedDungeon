@@ -454,7 +454,15 @@ public interface IBattleManager
                 _player.AddKill();
                 int goldReward = _monster.GoldDrop;
                 _player.AddGold(goldReward);
-                LogBattle($"승리! +{goldReward}G");
+                
+                // 전투 후 20% HP 회복
+                int healAmount = (int)(_player.TotalStats.MaxHP * 0.2f);
+                if (healAmount > 0)
+                {
+                    _player.Heal(healAmount);
+                }
+                
+                LogBattle($"승리! +{goldReward}G, HP +{healAmount}");
                 OnMonsterDeath?.Invoke();
             }
             else

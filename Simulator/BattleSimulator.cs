@@ -8,38 +8,16 @@ namespace GreedDungeon.Simulator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("=== GreedDungeon 전투 시뮬레이터 ===\n");
-            Console.WriteLine("행동 게이지 시스템: EffectiveSpeed만큼 게이지 증가, 1000 도달 시 행동");
-            Console.WriteLine("공식: min(Speed, 5) + sqrt(max(0, Speed-5)) * 0.8\n");
+            Console.WriteLine("=== GreedDungeon 다전투 시뮬레이터 ===\n");
+            Console.WriteLine("플레이어가 연속으로 여러 몬스터와 싸우는 상황 시뮬레이션");
+            Console.WriteLine("전투 사이 HP 회복 없음, 난이도는 전투마다 5% 증가\n");
 
-            Console.WriteLine("=== Speed 효과 테스트 ===");
-            for (int spd = 5; spd <= 25; spd += 5)
-            {
-                float effective = GetEffectiveSpeed(spd);
-                Console.WriteLine($"  Speed {spd} → 실제 {effective:F1} (vs Monster 5 비율 {effective/5:F2}:1)");
-            }
-            Console.WriteLine();
-
-            // Player 시나리오 (기본 스탯 + 장비 보너스)
-            // 기본: HP 110, ATK 12, DEF 12, SPD 5, CRIT 5%
-            var scenarios = new (string Name, int HP, int ATK, int DEF, int SPD, float CRIT, bool HasSkill, int SkillTier)[]
-            {
-                ("시작 장비 (막대기)", 110, 15, 12, 5, 8f, false, 0),     // 기본 + 막대기
-                ("장비 1개", 115, 17, 13, 5, 10f, false, 0),               // +HP 5, ATK 2, DEF 1
-                ("장비 2개", 120, 19, 14, 5, 12f, false, 0),               // +HP 5, ATK 2, DEF 1
-                ("장비 3개", 125, 21, 15, 6, 14f, false, 0),               // +HP 5, ATK 2, DEF 1, SPD 1
-                ("전설 장비 1개", 170, 45, 20, 7, 25f, false, 0),
-                ("전설 장비 1개 + 스킬", 170, 45, 20, 7, 25f, true, 2),
-                ("전설 장비 2개", 210, 60, 24, 8, 40f, false, 0),
-                ("전설 장비 2개 + 스킬", 210, 60, 24, 8, 40f, true, 3)
-            };
-
-            // 몬스터 데이터 (밸런스 조정 - 시작 장비 60% 목표)
+            // 몬스터 데이터
             var monsters = new MonsterData[]
             {
-                new MonsterData("슬라임", 90, 22, 6, 5, 5, 
-                    new SkillData(101, "분열", "Heal", 0, 0, 0, 0, "", 0, 0, 25), 
-                    new SkillData(5, "재생", "Heal", 0, 0, 0, 0, "", 0, 0, 20), 30),
+                new MonsterData("슬라임", 60, 28, 6, 5, 5, 
+                    new SkillData(101, "분열", "Heal", 0, 0, 0, 0, "", 0, 0, 15), 
+                    new SkillData(5, "재생", "Heal", 0, 0, 0, 0, "", 0, 0, 8), 30),
                 new MonsterData("역병쥐", 65, 22, 6, 7, 3, 
                     new SkillData(102, "역병", "Debuff", 1.0f, 1, 2, 30), 
                     new SkillData(2, "연속공격", "Attack", 0.4f, 2, 0, 0), 25),
@@ -54,68 +32,59 @@ namespace GreedDungeon.Simulator
                     new SkillData(1, "강타", "Attack", 1.0f, 1, 0, 0), 35)
             };
 
-            // 전투 횟수 기반 난이도 시뮬레이션
-            Console.WriteLine("=== 전투 횟수 기반 난이도 시스템 ===");
-            Console.WriteLine("각 전투마다 몬스터 HP/ATK 5% 증가\n");
-
-            int[] battleCounts = { 1, 3, 5, 7, 10 };
-            int simulationCount = 500;
-
-            foreach (var scenario in scenarios)
+            // 플레이어 시나리오 (HP, ATK, DEF, SPD, CRIT, HasSkill, SkillTier)
+            var playerScenarios = new (string Name, int HP, int ATK, int DEF, int SPD, float CRIT, bool HasSkill, int SkillTier)[]
             {
-                Console.WriteLine($"\n=== {scenario.Name} ===");
-                Console.WriteLine($"Player: HP {scenario.HP}, ATK {scenario.ATK}, DEF {scenario.DEF}, SPD {scenario.SPD}, CRIT {scenario.CRIT:F0}%");
-                if (scenario.HasSkill)
-                    Console.WriteLine($"Skill: Tier {scenario.SkillTier} (데미지 배율 {GetSkillMultiplier(scenario.SkillTier):F1}x)");
-                Console.WriteLine();
+                ("시작 장비 (막대기) + 스킬", 110, 15, 12, 5, 8f, true, 1),
+                ("장비 1개", 115, 17, 13, 5, 10f, false, 0),
+                ("장비 2개", 120, 19, 14, 5, 12f, false, 0),
+                ("장비 3개", 125, 21, 15, 6, 14f, false, 0),
+                ("장비 4개", 130, 23, 16, 6, 16f, false, 0),
+            };
 
-                foreach (int battleCount in battleCounts)
+            int simulationCount = 1000;
+            int maxBattles = 10;
+
+            foreach (var player in playerScenarios)
+            {
+                Console.WriteLine($"\n=== {player.Name} ===");
+                Console.WriteLine($"HP {player.HP}, ATK {player.ATK}, DEF {player.DEF}, SPD {player.SPD}, CRIT {player.CRIT:F0}%\n");
+
+                // N전투 생존율 (랜덤 몬스터)
+                Console.WriteLine("[연속 전투 생존율 - 랜덤 몬스터]");
+                for (int battleCount = 1; battleCount <= maxBattles; battleCount++)
                 {
-                    float difficultyMult = 1 + (battleCount - 1) * 0.05f;
-                    Console.WriteLine($"  [전투 {battleCount}회차] 난이도 배율: {difficultyMult:F0%}");
-
-                    foreach (var baseMonster in monsters)
+                    int survived = 0;
+                    for (int sim = 0; sim < simulationCount; sim++)
                     {
-                        var monster = new MonsterData(
-                            baseMonster.Name,
-                            (int)(baseMonster.HP * difficultyMult),
-                            (int)(baseMonster.ATK * difficultyMult),
-                            baseMonster.DEF,
-                            baseMonster.SPD,
-                            baseMonster.CritRate,
-                            baseMonster.UniqueSkill,
-                            baseMonster.SharedSkill,
-                            baseMonster.SkillChance
-                        );
-
-                        var result = SimulateBattle(scenario, monster, simulationCount);
-                        Console.WriteLine($"    vs {monster.Name,-6}: 승률 {result.WinRate:F1}% (HP {result.AvgRemainingHP:F0} 남음)");
+                        if (SimulateMultipleBattles(player, monsters, battleCount, false))
+                            survived++;
                     }
+                    float rate = (float)survived / simulationCount * 100;
+                    Console.WriteLine($"  {battleCount}전투 생존: {rate:F1}%");
                 }
-            }
 
-            // 켈베로스는 5회차부터 등장
-            Console.WriteLine("\n=== 켈베로스 등장 조건 (전투 5회차 이상) ===");
-            foreach (var scenario in scenarios.Where(s => s.HasSkill || s.ATK >= 45))
-            {
-                Console.WriteLine($"\n{scenario.Name}:");
-                foreach (int battleCount in new[] { 5, 7, 10 })
+                // 보스 포함 (5전투부터 켈베로스)
+                Console.WriteLine("\n[연속 전투 생존율 - 5전투부터 보스]");
+                for (int battleCount = 5; battleCount <= maxBattles; battleCount++)
                 {
-                    float difficultyMult = 1 + (battleCount - 1) * 0.05f;
-                    var cerberus = new MonsterData(
-                        "켈베로스",
-                        (int)(350 * difficultyMult),
-                        (int)(40 * difficultyMult),
-                        18,
-                        7,
-                        10,
-                        monsters[4].UniqueSkill,
-                        monsters[4].SharedSkill,
-                        35
-                    );
-                    var result = SimulateBattle(scenario, cerberus, simulationCount);
-                    Console.WriteLine($"  [{battleCount}회차] 승률: {result.WinRate:F1}%");
+                    int survived = 0;
+                    for (int sim = 0; sim < simulationCount; sim++)
+                    {
+                        if (SimulateMultipleBattles(player, monsters, battleCount, true))
+                            survived++;
+                    }
+                    float rate = (float)survived / simulationCount * 100;
+                    Console.WriteLine($"  {battleCount}전투 생존: {rate:F1}%");
                 }
+
+                // 평균 생존 전투 수
+                float avgSurvival = 0;
+                for (int sim = 0; sim < simulationCount; sim++)
+                {
+                    avgSurvival += CountSurvivedBattles(player, monsters, maxBattles, false);
+                }
+                Console.WriteLine($"\n평균 생존 전투 수: {avgSurvival / simulationCount:F1}");
             }
 
             Console.WriteLine("\n=== 몬스터 스킬 상세 ===");
@@ -127,51 +96,128 @@ namespace GreedDungeon.Simulator
             Console.WriteLine("\n완료!");
         }
 
-        static float GetSkillMultiplier(int tier) => tier switch
-        {
-            1 => 1.5f,
-            2 => 2.5f,
-            3 => 3.0f,
-            _ => 1.0f
-        };
-
-        static (float WinRate, float AvgTurns, float AvgRemainingHP) SimulateBattle(
+        static bool SimulateMultipleBattles(
             (string Name, int HP, int ATK, int DEF, int SPD, float CRIT, bool HasSkill, int SkillTier) playerStats,
-            MonsterData monster,
-            int count)
+            MonsterData[] monsters,
+            int battleCount,
+            bool bossAtEnd)
         {
-            int wins = 0;
-            int totalTurns = 0;
-            int totalRemainingHP = 0;
-
+            int currentHP = playerStats.HP;
             Random rng = new Random();
 
-            for (int i = 0; i < count; i++)
+            for (int battle = 1; battle <= battleCount; battle++)
             {
-                var result = SimulateSingleBattle(playerStats, monster, rng);
-                if (result.PlayerWon)
+                float difficultyMult = 1 + (battle - 1) * 0.05f;
+                
+                MonsterData monster;
+                if (bossAtEnd && battle >= 5)
                 {
-                    wins++;
-                    totalRemainingHP += result.RemainingHP;
+                    // 5전투부터 켈베로스
+                    monster = new MonsterData(
+                        "켈베로스",
+                        (int)(monsters[4].HP * difficultyMult),
+                        (int)(monsters[4].ATK * difficultyMult),
+                        monsters[4].DEF,
+                        monsters[4].SPD,
+                        monsters[4].CritRate,
+                        monsters[4].UniqueSkill,
+                        monsters[4].SharedSkill,
+                        monsters[4].SkillChance
+                    );
                 }
-                totalTurns += result.Turns;
+                else
+                {
+                    // 랜덤 일반 몬스터 (켈베로스 제외)
+                    int idx = rng.Next(monsters.Length - 1);
+                    monster = new MonsterData(
+                        monsters[idx].Name,
+                        (int)(monsters[idx].HP * difficultyMult),
+                        (int)(monsters[idx].ATK * difficultyMult),
+                        monsters[idx].DEF,
+                        monsters[idx].SPD,
+                        monsters[idx].CritRate,
+                        monsters[idx].UniqueSkill,
+                        monsters[idx].SharedSkill,
+                        monsters[idx].SkillChance
+                    );
+                }
+
+                var result = SimulateSingleBattleWithHP(playerStats, monster, rng, currentHP);
+                if (!result.PlayerWon)
+                    return false;
+                
+                // 전투 후 20% HP 회복
+                currentHP = Math.Min(playerStats.HP, result.RemainingHP + (int)(playerStats.HP * 0.2f));
             }
 
-            float winRate = (float)wins / count * 100;
-            float avgTurns = (float)totalTurns / count;
-            float avgRemainingHP = wins > 0 ? (float)totalRemainingHP / wins : 0;
-
-            return (winRate, avgTurns, avgRemainingHP);
+            return true;
         }
 
-        static (bool PlayerWon, int Turns, int RemainingHP) SimulateSingleBattle(
+        static int CountSurvivedBattles(
+            (string Name, int HP, int ATK, int DEF, int SPD, float CRIT, bool HasSkill, int SkillTier) playerStats,
+            MonsterData[] monsters,
+            int maxBattles,
+            bool bossAtEnd)
+        {
+            int currentHP = playerStats.HP;
+            Random rng = new Random();
+
+            for (int battle = 1; battle <= maxBattles; battle++)
+            {
+                float difficultyMult = 1 + (battle - 1) * 0.05f;
+                
+                MonsterData monster;
+                if (bossAtEnd && battle >= 5)
+                {
+                    monster = new MonsterData(
+                        "켈베로스",
+                        (int)(monsters[4].HP * difficultyMult),
+                        (int)(monsters[4].ATK * difficultyMult),
+                        monsters[4].DEF,
+                        monsters[4].SPD,
+                        monsters[4].CritRate,
+                        monsters[4].UniqueSkill,
+                        monsters[4].SharedSkill,
+                        monsters[4].SkillChance
+                    );
+                }
+                else
+                {
+                    int idx = rng.Next(monsters.Length - 1);
+                    monster = new MonsterData(
+                        monsters[idx].Name,
+                        (int)(monsters[idx].HP * difficultyMult),
+                        (int)(monsters[idx].ATK * difficultyMult),
+                        monsters[idx].DEF,
+                        monsters[idx].SPD,
+                        monsters[idx].CritRate,
+                        monsters[idx].UniqueSkill,
+                        monsters[idx].SharedSkill,
+                        monsters[idx].SkillChance
+                    );
+                }
+
+                var result = SimulateSingleBattleWithHP(playerStats, monster, rng, currentHP);
+                if (!result.PlayerWon)
+                    return battle - 1;
+                
+                // 전투 후 20% HP 회복
+                currentHP = Math.Min(playerStats.HP, result.RemainingHP + (int)(playerStats.HP * 0.2f));
+            }
+
+            return maxBattles;
+        }
+
+        static (bool PlayerWon, int Turns, int RemainingHP) SimulateSingleBattleWithHP(
             (string Name, int HP, int ATK, int DEF, int SPD, float CRIT, bool HasSkill, int SkillTier) playerStats,
             MonsterData monster,
-            Random rng)
+            Random rng,
+            int startingHP)
         {
-            int playerHP = playerStats.HP;
+            int playerHP = startingHP;
             int playerMP = 40;
             int monsterHP = monster.HP;
+            int monsterMaxHP = monster.MaxHP;
             int monsterATKBuff = 0;
             int monsterBuffDuration = 0;
 
@@ -180,7 +226,7 @@ namespace GreedDungeon.Simulator
 
             const int GAUGE_THRESHOLD = 1000;
             int turns = 0;
-
+            
             float skillMultiplier = GetSkillMultiplier(playerStats.SkillTier);
             int skillMPCost = playerStats.SkillTier switch { 1 => 5, 2 => 15, 3 => 25, _ => 0 };
             int skillCooldown = 0;
@@ -210,12 +256,11 @@ namespace GreedDungeon.Simulator
                         {
                             damage = CalculateDamage(playerStats.ATK, monster.DEF, playerStats.CRIT, 1.0f, rng);
                         }
-
+                        
                         monsterHP -= damage;
-
+                        
                         if (skillCooldown > 0) skillCooldown--;
 
-                        // 버프 지속시간 감소
                         if (monsterBuffDuration > 0)
                         {
                             monsterBuffDuration--;
@@ -228,7 +273,6 @@ namespace GreedDungeon.Simulator
                     {
                         monsterGauge -= GAUGE_THRESHOLD;
 
-                        // 몬스터 스킬 사용 결정
                         int monsterATK = monster.ATK + monsterATKBuff;
                         bool useSkill = rng.Next(100) < monster.SkillChance;
                         SkillData skill = useSkill ? (rng.Next(2) == 0 ? monster.UniqueSkill : monster.SharedSkill) : null;
@@ -236,7 +280,7 @@ namespace GreedDungeon.Simulator
                         int monsterDamage;
                         if (skill != null)
                         {
-                            monsterDamage = ExecuteMonsterSkill(skill, monsterATK, playerStats.DEF, rng, ref monsterHP, ref monsterATKBuff, ref monsterBuffDuration);
+                            monsterDamage = ExecuteMonsterSkill(skill, monsterATK, playerStats.DEF, rng, ref monsterHP, monsterMaxHP, ref monsterATKBuff, ref monsterBuffDuration);
                         }
                         else
                         {
@@ -258,7 +302,7 @@ namespace GreedDungeon.Simulator
         }
 
         static int ExecuteMonsterSkill(SkillData skill, int monsterATK, int playerDEF, Random rng, 
-            ref int monsterHP, ref int monsterATKBuff, ref int monsterBuffDuration)
+            ref int monsterHP, int monsterMaxHP, ref int monsterATKBuff, ref int monsterBuffDuration)
         {
             switch (skill.Type)
             {
@@ -272,10 +316,9 @@ namespace GreedDungeon.Simulator
 
                 case "Debuff":
                     int debuffDamage = CalculateDamage(monsterATK, playerDEF, 5f, skill.DamageMultiplier, rng);
-                    // 상태이상은 시뮬레이션에서 간소화 (추가 데미지로 처리)
                     if (skill.StatusEffectChance > 0 && rng.Next(100) < skill.StatusEffectChance)
                     {
-                        debuffDamage = (int)(debuffDamage * 1.2f); // 상태이상 시 20% 추가 데미지
+                        debuffDamage = (int)(debuffDamage * 1.2f);
                     }
                     return debuffDamage;
 
@@ -288,7 +331,8 @@ namespace GreedDungeon.Simulator
                     return 0;
 
                 case "Heal":
-                    monsterHP = Math.Min(monsterHP + (int)(monsterHP * skill.HealPercent / 100f), monsterHP);
+                    int healAmount = (int)(monsterMaxHP * skill.HealPercent / 100f);
+                    monsterHP = Math.Min(monsterHP + healAmount, monsterMaxHP);
                     return 0;
 
                 default:
@@ -310,17 +354,24 @@ namespace GreedDungeon.Simulator
             return damageAfterDef;
         }
 
+        static float GetSkillMultiplier(int tier) => tier switch
+        {
+            1 => 1.5f,
+            2 => 2.0f,
+            3 => 2.5f,
+            _ => 1.0f
+        };
+
         static float GetEffectiveSpeed(int speed)
         {
             return Math.Min(speed, 5) + (float)Math.Sqrt(Math.Max(0, speed - 5)) * 0.8f;
         }
     }
 
-    // 데이터 클래스
     class MonsterData
     {
         public string Name;
-        public int HP, ATK, DEF, SPD, CritRate;
+        public int HP, MaxHP, ATK, DEF, SPD, CritRate;
         public SkillData UniqueSkill, SharedSkill;
         public int SkillChance;
 
@@ -329,6 +380,7 @@ namespace GreedDungeon.Simulator
         {
             Name = name;
             HP = hp;
+            MaxHP = hp;
             ATK = atk;
             DEF = def;
             SPD = spd;

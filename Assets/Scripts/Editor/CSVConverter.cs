@@ -312,6 +312,8 @@ public class CSVConverter : EditorWindow
             data.BuyPrice = int.TryParse(values[11], out int bp) ? bp : 0;
             data.SellPrice = int.TryParse(values[12], out int sp) ? sp : 0;
             data.IconAddress = values[13];
+            data.FixedRarityID = values.Count > 14 && int.TryParse(values[14], out int fr) ? fr : 0;
+            data.FixedSkillID = values.Count > 15 && int.TryParse(values[15], out int fs) ? fs : 0;
 
             if (isNew)
             {

@@ -171,8 +171,25 @@ namespace GreedDungeon.Character
             if (equipment == null) return false;
             if (IsInventoryFull()) return false;
             
-            var rarity = RollRarity();
-            var skill = RollSkillForEquipment(equipment.SkillPoolType, rarity);
+            RarityDataSO rarity;
+            if (equipment.FixedRarityID > 0 && Services.IsInitialized)
+            {
+                rarity = Services.Get<IGameDataManager>().GetRarityData(equipment.FixedRarityID);
+            }
+            else
+            {
+                rarity = RollRarity();
+            }
+            
+            SkillDataSO skill = null;
+            if (equipment.FixedSkillID > 0 && Services.IsInitialized)
+            {
+                skill = Services.Get<IGameDataManager>().GetSkillData(equipment.FixedSkillID);
+            }
+            else
+            {
+                skill = RollSkillForEquipment(equipment.SkillPoolType, rarity);
+            }
             
             Debug.Log($"[Player] 장비 추가: {equipment.Name}, SkillPoolType: {equipment.SkillPoolType}, Rarity: {rarity?.Name}, Skill: {skill?.Name ?? "null"}");
             
@@ -461,8 +478,25 @@ namespace GreedDungeon.Character
             if (equipment == null) return false;
             if (IsInventoryFull()) return false;
             
-            var rarity = GetHighestRarity();
-            var skill = RollSkillForEquipment(equipment.SkillPoolType, rarity);
+            RarityDataSO rarity;
+            if (equipment.FixedRarityID > 0 && Services.IsInitialized)
+            {
+                rarity = Services.Get<IGameDataManager>().GetRarityData(equipment.FixedRarityID);
+            }
+            else
+            {
+                rarity = GetHighestRarity();
+            }
+            
+            SkillDataSO skill = null;
+            if (equipment.FixedSkillID > 0 && Services.IsInitialized)
+            {
+                skill = Services.Get<IGameDataManager>().GetSkillData(equipment.FixedSkillID);
+            }
+            else
+            {
+                skill = RollSkillForEquipment(equipment.SkillPoolType, rarity);
+            }
             
             Debug.Log($"[Player] 장비 추가(최고레어도): {equipment.Name}, SkillPoolType: {equipment.SkillPoolType}, Rarity: {rarity?.Name}, Skill: {skill?.Name ?? "null"}");
             

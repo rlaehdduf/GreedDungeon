@@ -1,20 +1,20 @@
-﻿ID,Name,Type,Description,HP,MP,Attack,Defense,Speed,CriticalRate,SkillPoolType,BuyPrice,SellPrice,IconAddress
-1,막대기,Weapon,길 가다보면 흔히 보이는 나무 막대기다,0,0,5,0,0,2,Neutral,50,25,Weapons/Stick
-2,검,Weapon,날이 무뎌진 낡은 검이다,0,0,15,0,0,8,Melee,200,100,Weapons/Sword
-3,방패,Weapon,오랫동안 방치된듯 거미줄이 쳐진 먼지많은 방패다,10,0,5,2,-5,1,Neutral,180,90,Weapons/Shield
-4,완드,Weapon,마법사의 시체에서 주운 완드다 아직까진 보석의 빛이 꺼지지않았다,0,30,12,0,0,3,Magic,250,125,Weapons/Wand
-5,도끼,Weapon,평범한 사람이 휘두르면 바로 지칠것같은 커다란 도끼다,0,0,18,0,-3,12,Neutral,220,110,Weapons/Axe
-6,대검,Weapon,양손으로 쥐는 거대한 검이다,0,0,20,0,-2,15,Melee,400,200,Weapons/GreatSword
-7,마법지팡이,Weapon,고대 마법사가 사용하던 지팡이다,0,40,15,0,0,5,Magic,500,250,Weapons/Staff
-101,가죽갑옷,Armor,동물의 가죽으로 만들어진 갑옷이다,10,0,0,2,2,0,Passive,150,75,Armors/LeatherArmor
-102,사슬갑옷,Armor,사슬들을 꼬아놓은 갑옷이다 움직일때마다 짤랑인다,20,0,0,4,-2,0,Passive,300,150,Armors/ChainArmor
-103,강철갑옷,Armor,너무 단단하고 무거운 갑옷이다 갑옷을입고 생활하긴 힘들것같다,30,0,0,5,-8,0,Passive,550,275,Armors/PlateArmor
-104,가시갑옷,Armor,최선의 방어는 공격이다 갑옷에 가시를박아 반사 피해를주는 갑옷이다,15,0,5,4,0,5,Passive,400,200,Armors/SpikeArmor
-105,깃털갑옷,Armor,엄청난 강도의 깃털을 엮은 갑옷이다 매우가벼운게 특징이다,18,0,0,3,10,0,Passive,350,175,Armors/FeatherArmor
-106,드래곤갑옷,Armor,드래곤의 비늘로 만든 전설의 갑옷이다,50,0,0,8,-5,0,Passive,1000,500,Armors/DragonArmor
-201,반지,Accessory,녹이 슬어있는 반지다,0,0,3,0,2,3,Random,150,75,Accessories/Ring
-202,목걸이,Accessory,목에 걸면 파상풍에 걸릴것같은 목걸이다,8,10,0,3,0,0,Random,200,100,Accessories/NeckGlass
-203,망토,Accessory,망토의 역할을 하지못하는 찢어진 망토다,0,0,0,3,8,2,Random,180,90,Accessories/Cloak
-204,보석,Accessory,일반 보석보다는 못생긴 수요가 없을것같은 보석이다,0,0,2,0,0,12,Random,250,125,Accessories/Jewel
-205,왕관,Accessory,누군진 몰라도 왕국에 들고가면 치안대로 잡혀갈듯이 정교하게 만들어진 왕관이다,0,25,8,0,0,0,Random,220,110,Accessories/Crown
-206,용의반지,Accessory,용의 심장으로 만든 전설의 반지다,25,30,10,5,5,12,Random,800,400,Accessories/DragonRing
+﻿ID,Name,Type,Description,HP,MP,Attack,Defense,Speed,CriticalRate,SkillPoolType,BuyPrice,SellPrice,IconAddress,FixedRarityID,FixedSkillID
+1,막대기,Weapon,길 가다보면 흔히 보이는 나무 막대기다,0,0,5,0,0,2,Neutral,50,25,Weapons/Stick,1,1
+2,검,Weapon,날이 무뎌진 낡은 검이다,0,0,15,0,0,8,Melee,200,100,Weapons/Sword,0,0
+3,방패,Weapon,오랫동안 방치된듯 거미줄이 쳐진 먼지많은 방패다,10,0,5,2,-5,1,Neutral,180,90,Weapons/Shield,0,0
+4,완드,Weapon,마법사의 시체에서 주운 완드다 아직까진 보석의 빛이 꺼지지않았다,0,30,12,0,0,3,Magic,250,125,Weapons/Wand,0,0
+5,도끼,Weapon,평범한 사람이 휘두르면 바로 지칠것같은 커다란 도끼다,0,0,18,0,-3,12,Neutral,220,110,Weapons/Axe,0,0
+6,대검,Weapon,양손으로 쥐는 거대한 검이다,0,0,20,0,-2,15,Melee,400,200,Weapons/GreatSword,0,0
+7,마법지팡이,Weapon,고대 마법사가 사용하던 지팡이다,0,40,15,0,0,5,Magic,500,250,Weapons/Staff,0,0
+101,가죽갑옷,Armor,동물의 가죽으로 만들어진 갑옷이다,10,0,0,2,2,0,Passive,150,75,Armors/LeatherArmor,0,0
+102,사슬갑옷,Armor,사슬들을 꼬아놓은 갑옷이다 움직일때마다 짤랑인다,20,0,0,4,-2,0,Passive,300,150,Armors/ChainArmor,0,0
+103,강철갑옷,Armor,너무 단단하고 무거운 갑옷이다 갑옷을입고 생활하긴 힘들것같다,30,0,0,5,-8,0,Passive,550,275,Armors/PlateArmor,0,0
+104,가시갑옷,Armor,최선의 방어는 공격이다 갑옷에 가시를박아 반사 피해를주는 갑옷이다,15,0,5,4,0,5,Passive,400,200,Armors/SpikeArmor,0,0
+105,깃털갑옷,Armor,엄청난 강도의 깃털을 엮은 갑옷이다 매우가벼운게 특징이다,18,0,0,3,10,0,Passive,350,175,Armors/FeatherArmor,0,0
+106,드래곤갑옷,Armor,드래곤의 비늘로 만든 전설의 갑옷이다,50,0,0,8,-5,0,Passive,1000,500,Armors/DragonArmor,0,0
+201,반지,Accessory,녹이 슬어있는 반지다,0,0,3,0,2,3,Random,150,75,Accessories/Ring,0,0
+202,목걸이,Accessory,목에 걸면 파상풍에 걸릴것같은 목걸이다,8,10,0,3,0,0,Random,200,100,Accessories/NeckGlass,0,0
+203,망토,Accessory,망토의 역할을 하지못하는 찢어진 망토다,0,0,0,3,8,2,Random,180,90,Accessories/Cloak,0,0
+204,보석,Accessory,일반 보석보다는 못생긴 수요가 없을것같은 보석이다,0,0,2,0,0,12,Random,250,125,Accessories/Jewel,0,0
+205,왕관,Accessory,누군진 몰라도 왕국에 들고가면 치안대로 잡혀갈듯이 정교하게 만들어진 왕관이다,0,25,8,0,0,0,Random,220,110,Accessories/Crown,0,0
+206,용의반지,Accessory,용의 심장으로 만든 전설의 반지다,25,30,10,5,5,12,Random,800,400,Accessories/DragonRing,0,0

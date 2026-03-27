@@ -26,3 +26,4 @@ MonoBehaviour:
   SellPrice: 75
   Description: "\uB179\uC774 \uC2AC\uC5B4\uC788\uB294 \uBC18\uC9C0\uB2E4"
   IconAddress: Accessories/Ring
+  FixedRarityID: 0

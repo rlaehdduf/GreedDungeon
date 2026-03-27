@@ -27,3 +27,4 @@ MonoBehaviour:
   Description: "\uAE38 \uAC00\uB2E4\uBCF4\uBA74 \uD754\uD788 \uBCF4\uC774\uB294 \uB098\uBB34
     \uB9C9\uB300\uAE30\uB2E4"
   IconAddress: Weapons/Stick
+  FixedRarityID: 1

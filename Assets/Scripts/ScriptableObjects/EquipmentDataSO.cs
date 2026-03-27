@@ -37,6 +37,8 @@ namespace GreedDungeon.ScriptableObjects
         public int SellPrice;
         [TextArea] public string Description;
         public string IconAddress;
+        public int FixedRarityID;
+        public int FixedSkillID;
         
         int IData.ID => ID;
     }

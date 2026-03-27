@@ -27,3 +27,4 @@ MonoBehaviour:
   Description: "\uB9C8\uBC95\uC0AC\uC758 \uC2DC\uCCB4\uC5D0\uC11C \uC8FC\uC6B4 \uC644\uB4DC\uB2E4
     \uC544\uC9C1\uAE4C\uC9C4 \uBCF4\uC11D\uC758 \uBE5B\uC774 \uAEBC\uC9C0\uC9C0\uC54A\uC558\uB2E4"
   IconAddress: Weapons/Wand
+  FixedRarityID: 0
