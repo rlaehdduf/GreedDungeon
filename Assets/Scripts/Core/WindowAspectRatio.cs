@@ -9,7 +9,7 @@ namespace GreedDungeon.Core
         [Header("Settings")]
         [SerializeField] private float _aspectRatio = 16f / 9f;
         [SerializeField] private bool _startFullscreen = true;
-        [SerializeField] private int _minWidth = 640;
+        [SerializeField] private int _minWidth = 1280;
         
 #if UNITY_STANDALONE_WIN
         private delegate IntPtr WndProcDelegate(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
