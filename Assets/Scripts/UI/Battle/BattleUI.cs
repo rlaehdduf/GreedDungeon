@@ -3,7 +3,9 @@ using UnityEngine.UI;
 using GreedDungeon.Character;
 using GreedDungeon.Items;
 using GreedDungeon.ScriptableObjects;
+using GreedDungeon.Combat;
 using System;
+using System.Collections.Generic;
 
 namespace GreedDungeon.UI.Battle
 {
@@ -15,6 +17,7 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private ActionMenuUI _actionMenu;
         [SerializeField] private BattleLogUI _battleLog;
         [SerializeField] private SkillSlotUI _skillSlotUI;
+        [SerializeField] private ActionGaugeBarUI _actionGaugeBar;
 
         [Header("Effects")]
         [SerializeField] private DamageTextUI _damageTextUI;
@@ -209,6 +212,23 @@ namespace GreedDungeon.UI.Battle
         {
             if (_monsterStatus != null)
                 _monsterStatus.Hide();
+        }
+
+        public void SetupActionGaugeBar(IEnumerable<IBattleEntity> entities, ITurnManager turnManager)
+        {
+            if (_actionGaugeBar != null)
+            {
+                _actionGaugeBar.Initialize(entities);
+            }
+        }
+
+        public void UpdateActionGaugeBar(IReadOnlyList<IBattleEntity> entities, IBattleEntity currentEntity)
+        {
+            if (_actionGaugeBar != null)
+            {
+                _actionGaugeBar.UpdateAllPositions(entities);
+                _actionGaugeBar.HighlightCurrentEntity(currentEntity);
+            }
         }
     }
 }

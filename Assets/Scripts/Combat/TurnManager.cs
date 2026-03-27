@@ -13,6 +13,7 @@ namespace GreedDungeon.Combat
         void RemoveEntity(IBattleEntity entity);
         IReadOnlyList<IBattleEntity> TurnOrder { get; }
         int CurrentTurnNumber { get; }
+        event System.Action<IReadOnlyList<IBattleEntity>> OnGaugeUpdated;
     }
 
     public class TurnManager : ITurnManager
@@ -22,6 +23,8 @@ namespace GreedDungeon.Combat
         private List<IBattleEntity> _entities = new();
         private IBattleEntity _currentEntity;
         private int _turnNumber;
+        
+        public event System.Action<IReadOnlyList<IBattleEntity>> OnGaugeUpdated;
 
         public IBattleEntity CurrentEntity => _currentEntity;
         public bool HasNextTurn => _currentEntity != null && !_currentEntity.IsDead;
@@ -40,6 +43,7 @@ namespace GreedDungeon.Combat
             
             _currentEntity = null;
             AdvanceToNextActor();
+            OnGaugeUpdated?.Invoke(_entities.AsReadOnly());
         }
 
         private void AdvanceToNextActor()
@@ -74,6 +78,7 @@ namespace GreedDungeon.Combat
             _turnNumber++;
             
             AdvanceToNextActor();
+            OnGaugeUpdated?.Invoke(_entities.AsReadOnly());
         }
 
         public void RemoveEntity(IBattleEntity entity)

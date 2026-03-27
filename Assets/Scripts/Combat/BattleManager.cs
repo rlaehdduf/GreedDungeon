@@ -22,6 +22,7 @@ public interface IBattleManager
         event Action OnMonsterTurnStarted;
         event Action<int, int> OnMonsterHealed;
         event Action<BuffType, float, int> OnMonsterBuffApplied;
+        event Action<IReadOnlyList<IBattleEntity>, IBattleEntity> OnGaugeUpdated;
 
         void StartBattle(Player player, Monster monster);
         void ExecuteAttack(IBattleEntity attacker, IBattleEntity defender, SkillDataSO skill);
@@ -59,12 +60,20 @@ public interface IBattleManager
         public event Action OnMonsterTurnStarted;
         public event Action<int, int> OnMonsterHealed;
         public event Action<BuffType, float, int> OnMonsterBuffApplied;
+        public event Action<IReadOnlyList<IBattleEntity>, IBattleEntity> OnGaugeUpdated;
 
         public BattleManager(IDamageCalculator damageCalculator, ITurnManager turnManager, IGameDataManager gameDataManager)
         {
             _damageCalculator = damageCalculator;
             _turnManager = turnManager;
             _gameDataManager = gameDataManager;
+            
+            _turnManager.OnGaugeUpdated += HandleGaugeUpdated;
+        }
+        
+        private void HandleGaugeUpdated(IReadOnlyList<IBattleEntity> entities)
+        {
+            OnGaugeUpdated?.Invoke(entities, _turnManager.CurrentEntity);
         }
 
         private void LogBattle(string message, UI.Battle.LogType logType = UI.Battle.LogType.System)

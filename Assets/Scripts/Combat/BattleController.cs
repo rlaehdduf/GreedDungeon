@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using GreedDungeon.Character;
 using GreedDungeon.Core;
 using GreedDungeon.Dungeon;
@@ -67,6 +68,7 @@ namespace GreedDungeon.Combat
             _battleManager.OnPlayerDamaged += HandlePlayerDamaged;
             _battleManager.OnPlayerHealed += HandlePlayerHealed;
             _battleManager.OnAttackEffect += HandleAttackEffect;
+            _battleManager.OnGaugeUpdated += HandleGaugeUpdated;
 
             SetupUIEvents();
             StartTestBattle();
@@ -447,6 +449,11 @@ namespace GreedDungeon.Combat
             }
         }
 
+        private void HandleGaugeUpdated(IReadOnlyList<IBattleEntity> entities, IBattleEntity currentEntity)
+        {
+            _battleUI?.UpdateActionGaugeBar(entities, currentEntity);
+        }
+
         private void OnDestroy()
         {
             if (_battleManager != null)
@@ -460,6 +467,7 @@ namespace GreedDungeon.Combat
                 _battleManager.OnPlayerDamaged -= HandlePlayerDamaged;
                 _battleManager.OnPlayerHealed -= HandlePlayerHealed;
                 _battleManager.OnAttackEffect -= HandleAttackEffect;
+                _battleManager.OnGaugeUpdated -= HandleGaugeUpdated;
             }
 
             if (_battleUI != null)
