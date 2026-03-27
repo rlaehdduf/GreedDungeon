@@ -18,7 +18,8 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private float _fadeDuration = 0.3f;
 
         [Header("Font")]
-        [SerializeField] private int _fontSize = 36;
+        [SerializeField] private int _baseFontSize = 36;
+        [SerializeField] private int _referenceWidth = 1920;
 
         [Header("Colors")]
         [SerializeField] private Color _normalColor = Color.white;
@@ -27,6 +28,12 @@ namespace GreedDungeon.UI.Battle
         [SerializeField] private Color _playerDamageColor = new Color(1f, 0.4f, 0.4f);
 
         private readonly Queue<GameObject> _pool = new();
+        private float _scaleFactor = 1f;
+        
+        private void Start()
+        {
+            _scaleFactor = (float)Screen.width / _referenceWidth;
+        }
 
         private void Awake()
         {
@@ -43,6 +50,8 @@ namespace GreedDungeon.UI.Battle
 
         public void ShowDamage(int damage, Vector2 position, bool isCritical = false, bool isHeal = false, bool isPlayerDamage = false)
         {
+            _scaleFactor = (float)Screen.width / _referenceWidth;
+            
             var text = GetText();
             text.transform.localPosition = position;
             text.SetActive(true);
@@ -52,6 +61,7 @@ namespace GreedDungeon.UI.Battle
             {
                 textComponent.text = isHeal ? $"+{damage}" : $"-{damage}";
                 textComponent.color = GetColor(isCritical, isHeal, isPlayerDamage);
+                textComponent.fontSize = Mathf.RoundToInt(_baseFontSize * _scaleFactor);
             }
 
             StartCoroutine(AnimateDamageText(text, position));
@@ -124,8 +134,8 @@ namespace GreedDungeon.UI.Battle
             rectTransform.sizeDelta = new Vector2(100, 50);
 
             var text = go.AddComponent<Text>();
-            text.font = Font.CreateDynamicFontFromOSFont("Arial", _fontSize);
-            text.fontSize = _fontSize;
+            text.font = Font.CreateDynamicFontFromOSFont("Arial", _baseFontSize);
+            text.fontSize = _baseFontSize;
             text.alignment = TextAnchor.MiddleCenter;
             text.horizontalOverflow = HorizontalWrapMode.Overflow;
             text.verticalOverflow = VerticalWrapMode.Overflow;
