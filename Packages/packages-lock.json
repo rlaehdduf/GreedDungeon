@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.pathfinder.core": {
-      "version": "file:C:/Users/admin/Pathfinder/Packages/com.pathfinder.core",
+      "version": "file:C:/Users/admin/Desktop/HI/Pathfinder/Packages/com.pathfinder.core",
       "depth": 0,
       "source": "local",
       "dependencies": {}

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca3c52bff6c20144ea7b942cdc714313, type: 3}
+  m_Name: Monster_5_Cerberus
+  m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.MonsterDataSO
+  ID: 5
+  Name: Cerberus
+  Element: 1
+  MaxHP: 350
+  Attack: 40
+  Defense: 18
+  Speed: 7
+  CriticalRate: 10
+  GoldDropMin: 200
+  GoldDropMax: 500
+  StatusEffectID: Stun
+  StatusEffectChance: 0
+  UniqueSkillID: 105
+  SharedSkillID: 1
+  SkillChance: 35
+  IsBoss: 1
+  PrefabAddress: Monsters/Cerberus
+  ScaleX: 0.6
+  ScaleY: 0.6

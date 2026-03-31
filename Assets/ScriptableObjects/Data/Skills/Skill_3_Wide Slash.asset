@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: def1d029482283b4ebe75910398d54f0, type: 3}
+  m_Name: Skill_3_Wide Slash
+  m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.SkillDataSO
+  ID: 3
+  Name: Wide Slash
+  Type: 1
+  MPCost: 15
+  Description: A sweeping attack against enemies
+  EffectType: 0
+  EffectValue: 1
+  ValueFloat: m
+  HitCount: 1
+  Duration: 0
+  Target: 1
+  StatusEffectID: 
+  StatusEffectChance: 0
+  Cooldown: 2
+  Tier: 1
+  IconAddress: Skills/Slash
+  Element: 0

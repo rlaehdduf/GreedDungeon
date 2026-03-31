@@ -55,6 +55,12 @@ MonoBehaviour:
     - SkillData
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0bd36640e506cd94d9e0919c38b38ac4
+    m_Address: Assets/ScriptableObjects/Data/Equipments/Equipment_206_Dragon Ring.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 12947832221444c4892173de4df2565c
     m_Address: Items/MagicArrow
     m_ReadOnly: 0
@@ -256,6 +262,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5cd943f6fe68c3b438b9560986855021
+    m_Address: Assets/ScriptableObjects/Data/Skills/Skill_18_Fury Strike.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5da35b55e08ec0d48828450e6764b6b8
     m_Address: Effects/Neutral
     m_ReadOnly: 0
@@ -284,6 +296,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c07079e51ea131438c7ae71bc09b7e7
+    m_Address: Assets/ScriptableObjects/Data/Skills/Skill_17_Meteor.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6cd8001849f5c90408d9403f2b0bc44e
     m_Address: Effects/Magic
@@ -328,6 +346,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - SkillData
     - SkillIcon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8032b2416d345be40bad57d01848a83c
+    m_Address: Assets/ScriptableObjects/Data/Equipments/Equipment_6_Greatsword.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 81c4f0e12a997094bb5073db5e68e408
+    m_Address: Assets/ScriptableObjects/Data/Equipments/Equipment_7_Magic Staff.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8326dc32fee911e438ba131c907d02f6
     m_Address: Monsters/Skull
@@ -458,6 +488,12 @@ MonoBehaviour:
     - SkillData
     - SkillIcon
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a3b94e67dc9fca74895e2efedfc738b8
+    m_Address: Assets/ScriptableObjects/Data/Skills/Skill_19_Combo Rush.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: abdd5c608ecf563469660f5326c1e2a2
     m_Address: Assets/ScriptableObjects/Data/Rarities/Rarity_3_Rare.asset
     m_ReadOnly: 0
@@ -476,6 +512,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - MonsterData
     - MonsterSprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aec65b9825ba95e4a914b4c3e8465e77
+    m_Address: Assets/ScriptableObjects/Data/Equipments/Equipment_106_Dragon Armor.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EquipmentData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b0e0a5cb72954c94a8e69e3716bc6c34
     m_Address: Skills/SpeedBuff

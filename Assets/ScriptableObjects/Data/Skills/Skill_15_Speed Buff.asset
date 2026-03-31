@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: def1d029482283b4ebe75910398d54f0, type: 3}
+  m_Name: Skill_15_Speed Buff
+  m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.SkillDataSO
+  ID: 15
+  Name: Speed Buff
+  Type: 4
+  MPCost: 10
+  Description: Speed increases by 5
+  EffectType: 2
+  EffectValue: 5
+  ValueFloat: i
+  HitCount: 0
+  Duration: 6
+  Target: 2
+  StatusEffectID: 
+  StatusEffectChance: 0
+  Cooldown: 9
+  Tier: 3
+  IconAddress: Skills/SpeedBuff
+  Element: 0

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca3c52bff6c20144ea7b942cdc714313, type: 3}
+  m_Name: Monster_4_Skeleton
+  m_EditorClassIdentifier: Assembly-CSharp::GreedDungeon.ScriptableObjects.MonsterDataSO
+  ID: 4
+  Name: Skeleton
+  Element: 1
+  MaxHP: 58
+  Attack: 24
+  Defense: 4
+  Speed: 10
+  CriticalRate: 12
+  GoldDropMin: 15
+  GoldDropMax: 30
+  StatusEffectID: Burn
+  StatusEffectChance: 10
+  UniqueSkillID: 104
+  SharedSkillID: 4
+  SkillChance: 30
+  IsBoss: 0
+  PrefabAddress: Monsters/Skull
+  ScaleX: 0.45
+  ScaleY: 0.45

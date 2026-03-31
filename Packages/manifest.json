@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.pathfinder.core": "file:C:/Users/admin/Pathfinder/Packages/com.pathfinder.core",
+    "com.pathfinder.core": "file:C:/Users/admin/Desktop/HI/Pathfinder/Packages/com.pathfinder.core",
     "com.unity.2d.animation": "13.0.4",
     "com.unity.2d.aseprite": "3.0.1",
     "com.unity.2d.psdimporter": "12.0.1",
