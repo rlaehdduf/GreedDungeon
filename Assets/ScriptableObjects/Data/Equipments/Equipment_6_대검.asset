@@ -27,3 +27,4 @@ MonoBehaviour:
   Description: "\uC591\uC190\uC73C\uB85C \uC950\uB294 \uAC70\uB300\uD55C \uAC80\uC774\uB2E4"
   IconAddress: Weapons/GreatSword
   FixedRarityID: 0
+  FixedSkillID: 0

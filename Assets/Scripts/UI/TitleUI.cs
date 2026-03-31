@@ -15,6 +15,7 @@ namespace GreedDungeon.UI
         [SerializeField] private float _bobSpeed = 8f;
         [SerializeField] private float _bobAmount = 15f;
         [SerializeField] private float _shakeAmount = 3f;
+        [SerializeField] private float _fadeStartPercent = 0.5f;
 
         [Header("Blinking Text")]
         [SerializeField] private Text _blinkText;
@@ -24,11 +25,20 @@ namespace GreedDungeon.UI
 
         private bool _isTransitioning;
         private Vector3 _originalScale;
+        private Image _backgroundImage;
+        private Color _originalColor;
 
         private void Start()
         {
             if (_background != null)
+            {
                 _originalScale = _background.localScale;
+                _backgroundImage = _background.GetComponent<Image>();
+                if (_backgroundImage != null)
+                {
+                    _originalColor = _backgroundImage.color;
+                }
+            }
         }
 
         private void Update()
@@ -80,6 +90,13 @@ namespace GreedDungeon.UI
                     originalPos.x,
                     originalPos.y + bob + microBob
                 );
+
+                if (_backgroundImage != null && t >= _fadeStartPercent)
+                {
+                    float fadeProgress = (t - _fadeStartPercent) / (1f - _fadeStartPercent);
+                    float alpha = Mathf.Lerp(1f, 0f, fadeProgress);
+                    _backgroundImage.color = new Color(_originalColor.r, _originalColor.g, _originalColor.b, alpha);
+                }
 
                 yield return null;
             }

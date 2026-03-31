@@ -24,4 +24,4 @@ MonoBehaviour:
   BuffType: 0
   BuffValue: 0
   BuffDuration: 0
-  HealPercent: 25
+  HealPercent: 15

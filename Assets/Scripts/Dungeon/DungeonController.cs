@@ -72,6 +72,15 @@ namespace GreedDungeon.Dungeon
             {
                 _forceNextEncounter = EncounterType.Shop;
             }
+
+            if (_testMode && Keyboard.current.pKey.wasPressedThisFrame && _currentMonster != null)
+            {
+                _currentMonster.TakeDamage(100);
+                if (_currentMonster.IsDead)
+                {
+                    OnMonsterDeath();
+                }
+            }
         }
         
         public void Initialize(Player player)
@@ -99,11 +108,25 @@ namespace GreedDungeon.Dungeon
         
         public void OnMonsterDeath()
         {
+            GiveRandomConsumable();
+            
             if (_monsterDisplay != null)
             {
                 _monsterDisplay.Clear();
             }
             StartCoroutine(HandleMonsterDeathCoroutine());
+        }
+        
+        private void GiveRandomConsumable()
+        {
+            if (_gameDataManager == null || _player == null) return;
+            
+            var consumables = _gameDataManager.GetAllConsumableData();
+            if (consumables != null && consumables.Count > 0)
+            {
+                var consumable = consumables[UnityEngine.Random.Range(0, consumables.Count)];
+                _player.TryAddItem(new InventoryItem(consumable, 1));
+            }
         }
         
         private IEnumerator HandleMonsterDeathCoroutine()
@@ -199,6 +222,11 @@ namespace GreedDungeon.Dungeon
         
         private void StartNextBattle()
         {
+            if (_backgroundScroller != null)
+            {
+                _backgroundScroller.ResetAlpha();
+            }
+            
             MonsterDataSO monsterData;
             
             bool isBoss = false;

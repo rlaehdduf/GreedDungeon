@@ -27,3 +27,4 @@ MonoBehaviour:
   Description: "\uB0A0\uC774 \uBB34\uB38C\uC9C4 \uB0A1\uC740 \uAC80\uC774\uB2E4"
   IconAddress: Weapons/Sword
   FixedRarityID: 0
+  FixedSkillID: 0

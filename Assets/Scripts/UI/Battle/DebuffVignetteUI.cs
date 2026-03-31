@@ -31,7 +31,6 @@ namespace GreedDungeon.UI.Battle
         private Player _player;
         private Coroutine _currentFade;
         private Color _savedDebuffColor = Color.clear;
-        private bool _isGameOver;
         private bool _canReturnToTitle;
 
         private void Awake()
@@ -49,7 +48,6 @@ namespace GreedDungeon.UI.Battle
 
         public void Setup(Player player)
         {
-            _isGameOver = false;
             _canReturnToTitle = false;
 
             if (_player != null)
@@ -222,7 +220,6 @@ namespace GreedDungeon.UI.Battle
 
             textColor.a = 1f;
             _gameOverText.color = textColor;
-            _isGameOver = true;
             _canReturnToTitle = true;
         }
 

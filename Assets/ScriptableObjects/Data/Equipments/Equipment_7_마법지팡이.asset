@@ -27,3 +27,4 @@ MonoBehaviour:
   Description: "\uACE0\uB300 \uB9C8\uBC95\uC0AC\uAC00 \uC0AC\uC6A9\uD558\uB358 \uC9C0\uD321\uC774\uB2E4"
   IconAddress: Weapons/Staff
   FixedRarityID: 0
+  FixedSkillID: 0
