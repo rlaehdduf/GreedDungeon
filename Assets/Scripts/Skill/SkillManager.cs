@@ -190,7 +190,7 @@ namespace GreedDungeon.Skill
         {
             if (skill.Target == TargetType.Player && skill.EffectType == EffectType.Buff)
             {
-                if (skill.Name.Contains("Heal"))
+                if (skill.Name.Contains("Recovery"))
                 {
                     int healAmount = (int)(caster.TotalStats.MaxHP * (skill.EffectValue - 1));
                     caster.Heal(healAmount);
@@ -228,7 +228,7 @@ namespace GreedDungeon.Skill
                 stats.Attack += isInteger ? (int)value : (int)stats.Attack + (int)value;
             else if (skill.Name.Contains("Defense"))
                 stats.Defense += isInteger ? (int)value : (int)stats.Defense + (int)value;
-            else if (skill.Name.Contains("HP"))
+            else if (skill.Name.Contains("Vitality"))
                 stats.MaxHP += isInteger ? (int)value : (int)stats.MaxHP + (int)value;
             else if (skill.Name.Contains("Speed"))
                 stats.Speed += isInteger ? (int)value : (int)stats.Speed + (int)value;

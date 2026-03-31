@@ -451,7 +451,7 @@ namespace GreedDungeon.UI.Battle
             return skill.EffectType switch
             {
                 EffectType.Damage => $"Deals {skill.EffectValue * 100:F0}% damage to enemy",
-                EffectType.Buff => skill.Name.Contains("Heal") ? "Restores HP" : "Increases stats",
+                EffectType.Buff => skill.Name.Contains("Recovery") ? "Restores HP" : "Increases stats",
                 EffectType.Passive => "Passive effect",
                 _ => ""
             };
