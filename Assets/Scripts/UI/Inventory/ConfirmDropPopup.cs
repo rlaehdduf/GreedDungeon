@@ -27,7 +27,7 @@ namespace GreedDungeon.UI.Inventory
         public void Show(string itemName)
         {
             if (_messageText != null)
-                _messageText.text = $"{itemName}을(를) 버리시겠습니까?";
+                _messageText.text = $"Discard {itemName}?";
 
             gameObject.SetActive(true);
         }

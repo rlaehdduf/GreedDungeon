@@ -53,7 +53,7 @@ public class SpriteAddressablesSetter : EditorWindow
         }
 
         AssetDatabase.SaveAssets();
-        Debug.Log($"═══ 모든 Sprite 주소 설정 완료! 총 {totalCount}개 ═══");
+        Debug.Log($"═══ All Sprite addresses set! Total {totalCount} ═══");
     }
 
     private static int SetSpritesInFolder(string folder, string addressPrefix, string label)
@@ -77,7 +77,7 @@ public class SpriteAddressablesSetter : EditorWindow
             Debug.Log($"[{addressPrefix}] {fileName} -> {address}");
         }
 
-        Debug.Log($"[{addressPrefix}] {count}개 설정 완료");
+        Debug.Log($"[{addressPrefix}] {count} set");
         return count;
     }
 
@@ -118,7 +118,7 @@ public class SpriteAddressablesSetter : EditorWindow
         int count = SetSpritesInFolder("Assets/Sprites/Monster", "Monsters", MonsterLabel);
 
         AssetDatabase.SaveAssets();
-        Debug.Log($"═══ Monster Sprite 주소 설정 완료! 총 {count}개 ═══");
+        Debug.Log($"═══ Monster Sprite addresses set! Total {count} ═══");
     }
 
     [MenuItem("Tools/Addressables/Show Monster Sprite Addresses")]
@@ -142,11 +142,11 @@ public class SpriteAddressablesSetter : EditorWindow
             if (entry != null)
             {
                 string labels = string.Join(", ", entry.labels);
-                Debug.Log($"{spriteName} -> 주소: {entry.address}, 라벨: [{labels}]");
+                Debug.Log($"{spriteName} -> Address: {entry.address}, Labels: [{labels}]");
             }
             else
             {
-                Debug.Log($"{spriteName} -> (Addressable 아님)");
+                Debug.Log($"{spriteName} -> (Not Addressable)");
             }
         }
     }

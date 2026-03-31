@@ -84,11 +84,11 @@ public class AddressablesSetter : EditorWindow
             }
             else
             {
-                Debug.LogWarning($"매핑 없음: {prefabName}");
+                Debug.LogWarning($"No mapping found: {prefabName}");
             }
         }
 
-        Debug.Log($"═══ Addressables 주소 설정 완료! 총 {count}개 ═══");
+        Debug.Log($"═══ Addressables addresses set! Total {count} ═══");
     }
 
     private static void SetAddress(string guid, string address)
@@ -129,7 +129,7 @@ public class AddressablesSetter : EditorWindow
             }
             else
             {
-                Debug.Log($"{prefabName} -> (Addressable 아님)");
+                Debug.Log($"{prefabName} -> (Not Addressable)");
             }
         }
     }

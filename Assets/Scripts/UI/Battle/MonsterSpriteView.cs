@@ -60,7 +60,7 @@ namespace GreedDungeon.UI.Battle
             transform.localScale = _baseScale;
             _breathTimer = 0f;
             _isSetupComplete = true;
-            Debug.Log($"[MonsterSpriteView] Setup 완료 - Scale: {_baseScale}");
+            Debug.Log($"[MonsterSpriteView] Setup complete - Scale: {_baseScale}");
         }
 
         public void PlayDamageAnimation()

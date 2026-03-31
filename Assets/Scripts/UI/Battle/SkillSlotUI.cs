@@ -340,7 +340,7 @@ namespace GreedDungeon.UI.Battle
             if (_tooltipCooldown != null && _skillManager != null)
             {
                 int remaining = _skillManager.GetRemainingCooldown(skill.ID);
-                _tooltipCooldown.text = $"쿨타임: {remaining}/{skill.Cooldown}";
+                _tooltipCooldown.text = $"Cooldown: {remaining}/{skill.Cooldown}";
             }
 
             UpdateTooltipPosition(eventData);
@@ -360,7 +360,7 @@ namespace GreedDungeon.UI.Battle
             if (_tooltipCooldown != null && _skillManager != null)
             {
                 int remaining = _skillManager.GetRemainingCooldown(skill.ID);
-                _tooltipCooldown.text = $"쿨타임: {remaining}/{skill.Cooldown}";
+                _tooltipCooldown.text = $"Cooldown: {remaining}/{skill.Cooldown}";
             }
 
             SetTooltipPosition(screenPosition);
@@ -441,7 +441,7 @@ namespace GreedDungeon.UI.Battle
             }
 
             if (skill.MPCost > 0)
-                desc.Append($"\nMP 소모: {skill.MPCost}");
+                desc.Append($"\nMP Cost: {skill.MPCost}");
 
             return desc.ToString();
         }
@@ -450,9 +450,9 @@ namespace GreedDungeon.UI.Battle
         {
             return skill.EffectType switch
             {
-                EffectType.Damage => $"적에게 {skill.EffectValue * 100:F0}% 데미지",
-                EffectType.Buff => skill.Name.Contains("회복") ? "HP를 회복합니다" : "스탯이 증가합니다",
-                EffectType.Passive => "패시브 효과",
+                EffectType.Damage => $"Deals {skill.EffectValue * 100:F0}% damage to enemy",
+                EffectType.Buff => skill.Name.Contains("Heal") ? "Restores HP" : "Increases stats",
+                EffectType.Passive => "Passive effect",
                 _ => ""
             };
         }

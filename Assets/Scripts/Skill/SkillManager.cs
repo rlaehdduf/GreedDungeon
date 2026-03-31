@@ -38,7 +38,7 @@ namespace GreedDungeon.Skill
                 return;
             }
 
-            Debug.Log($"[SkillManager] 로드된 스킬 수: {allSkills.Count}");
+            Debug.Log($"[SkillManager] Skills loaded: {allSkills.Count}");
             
             foreach (var skill in allSkills)
             {
@@ -51,10 +51,10 @@ namespace GreedDungeon.Skill
             if (!_skillPools.ContainsKey(SkillPoolType.Random))
                 _skillPools[SkillPoolType.Random] = new List<SkillDataSO>(allSkills);
 
-            Debug.Log($"[SkillManager] 스킬 풀 초기화 완료: {_skillPools.Count}개 타입");
+            Debug.Log($"[SkillManager] Skill pool initialization complete: {_skillPools.Count} types");
             foreach (var pool in _skillPools)
             {
-                Debug.Log($"  - {pool.Key}: {pool.Value.Count}개 스킬");
+                Debug.Log($"  - {pool.Key}: {pool.Value.Count} skills");
             }
         }
 
@@ -77,10 +77,10 @@ namespace GreedDungeon.Skill
             
             if (!_skillPools.TryGetValue(poolType, out var pool) || pool.Count == 0)
             {
-                Debug.Log($"[SkillManager] {poolType} 풀이 비어있음, Random 풀 사용");
+                Debug.Log($"[SkillManager] {poolType} pool is empty, using Random pool");
                 if (_skillPools.TryGetValue(SkillPoolType.Random, out var randomPool) && randomPool.Count > 0)
                     return randomPool[UnityEngine.Random.Range(0, randomPool.Count)];
-                Debug.LogWarning($"[SkillManager] 모든 스킬 풀이 비어있음!");
+                Debug.LogWarning($"[SkillManager] All skill pools are empty!");
                 return null;
             }
             return pool[UnityEngine.Random.Range(0, pool.Count)];
@@ -92,7 +92,7 @@ namespace GreedDungeon.Skill
             
             if (!_skillPools.TryGetValue(poolType, out var pool) || pool.Count == 0)
             {
-                Debug.LogWarning($"[SkillManager] {poolType} 풀이 비어있음");
+                Debug.LogWarning($"[SkillManager] {poolType} pool is empty");
                 return null;
             }
 
@@ -105,7 +105,7 @@ namespace GreedDungeon.Skill
 
             if (filteredSkills.Count == 0)
             {
-                Debug.LogWarning($"[SkillManager] {poolType} 풀에 tier {minTier}-{maxTier} 스킬 없음");
+                Debug.LogWarning($"[SkillManager] No tier {minTier}-{maxTier} skills in {poolType} pool");
                 return null;
             }
 
@@ -126,7 +126,7 @@ namespace GreedDungeon.Skill
         {
             if (turns <= 0) return;
             _cooldowns[skillId] = turns;
-            Debug.Log($"[SkillManager] 스킬 {skillId} 쿨다운 시작: {turns}턴");
+            Debug.Log($"[SkillManager] Skill {skillId} cooldown started: {turns} turns");
         }
 
         public void ReduceAllCooldowns()
@@ -138,7 +138,7 @@ namespace GreedDungeon.Skill
                 if (_cooldowns[key] <= 0)
                 {
                     _cooldowns.Remove(key);
-                    Debug.Log($"[SkillManager] 스킬 {key} 쿨다운 종료");
+                    Debug.Log($"[SkillManager] Skill {key} cooldown ended");
                 }
             }
         }
@@ -146,20 +146,20 @@ namespace GreedDungeon.Skill
         public void ResetCooldowns()
         {
             _cooldowns.Clear();
-            Debug.Log("[SkillManager] 모든 쿨다운 초기화");
+            Debug.Log("[SkillManager] All cooldowns reset");
         }
 
         public bool ExecuteSkill(SkillDataSO skill, IBattleEntity caster, IBattleEntity target)
         {
             if (skill == null || caster == null) return false;
 
-            Debug.Log($"[SkillManager] 스킬 실행: {skill.Name}");
+            Debug.Log($"[SkillManager] Executing skill: {skill.Name}");
 
             if (skill.MPCost > 0)
             {
                 if (caster.CurrentMP < skill.MPCost)
                 {
-                    Debug.Log($"  MP 부족! (필요: {skill.MPCost}, 현재: {caster.CurrentMP})");
+                    Debug.Log($"  Not enough MP! (Need: {skill.MPCost}, Have: {caster.CurrentMP})");
                     return false;
                 }
                 caster.UseMP(skill.MPCost);
@@ -190,11 +190,11 @@ namespace GreedDungeon.Skill
         {
             if (skill.Target == TargetType.Player && skill.EffectType == EffectType.Buff)
             {
-                if (skill.Name.Contains("회복"))
+                if (skill.Name.Contains("Heal"))
                 {
                     int healAmount = (int)(caster.TotalStats.MaxHP * (skill.EffectValue - 1));
                     caster.Heal(healAmount);
-                    Debug.Log($"  HP 회복: +{healAmount}");
+                    Debug.Log($"  HP restored: +{healAmount}");
                 }
                 else
                 {
@@ -210,9 +210,9 @@ namespace GreedDungeon.Skill
 
         private BuffType DetermineBuffType(string skillName)
         {
-            if (skillName.Contains("공격력")) return BuffType.Attack;
-            if (skillName.Contains("방어력")) return BuffType.Defense;
-            if (skillName.Contains("속도")) return BuffType.Speed;
+            if (skillName.Contains("Attack")) return BuffType.Attack;
+            if (skillName.Contains("Defense")) return BuffType.Defense;
+            if (skillName.Contains("Speed")) return BuffType.Speed;
             return BuffType.None;
         }
 
@@ -224,16 +224,16 @@ namespace GreedDungeon.Skill
             float value = skill.EffectValue;
             bool isInteger = !string.IsNullOrEmpty(valueStr) && valueStr == "i";
 
-            if (skill.Name.Contains("공격력"))
+            if (skill.Name.Contains("Attack"))
                 stats.Attack += isInteger ? (int)value : (int)stats.Attack + (int)value;
-            else if (skill.Name.Contains("방어력"))
+            else if (skill.Name.Contains("Defense"))
                 stats.Defense += isInteger ? (int)value : (int)stats.Defense + (int)value;
-            else if (skill.Name.Contains("체력"))
+            else if (skill.Name.Contains("HP"))
                 stats.MaxHP += isInteger ? (int)value : (int)stats.MaxHP + (int)value;
-            else if (skill.Name.Contains("속도"))
+            else if (skill.Name.Contains("Speed"))
                 stats.Speed += isInteger ? (int)value : (int)stats.Speed + (int)value;
 
-            Debug.Log($"[SkillManager] 패시브 적용: {skill.Name} → 스탯 증가");
+            Debug.Log($"[SkillManager] Passive applied: {skill.Name} → stat increase");
         }
     }
 }

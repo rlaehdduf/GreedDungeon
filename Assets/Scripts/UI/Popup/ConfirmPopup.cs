@@ -39,7 +39,7 @@ namespace GreedDungeon.UI.Popup
                 });
         }
 
-        public void Show(string title, string message, string confirmLabel = "확인", string cancelLabel = "취소")
+        public void Show(string title, string message, string confirmLabel = "Confirm", string cancelLabel = "Cancel")
         {
             if (_titleText != null)
                 _titleText.text = title;
@@ -56,7 +56,7 @@ namespace GreedDungeon.UI.Popup
             base.Show();
         }
 
-        public void ShowConfirmOnly(string title, string message, string confirmLabel = "확인")
+        public void ShowConfirmOnly(string title, string message, string confirmLabel = "Confirm")
         {
             if (_cancelButton != null)
                 _cancelButton.gameObject.SetActive(false);
