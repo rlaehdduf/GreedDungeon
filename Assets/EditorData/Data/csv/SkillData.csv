@@ -1,20 +1,20 @@
-﻿﻿ID,Name,Type,MPCost,Description,EffectType,EffectValue,ValueFloat,HitCount,Duration,Target,StatusEffect,StatusEffectChance,Cooldown,Tier,IconAddress
-1,강타,Neutral,5,적에게 강한 한방,Damage,1.5,m,1,0,Single,None,0,2,1,Skills/Smash
-2,이중타격,Neutral,12,적에게 두번 공격,Damage,1.2,m,2,0,Single,None,0,2,2,Skills/DoubleSmash
-3,가로베기,Melee,15,적들에게 넓은 공격,Damage,1.0,m,1,0,All,None,0,2,1,Skills/Slash
-4,이중베기,Melee,15,적에게 두번 공격,Damage,1.0,m,2,0,Single,None,0,2,1,Skills/DoubleSlash
-5,십자베기,Melee,20,적에게 강한 공격,Damage,2.0,m,2,0,Single,None,0,3,2,Skills/CrossSlash
-6,마나볼,Magic,8,적에게 마력 공격,Damage,1.8,m,1,0,Single,None,0,2,1,Skills/ManaBall
-7,파이어볼,Magic,18,적에게 화상 공격,Damage,2.5,m,1,3,Single,Burn,50,3,2,Skills/FireBall
-8,얼음비,Magic,20,적들에게 광역 공격,Damage,1.0,m,3,0,All,None,0,4,2,Skills/IceRain
-9,공격력증가,Passive,0,공격력이 5 증가합니다,Passive,5,i,0,0,Player,None,0,0,2,Skills/PowerBuff
-10,방어력증가,Passive,0,방어력이 5 증가합니다,Passive,5,i,0,0,Player,None,0,0,2,Skills/DefenseBuff
-11,체력증가,Passive,0,체력이 20 증가합니다,Passive,20,i,0,0,Player,None,0,0,1,Skills/HealthBuff
-12,속도증가,Passive,0,속도가 3 증가합니다,Passive,3,i,0,0,Player,None,0,0,3,Skills/SpeedBuff
-13,공격력버프,Buff,15,공격력이 30% 증가합니다,Buff,1.3,m,0,4,Player,None,0,6,1,Skills/PowerBuff
-14,방어력버프,Buff,12,방어력이 40% 증가합니다,Buff,1.4,m,0,4,Player,None,0,6,1,Skills/DefenseBuff
-15,속도버프,Buff,10,속도가 5 증가합니다,Buff,5,i,0,6,Player,None,0,9,3,Skills/SpeedBuff
-16,회복,Buff,20,최대체력 25%만큼 회복합니다,Buff,1.25,m,0,0,Player,None,0,4,2,Skills/Heal
-17,메테오,Magic,40,하늘에서 메테오를 소환한다,Damage,3.5,m,1,0,All,Burn,30,8,3,Skills/Meteor
-18,분노의일격,Melee,25,분노를 담은 강력한 일격,Damage,3.0,m,1,0,Single,None,0,5,3,Skills/RageStrike
-19,연속난타,Neutral,30,적에게 5번 연속 공격,Damage,0.6,m,5,0,Single,None,0,6,3,Skills/Combo
+ID,Name,Type,MPCost,Description,EffectType,EffectValue,ValueFloat,HitCount,Duration,Target,StatusEffect,StatusEffectChance,Cooldown,Tier,IconAddress
+1,Power Strike,Neutral,5,A powerful strike against the enemy,Damage,1.5,m,1,0,Single,None,0,2,1,Skills/Smash
+2,Double Strike,Neutral,12,Strikes the enemy twice,Damage,1.2,m,2,0,Single,None,0,2,2,Skills/DoubleSmash
+3,Wide Slash,Melee,15,A sweeping attack against enemies,Damage,1.0,m,1,0,All,None,0,2,1,Skills/Slash
+4,Double Slash,Melee,15,Strikes the enemy twice,Damage,1.0,m,2,0,Single,None,0,2,1,Skills/DoubleSlash
+5,Cross Slash,Melee,20,A powerful strike against the enemy,Damage,2.0,m,2,0,Single,None,0,3,2,Skills/CrossSlash
+6,Mana Bolt,Magic,8,A magical attack against the enemy,Damage,1.8,m,1,0,Single,None,0,2,1,Skills/ManaBall
+7,Fireball,Magic,18,A burning attack against the enemy,Damage,2.5,m,1,3,Single,Burn,50,3,2,Skills/FireBall
+8,Ice Rain,Magic,20,A wide-area attack against enemies,Damage,1.0,m,3,0,All,None,0,4,2,Skills/IceRain
+9,Attack Boost,Passive,0,Attack increases by 5,Passive,5,i,0,0,Player,None,0,0,2,Skills/PowerBuff
+10,Defense Boost,Passive,0,Defense increases by 5,Passive,5,i,0,0,Player,None,0,0,2,Skills/DefenseBuff
+11,Vitality Boost,Passive,0,HP increases by 20,Passive,20,i,0,0,Player,None,0,0,1,Skills/HealthBuff
+12,Speed Boost,Passive,0,Speed increases by 3,Passive,3,i,0,0,Player,None,0,0,3,Skills/SpeedBuff
+13,Attack Buff,Buff,15,Attack increases by 30%,Buff,1.3,m,0,4,Player,None,0,6,1,Skills/PowerBuff
+14,Defense Buff,Buff,12,Defense increases by 40%,Buff,1.4,m,0,4,Player,None,0,6,1,Skills/DefenseBuff
+15,Speed Buff,Buff,10,Speed increases by 5,Buff,5,i,0,6,Player,None,0,9,3,Skills/SpeedBuff
+16,Recovery,Buff,20,Restores 25% of max HP,Buff,1.25,m,0,0,Player,None,0,4,2,Skills/Heal
+17,Meteor,Magic,40,Summons a meteor from the sky,Damage,3.5,m,1,0,All,Burn,30,8,3,Skills/Meteor
+18,Fury Strike,Melee,25,A powerful strike fueled by rage,Damage,3.0,m,1,0,Single,None,0,5,3,Skills/RageStrike
+19,Combo Rush,Neutral,30,Strikes the enemy 5 times in succession,Damage,0.6,m,5,0,Single,None,0,6,3,Skills/Combo
