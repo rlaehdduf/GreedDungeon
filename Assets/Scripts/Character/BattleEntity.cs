@@ -211,7 +211,7 @@ namespace GreedDungeon.Character
         public void StartDefend()
         {
             IsDefending = true;
-            Debug.Log($"  [{Name}] 방어 태세! 받는 데미지 50% 감소");
+            Debug.Log($"  [{Name}] Defending! Damage taken reduced by 50%");
         }
 
         public void ApplyBuff(BuffType type, float value, int duration)
@@ -239,7 +239,7 @@ namespace GreedDungeon.Character
         {
             int count = _statusEffects.Count;
             _statusEffects.Clear();
-            Debug.Log($"  [{Name}] 디버프 {count}개 해제");
+            Debug.Log($"  [{Name}] {count} debuff(s) removed");
         }
 
         public void ClearAllStatusEffects()

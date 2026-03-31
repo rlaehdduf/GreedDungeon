@@ -145,14 +145,14 @@ namespace GreedDungeon.UI.Battle
         public void ShowBattleResult(bool playerWon, int goldEarned)
         {
             string message = playerWon 
-                ? $"승리! {goldEarned}G 획득" 
-                : "패배...";
+                ? $"Victory! Earned {goldEarned}G" 
+                : "Defeat...";
             AddBattleLog($"═══ {message} ═══");
         }
 
         public void ShowGameOver()
         {
-            AddBattleLog("게임 오버!");
+            AddBattleLog("Game Over!");
             EnableActions(false);
             
             if (_debuffVignetteUI != null)

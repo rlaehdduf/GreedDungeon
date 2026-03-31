@@ -84,7 +84,7 @@ namespace GreedDungeon.UI.Inventory
 
             if (price >= 0)
             {
-                string prefix = isBuying ? "구매" : "판매";
+                string prefix = isBuying ? "Buy" : "Sell";
                 _priceText.text = $"{prefix}: {price}G";
                 _priceText.color = isBuying ? Color.yellow : Color.green;
                 _priceText.gameObject.SetActive(true);
@@ -139,8 +139,8 @@ namespace GreedDungeon.UI.Inventory
             if (consumable == null) return;
 
             var sb = new System.Text.StringBuilder();
-            sb.AppendLine($"효과: {GetEffectDescription(consumable)}");
-            sb.AppendLine($"수량: {item.Quantity}");
+            sb.AppendLine($"Effect: {GetEffectDescription(consumable)}");
+            sb.AppendLine($"Quantity: {item.Quantity}");
 
             _statsText.text = sb.ToString();
         }
@@ -149,13 +149,13 @@ namespace GreedDungeon.UI.Inventory
         {
             return data.EffectType switch
             {
-                ConsumableEffectType.Heal => $"HP {data.EffectValue:F0} 회복",
-                ConsumableEffectType.Cleanse => "디버프 해제",
-                ConsumableEffectType.Buff => $"{data.BuffType} +{data.EffectValue:F0}% ({data.Duration}턴)",
-                ConsumableEffectType.Poison => $"독 부여 ({data.Duration}턴)",
-                ConsumableEffectType.Burn => $"화상 부여 ({data.Duration}턴)",
-                ConsumableEffectType.Attack => $"{data.EffectValue:F0} 데미지",
-                _ => "알 수 없음"
+                ConsumableEffectType.Heal => $"Restores {data.EffectValue:F0} HP",
+                ConsumableEffectType.Cleanse => "Removes debuffs",
+                ConsumableEffectType.Buff => $"{data.BuffType} +{data.EffectValue:F0}% ({data.Duration} turns)",
+                ConsumableEffectType.Poison => $"Inflicts poison ({data.Duration} turns)",
+                ConsumableEffectType.Burn => $"Inflicts burn ({data.Duration} turns)",
+                ConsumableEffectType.Attack => $"{data.EffectValue:F0} damage",
+                _ => "Unknown"
             };
         }
 
@@ -232,9 +232,9 @@ namespace GreedDungeon.UI.Inventory
 
             if (_skillTooltipPanel != null)
             {
-                Debug.Log($"[ItemTooltipUI] SkillTooltipPanel 활성화, activeSelf: {_skillTooltipPanel.activeSelf}");
+                Debug.Log($"[ItemTooltipUI] SkillTooltipPanel activated, activeSelf: {_skillTooltipPanel.activeSelf}");
                 _skillTooltipPanel.SetActive(true);
-                Debug.Log($"[ItemTooltipUI] SkillTooltipPanel 활성화 후 activeSelf: {_skillTooltipPanel.activeSelf}");
+                Debug.Log($"[ItemTooltipUI] SkillTooltipPanel after activation, activeSelf: {_skillTooltipPanel.activeSelf}");
 
                 if (_skillTooltipName != null)
                     _skillTooltipName.text = skill.Name;
@@ -244,7 +244,7 @@ namespace GreedDungeon.UI.Inventory
             }
             else
             {
-                Debug.LogWarning("[ItemTooltipUI] _skillTooltipPanel이 null입니다! Inspector에서 연결해주세요.");
+                Debug.LogWarning("[ItemTooltipUI] _skillTooltipPanel is null! Please connect it in the Inspector.");
             }
         }
 

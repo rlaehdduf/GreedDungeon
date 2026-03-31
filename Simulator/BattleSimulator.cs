@@ -8,35 +8,35 @@ namespace GreedDungeon.Simulator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("=== GreedDungeon 다전투 시뮬레이터 ===\n");
-            Console.WriteLine("설정: 난이도 1% 증가, HP 70% 회복\n");
+            Console.WriteLine("=== GreedDungeon Multi-Battle Simulator ===\n");
+            Console.WriteLine("Settings: Difficulty +1% per battle, HP 70% recovery\n");
 
             var monsters = new MonsterData[]
             {
-                new MonsterData("슬라임", 60, 28, 6, 5, 5, 
-                    new SkillData(101, "분열", "Heal", 0, 0, 0, 0, "", 0, 0, 15), 
-                    new SkillData(5, "재생", "Heal", 0, 0, 0, 0, "", 0, 0, 8), 30),
-                new MonsterData("역병쥐", 65, 22, 6, 7, 3, 
-                    new SkillData(102, "역병", "Debuff", 1.0f, 1, 2, 30), 
-                    new SkillData(2, "연속공격", "Attack", 0.4f, 2, 0, 0), 25),
-                new MonsterData("거미", 72, 20, 5, 6, 5, 
-                    new SkillData(103, "독침", "Debuff", 1.0f, 1, 2, 35), 
-                    new SkillData(3, "독가스", "Attack", 0.7f, 1, 2, 15), 25),
-                new MonsterData("해골", 58, 24, 4, 10, 12, 
-                    new SkillData(104, "강력한일격", "Attack", 1.3f, 1, 3, 50), 
-                    new SkillData(4, "분노", "Buff", 0, 0, 0, 0, "Attack", 25, 3), 30),
-                new MonsterData("켈베로스", 350, 40, 18, 7, 10, 
-                    new SkillData(105, "지옥불", "Attack", 0.5f, 2, 1, 30), 
-                    new SkillData(1, "강타", "Attack", 1.0f, 1, 0, 0), 35)
+                new MonsterData("Slime", 60, 28, 6, 5, 5, 
+                    new SkillData(101, "Fission", "Heal", 0, 0, 0, 0, "", 0, 0, 15), 
+                    new SkillData(5, "Regeneration", "Heal", 0, 0, 0, 0, "", 0, 0, 8), 30),
+                new MonsterData("Plague Rat", 65, 22, 6, 7, 3, 
+                    new SkillData(102, "Plague", "Debuff", 1.0f, 1, 2, 30), 
+                    new SkillData(2, "Double Strike", "Attack", 0.4f, 2, 0, 0), 25),
+                new MonsterData("Spider", 72, 20, 5, 6, 5, 
+                    new SkillData(103, "Venom Sting", "Debuff", 1.0f, 1, 2, 35), 
+                    new SkillData(3, "Poison Gas", "Attack", 0.7f, 1, 2, 15), 25),
+                new MonsterData("Skeleton", 58, 24, 4, 10, 12, 
+                    new SkillData(104, "Devastating Blow", "Attack", 1.3f, 1, 3, 50), 
+                    new SkillData(4, "Rage", "Buff", 0, 0, 0, 0, "Attack", 25, 3), 30),
+                new MonsterData("Cerberus", 350, 40, 18, 7, 10, 
+                    new SkillData(105, "Hellfire", "Attack", 0.5f, 2, 1, 30), 
+                    new SkillData(1, "Power Strike", "Attack", 1.0f, 1, 0, 0), 35)
             };
 
             var playerScenarios = new (string Name, int HP, int ATK, int DEF, int SPD, float CRIT, bool HasSkill, int SkillTier)[]
             {
-                ("시작 장비 + 스킬", 110, 15, 12, 5, 8f, true, 1),
-                ("장비 1개", 115, 17, 13, 5, 10f, false, 0),
-                ("장비 2개", 120, 19, 14, 5, 12f, false, 0),
-                ("장비 3개", 125, 21, 15, 6, 14f, false, 0),
-                ("장비 4개", 130, 23, 16, 6, 16f, false, 0),
+                ("Starting Equipment + Skill", 110, 15, 12, 5, 8f, true, 1),
+                ("1 Equipment", 115, 17, 13, 5, 10f, false, 0),
+                ("2 Equipment", 120, 19, 14, 5, 12f, false, 0),
+                ("3 Equipment", 125, 21, 15, 6, 14f, false, 0),
+                ("4 Equipment", 130, 23, 16, 6, 16f, false, 0),
             };
 
             float difficultyRate = 0.01f;
@@ -57,7 +57,7 @@ namespace GreedDungeon.Simulator
                             survived++;
                     }
                     float rate = (float)survived / simulationCount * 100;
-                    Console.WriteLine($"  {battleCount}전투 생존: {rate:F1}%");
+                    Console.WriteLine($"  {battleCount} Battles Survived: {rate:F1}%");
                 }
                 
                 float avgSurvival = 0;
@@ -65,10 +65,10 @@ namespace GreedDungeon.Simulator
                 {
                     avgSurvival += CountSurvivedBattles(player, monsters, 10, false, difficultyRate, healRate);
                 }
-                Console.WriteLine($"\n평균 생존 전투 수: {avgSurvival / simulationCount:F1}");
+                Console.WriteLine($"\nAverage Battles Survived: {avgSurvival / simulationCount:F1}");
             }
 
-            Console.WriteLine("\n완료!");
+            Console.WriteLine("\nComplete!");
         }
 
         static int CountSurvivedBattles(
@@ -90,7 +90,7 @@ namespace GreedDungeon.Simulator
                 if (bossAtEnd && battle >= 5)
                 {
                     monster = new MonsterData(
-                        "켈베로스",
+                        "Cerberus",
                         (int)(monsters[4].HP * difficultyMult),
                         (int)(monsters[4].ATK * difficultyMult),
                         monsters[4].DEF,
@@ -146,7 +146,7 @@ namespace GreedDungeon.Simulator
                 if (bossAtEnd && battle >= 5)
                 {
                     monster = new MonsterData(
-                        "켈베로스",
+                        "Cerberus",
                         (int)(monsters[4].HP * difficultyMult),
                         (int)(monsters[4].ATK * difficultyMult),
                         monsters[4].DEF,

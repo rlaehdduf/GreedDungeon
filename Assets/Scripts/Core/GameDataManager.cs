@@ -35,7 +35,7 @@ namespace GreedDungeon.Core
 
             await LoadAllDataAsync();
             IsInitialized = true;
-            Debug.Log($"[GameDataManager] 초기화 완료 - 몬스터: {_monsters.Count}, 스킬: {_skills.Count}");
+            Debug.Log($"[GameDataManager] Initialized - Monsters: {_monsters.Count}, Skills: {_skills.Count}");
         }
 
         private async Task LoadAllDataAsync()

@@ -192,7 +192,7 @@ namespace GreedDungeon.Character
                 skill = RollSkillForEquipment(equipment.SkillPoolType, rarity);
             }
             
-            Debug.Log($"[Player] 장비 추가: {equipment.Name}, SkillPoolType: {equipment.SkillPoolType}, Rarity: {rarity?.Name}, Skill: {skill?.Name ?? "null"}");
+            Debug.Log($"[Player] Equipment added: {equipment.Name}, SkillPoolType: {equipment.SkillPoolType}, Rarity: {rarity?.Name}, Skill: {skill?.Name ?? "null"}");
             
             var item = new InventoryItem(equipment, rarity, skill);
             return TryAddItem(item);
@@ -499,7 +499,7 @@ namespace GreedDungeon.Character
                 skill = RollSkillForEquipment(equipment.SkillPoolType, rarity);
             }
             
-            Debug.Log($"[Player] 장비 추가(최고레어도): {equipment.Name}, SkillPoolType: {equipment.SkillPoolType}, Rarity: {rarity?.Name}, Skill: {skill?.Name ?? "null"}");
+            Debug.Log($"[Player] Equipment added (highest rarity): {equipment.Name}, SkillPoolType: {equipment.SkillPoolType}, Rarity: {rarity?.Name}, Skill: {skill?.Name ?? "null"}");
             
             var item = new InventoryItem(equipment, rarity, skill);
             return TryAddItem(item);

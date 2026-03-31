@@ -292,13 +292,13 @@ namespace GreedDungeon.Dungeon.UI
             
             if (_player.Gold < price)
             {
-                Debug.Log("골드가 부족합니다.");
+                Debug.Log("Not enough gold.");
                 return;
             }
             
             if (_player.IsInventoryFull())
             {
-                Debug.Log("인벤토리가 가득 찼습니다.");
+                Debug.Log("Inventory is full.");
                 return;
             }
             

@@ -93,7 +93,7 @@ namespace GreedDungeon.Core
                 int width = rect.Right - rect.Left;
                 int height = rect.Bottom - rect.Top;
                 
-                // 최소 크기 체크
+                // Minimum size check
                 if (width < _staticMinWidth) width = _staticMinWidth;
                 if (height < _staticMinHeight) height = _staticMinHeight;
                 

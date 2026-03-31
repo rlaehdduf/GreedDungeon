@@ -60,7 +60,7 @@ public class ScriptableObjectAddressablesSetter : EditorWindow
         }
 
         AssetDatabase.SaveAssets();
-        Debug.Log($"═══ ScriptableObject 라벨 설정 완료! 총 {count}개 ═══");
+        Debug.Log($"═══ ScriptableObject labels set! Total: {count} ═══");
     }
 
     private static void SetLabelOnly(string guid, string label)
@@ -111,7 +111,7 @@ public class ScriptableObjectAddressablesSetter : EditorWindow
         }
 
         AssetDatabase.SaveAssets();
-        Debug.Log($"═══ 스킬 아이콘 Sprite 등록 완료! 총 {count}개 ═══");
+        Debug.Log($"═══ Skill icon sprites registered! Total: {count} ═══");
     }
 
     [MenuItem("Tools/Addressables/Set All (SO + Sprites)")]
@@ -119,13 +119,13 @@ public class ScriptableObjectAddressablesSetter : EditorWindow
     {
         SetAllSOLabels();
         SpriteAddressablesSetter.SetAllSpriteAddresses();
-        Debug.Log("═══ 모든 Addressables 설정 완료! ═══");
+        Debug.Log("═══ All Addressables configured! ═══");
     }
 
     [MenuItem("Tools/Addressables/🔄 Setup & Build (All-in-One)")]
     public static void SetupAndBuildAll()
     {
-        Debug.Log("=== Addressables 자동 설정 시작 ===");
+        Debug.Log("=== Starting Addressables auto-configuration ===");
 
         SetAllSOLabels();
         SpriteAddressablesSetter.SetAllSpriteAddresses();
@@ -133,11 +133,11 @@ public class ScriptableObjectAddressablesSetter : EditorWindow
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log("═══ 주소 설정 완료. 빌드 시작... ═══");
+        Debug.Log("═══ Addresses set. Starting build... ═══");
 
         BuildAddressables();
 
-        Debug.Log("=== ✅ 모든 작업 완료! 게임 실행 가능 ===");
+        Debug.Log("=== ✅ All tasks complete! Game is ready to run ===");
     }
 
     private static void BuildAddressables()
@@ -145,14 +145,14 @@ public class ScriptableObjectAddressablesSetter : EditorWindow
         var settings = AddressableAssetSettingsDefaultObject.Settings;
         if (settings == null)
         {
-            Debug.LogError("Addressable Settings 없음!");
+            Debug.LogError("No Addressable Settings found!");
             return;
         }
 
         AddressableAssetSettings.CleanPlayerContent(settings.ActivePlayerDataBuilder);
         AddressableAssetSettings.BuildPlayerContent();
 
-        Debug.Log("═══ ✅ Addressables 빌드 완료! ═══");
+        Debug.Log("═══ ✅ Addressables build complete! ═══");
     }
 
     [MenuItem("Tools/Addressables/Set Element Icons")]
@@ -182,7 +182,7 @@ public class ScriptableObjectAddressablesSetter : EditorWindow
         }
 
         AssetDatabase.SaveAssets();
-        Debug.Log($"═══ 속성 아이콘 Sprite 등록 완료! 총 {count}개 ═══");
+        Debug.Log($"═══ Element icon sprites registered! Total: {count} ═══");
     }
 
     private static void SetAddress(string guid, string address, string label)
@@ -230,11 +230,11 @@ public class ScriptableObjectAddressablesSetter : EditorWindow
             if (entry != null)
             {
                 string labels = string.Join(", ", entry.labels);
-                Debug.Log($"{soName} -> 주소: {entry.address}, 라벨: [{labels}]");
+                Debug.Log($"{soName} -> Address: {entry.address}, Labels: [{labels}]");
             }
             else
             {
-                Debug.Log($"{soName} -> (Addressable 아님)");
+                Debug.Log($"{soName} -> (Not Addressable)");
             }
         }
     }

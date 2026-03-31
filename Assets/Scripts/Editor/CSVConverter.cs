@@ -57,11 +57,11 @@ public class CSVConverter : EditorWindow
             string result = AssetDatabase.RenameAsset(currentPath, expectedName);
             if (string.IsNullOrEmpty(result))
             {
-                Debug.Log($"에셋 이름 변경: {System.IO.Path.GetFileName(currentPath)} → {expectedName}");
+                Debug.Log($"Asset renamed: {System.IO.Path.GetFileName(currentPath)} → {expectedName}");
             }
             else
             {
-                Debug.LogWarning($"이름 변경 실패: {result}");
+                Debug.LogWarning($"Rename failed: {result}");
             }
         }
     }
@@ -82,7 +82,7 @@ public class CSVConverter : EditorWindow
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         
-        Debug.Log($"═══ CSV 변환 완료! 총 {total}개 ═══");
+        Debug.Log($"═══ CSV conversion complete! Total: {total} ═══");
     }
 
     [MenuItem("Tools/CSV/Convert StatusEffects")]
@@ -91,7 +91,7 @@ public class CSVConverter : EditorWindow
         string csvFile = Path.Combine(CSV_PATH, "StatusEffect.csv");
         if (!File.Exists(csvFile))
         {
-            Debug.LogWarning($"파일 없음: {csvFile}");
+            Debug.LogWarning($"File not found: {csvFile}");
             return 0;
         }
 
@@ -137,7 +137,7 @@ public class CSVConverter : EditorWindow
             count++;
         }
         
-        Debug.Log($"StatusEffect 변환 완료: {count}개");
+        Debug.Log($"StatusEffect conversion complete: {count}");
         return count;
     }
 
@@ -147,7 +147,7 @@ public class CSVConverter : EditorWindow
         string csvFile = Path.Combine(CSV_PATH, "RarityData.csv");
         if (!File.Exists(csvFile))
         {
-            Debug.LogWarning($"파일 없음: {csvFile}");
+            Debug.LogWarning($"File not found: {csvFile}");
             return 0;
         }
 
@@ -193,7 +193,7 @@ public class CSVConverter : EditorWindow
             count++;
         }
         
-        Debug.Log($"Rarity 변환 완료: {count}개");
+        Debug.Log($"Rarity conversion complete: {count}");
         return count;
     }
 
@@ -203,7 +203,7 @@ public class CSVConverter : EditorWindow
         string csvFile = Path.Combine(CSV_PATH, "SkillData.csv");
         if (!File.Exists(csvFile))
         {
-            Debug.LogWarning($"파일 없음: {csvFile}");
+            Debug.LogWarning($"File not found: {csvFile}");
             return 0;
         }
 
@@ -218,7 +218,7 @@ public class CSVConverter : EditorWindow
             var values = lines[i];
             if (values.Count < 16 || !int.TryParse(values[0], out int id))
             {
-                Debug.LogWarning($"Skill 라인 {i} 건너뜀: 필드 수={values.Count}");
+                Debug.LogWarning($"Skipping Skill line {i}: field count={values.Count}");
                 continue;
             }
 
@@ -261,7 +261,7 @@ public class CSVConverter : EditorWindow
             count++;
         }
         
-        Debug.Log($"Skill 변환 완료: {count}개");
+        Debug.Log($"Skill conversion complete: {count}");
         return count;
     }
 
@@ -271,7 +271,7 @@ public class CSVConverter : EditorWindow
         string csvFile = Path.Combine(CSV_PATH, "EquipmentData.csv");
         if (!File.Exists(csvFile))
         {
-            Debug.LogWarning($"파일 없음: {csvFile}");
+            Debug.LogWarning($"File not found: {csvFile}");
             return 0;
         }
 
@@ -325,7 +325,7 @@ public class CSVConverter : EditorWindow
             count++;
         }
         
-        Debug.Log($"Equipment 변환 완료: {count}개");
+        Debug.Log($"Equipment conversion complete: {count}");
         return count;
     }
 
@@ -335,7 +335,7 @@ public class CSVConverter : EditorWindow
         string csvFile = Path.Combine(CSV_PATH, "MonsterData.csv");
         if (!File.Exists(csvFile))
         {
-            Debug.LogWarning($"파일 없음: {csvFile}");
+            Debug.LogWarning($"File not found: {csvFile}");
             return 0;
         }
 
@@ -392,7 +392,7 @@ public class CSVConverter : EditorWindow
             count++;
         }
         
-        Debug.Log($"Monster 변환 완료: {count}개");
+        Debug.Log($"Monster conversion complete: {count}");
         return count;
     }
 
@@ -402,7 +402,7 @@ public class CSVConverter : EditorWindow
         string csvFile = Path.Combine(CSV_PATH, "ConsumableData.csv");
         if (!File.Exists(csvFile))
         {
-            Debug.LogWarning($"파일 없음: {csvFile}");
+            Debug.LogWarning($"File not found: {csvFile}");
             return 0;
         }
 
@@ -452,7 +452,7 @@ public class CSVConverter : EditorWindow
             count++;
         }
         
-        Debug.Log($"Consumable 변환 완료: {count}개");
+        Debug.Log($"Consumable conversion complete: {count}");
         return count;
     }
 
@@ -498,9 +498,9 @@ public class CSVConverter : EditorWindow
     {
         return value switch
         {
-            "불" => Element.Fire,
-            "물" => Element.Water,
-            "풀" => Element.Grass,
+            "Fire" => Element.Fire,
+            "Water" => Element.Water,
+            "Grass" => Element.Grass,
             _ => Element.None
         };
     }
@@ -593,8 +593,8 @@ private static SkillPoolType ParseSkillPoolType(string value)
 
         private static BuffType ParseBuffType(string statusEffectId, string name)
         {
-            if (name.Contains("힘의")) return BuffType.Attack;
-            if (name.Contains("철의")) return BuffType.Defense;
+            if (name.Contains("Strength")) return BuffType.Attack;
+            if (name.Contains("Iron")) return BuffType.Defense;
             return BuffType.None;
         }
 
@@ -614,7 +614,7 @@ private static SkillPoolType ParseSkillPoolType(string value)
         string csvFile = Path.Combine(CSV_PATH, "MonsterSkill.csv");
         if (!File.Exists(csvFile))
         {
-            Debug.LogWarning($"파일 없음: {csvFile}");
+            Debug.LogWarning($"File not found: {csvFile}");
             return 0;
         }
 
@@ -665,7 +665,7 @@ private static SkillPoolType ParseSkillPoolType(string value)
             count++;
         }
         
-        Debug.Log($"MonsterSkill 변환 완료: {count}개");
+        Debug.Log($"MonsterSkill conversion complete: {count}");
         return count;
     }
 
@@ -698,7 +698,7 @@ private static SkillPoolType ParseSkillPoolType(string value)
         string csvFile = Path.Combine(CSV_PATH, "PlayerData.csv");
         if (!File.Exists(csvFile))
         {
-            Debug.LogWarning($"파일 없음: {csvFile}");
+            Debug.LogWarning($"File not found: {csvFile}");
             return 0;
         }
 
@@ -709,14 +709,14 @@ private static SkillPoolType ParseSkillPoolType(string value)
         var lines = ReadCSV(csvFile);
         if (lines.Count < 2)
         {
-            Debug.LogWarning("PlayerData.csv에 데이터가 없습니다.");
+            Debug.LogWarning("No data in PlayerData.csv.");
             return 0;
         }
 
         var values = lines[1];
         if (values.Count < 9)
         {
-            Debug.LogWarning($"PlayerData 필드 수 부족: {values.Count}");
+            Debug.LogWarning($"PlayerData field count insufficient: {values.Count}");
             return 0;
         }
 
@@ -745,7 +745,7 @@ private static SkillPoolType ParseSkillPoolType(string value)
         }
 
         EditorUtility.SetDirty(data);
-        Debug.Log($"PlayerData 변환 완료");
+        Debug.Log("PlayerData conversion complete");
         return 1;
     }
 }

@@ -102,7 +102,7 @@ public interface IBattleManager
             
             OnBattleStarted?.Invoke(_monster);
 
-            LogBattle($"전투: {_monster.Name}");
+            LogBattle($"Battle: {_monster.Name}");
         }
 
         private void SubscribeEntityEvents(IBattleEntity entity)
@@ -132,23 +132,23 @@ public interface IBattleManager
         private void HandleStatusEffectApplied(IBattleEntity entity, ActiveStatusEffect effect)
         {
             var logType = entity == _player ? UI.Battle.LogType.Player : UI.Battle.LogType.Monster;
-            LogBattle($"→ {effect.Data.Name} ({effect.RemainingDuration}턴)", logType);
+            LogBattle($"→ {effect.Data.Name} ({effect.RemainingDuration} turns)", logType);
         }
 
         private void HandleStatusEffectEnded(IBattleEntity entity, ActiveStatusEffect effect)
         {
             var logType = entity == _player ? UI.Battle.LogType.Player : UI.Battle.LogType.Monster;
-            LogBattle($"{effect.Data.Name} 종료", logType);
+            LogBattle($"{effect.Data.Name} ended", logType);
         }
 
         private void HandleBuffApplied(IBattleEntity entity, ActiveBuff buff)
         {
-            LogBattle($"{buff.Type} +{buff.Value}% ({buff.RemainingDuration}턴)", UI.Battle.LogType.Player);
+            LogBattle($"{buff.Type} +{buff.Value}% ({buff.RemainingDuration} turns)", UI.Battle.LogType.Player);
         }
 
         private void HandleBuffEnded(IBattleEntity entity, ActiveBuff buff)
         {
-            LogBattle($"{buff.Type} 버프 종료", UI.Battle.LogType.Player);
+            LogBattle($"{buff.Type} buff ended", UI.Battle.LogType.Player);
         }
 
         private void HandleMonsterDamaged(int damage)
@@ -175,7 +175,7 @@ public interface IBattleManager
 
             bool isPlayer = attacker == _player;
             bool isPlayerDefender = defender == _player;
-            string actionText = skill != null ? skill.Name : "공격";
+            string actionText = skill != null ? skill.Name : "Attack";
 
             SkillType skillType = skill != null ? skill.Type : SkillType.Neutral;
             int hitCount = skill?.HitCount ?? 1;
@@ -201,7 +201,7 @@ public interface IBattleManager
                 OnPlayerDamaged?.Invoke(totalDamage, isCritical);
             }
 
-            string dmgText = hitCount > 1 ? $"{totalDamage} ({hitCount}회)" : $"{totalDamage}";
+            string dmgText = hitCount > 1 ? $"{totalDamage} ({hitCount} hits)" : $"{totalDamage}";
             var logType = isPlayer ? UI.Battle.LogType.Player : UI.Battle.LogType.Monster;
             
             if (isPlayer)
@@ -223,7 +223,7 @@ public interface IBattleManager
 
             defender.StartDefend();
             var logType = defender == _player ? UI.Battle.LogType.Player : UI.Battle.LogType.Monster;
-            LogBattle($"방어", logType);
+            LogBattle($"Defend", logType);
         }
 
         public bool ExecuteItem(InventoryItem item, IBattleEntity target)
@@ -246,7 +246,7 @@ public interface IBattleManager
 
                 case ConsumableEffectType.Cleanse:
                     target.ClearDebuffs();
-                    LogBattle($"[{data.Name}] 디버프 해제", UI.Battle.LogType.Player);
+                    LogBattle($"[{data.Name}] Debuffs removed", UI.Battle.LogType.Player);
                     break;
 
                 case ConsumableEffectType.Buff:
@@ -295,7 +295,7 @@ public interface IBattleManager
             {
                 int duration = skill.Duration > 0 ? skill.Duration : effect.Duration;
                 target.ApplyStatusEffect(effect, duration);
-                LogBattle($"→ {effect.Name} ({duration}턴)");
+                LogBattle($"→ {effect.Name} ({duration} turns)");
             }
         }
 
@@ -467,19 +467,19 @@ public interface IBattleManager
                 int goldReward = _monster.GoldDrop;
                 _player.AddGold(goldReward);
                 
-                // 전투 후 50% HP 회복
+                // Restore 50% HP after battle
                 int healAmount = (int)(_player.TotalStats.MaxHP * 0.5f);
                 if (healAmount > 0)
                 {
                     _player.Heal(healAmount);
                 }
                 
-                LogBattle($"승리! +{goldReward}G, HP +{healAmount}");
+                LogBattle($"Victory! +{goldReward}G, HP +{healAmount}");
                 OnMonsterDeath?.Invoke();
             }
             else
             {
-                LogBattle($"패배...");
+                LogBattle($"Defeat...");
                 OnPlayerDeath?.Invoke();
             }
         }
