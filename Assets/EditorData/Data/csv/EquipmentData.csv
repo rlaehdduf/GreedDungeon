@@ -1,7 +1,7 @@
 ID,Name,Type,Description,HP,MP,Attack,Defense,Speed,CriticalRate,SkillPoolType,BuyPrice,SellPrice,IconAddress,FixedRarityID,FixedSkillID
 1,Wooden Stick,Weapon,A common wooden stick found along the road,0,0,5,0,0,2,Neutral,50,25,Weapons/Stick,1,1
 2,Sword,Weapon,An old sword with a dull blade,0,0,15,0,0,8,Melee,200,100,Weapons/Sword,0,0
-3,Shield,Weapon,A dusty shield covered in cobwebs, long abandoned,10,0,5,2,-5,1,Neutral,180,90,Weapons/Shield,0,0
+3,Shield,Weapon,A dusty shield covered in cobwebs - long abandoned,10,0,5,2,-5,1,Neutral,180,90,Weapons/Shield,0,0
 4,Wand,Weapon,A wand looted from a mage's corpse. The gem still glows faintly,0,30,12,0,0,3,Magic,250,125,Weapons/Wand,0,0
 5,Axe,Weapon,A massive axe that would exhaust an ordinary person,0,0,18,0,-3,12,Neutral,220,110,Weapons/Axe,0,0
 6,Greatsword,Weapon,A colossal sword wielded with both hands,0,0,20,0,-2,15,Melee,400,200,Weapons/GreatSword,0,0
